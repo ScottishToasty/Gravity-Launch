@@ -6,14 +6,16 @@ The permanent development and testing home for Gravity Launch by ScottishToasty.
 
 [Play Gravity Launch](https://scottishtoasty.github.io/Gravity-Launch/) in a browser, including Safari on iPhone. The game is served directly by GitHub Pages without a hosting advertising banner.
 
-Current version: **v6.2.2**. The playable HTML is an unchanged copy of the v6.2.2 developer build.
+Current version: **v6.2.3**. The playable HTML is an unchanged copy of the supplied v6.2.3 hosting build.
 
 ## Repository layout
 
 | Path | Purpose |
 | --- | --- |
 | `index.html` | Current playable game |
+| `builds/v6.2.3/index.html` | Archived v6.2.3 developer build |
 | `builds/v6.2.2/index.html` | Archived v6.2.2 developer build |
+| `release-notes/v6.2.3.md` | Original v6.2.3 release notes |
 | `release-notes/v6.2.2.md` | Original v6.2.2 release notes |
 | `README.md` | Project information and version history |
 
@@ -29,6 +31,7 @@ To test locally, run `python3 -m http.server 8000` from the repository root and 
 
 | Version | Changes |
 | --- | --- |
+| [v6.2.3](release-notes/v6.2.3.md) | iPhone standalone web-app metadata, Home Screen app name and black status bar; gameplay unchanged. |
 | [v6.2.2](release-notes/v6.2.2.md) | Subdued Settings Home button styling; mobile-friendly categorised Sandbox object picker. |
 
 Hosting setup only: no changes to gameplay, physics, progression, or developer features.
