@@ -114,7 +114,7 @@ button,select,input{touch-action:manipulation;-webkit-tap-highlight-color:transp
 @media(prefers-reduced-motion:reduce){.starAppear,.starFade,.starWarning{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 @media (pointer:fine) and (min-width:850px){body{cursor:crosshair}.app,button,input,select,textarea{cursor:auto}.frame canvas{cursor:crosshair}}
 
-/* v6.2.5 mobile: scale the complete frame, not its 420 x 740 game world.
+/* v6.3.3 mobile: scale the complete frame, not its 420 x 740 game world.
    Browser mode fits above Safari chrome; Home Screen mode uses the extra height. */
 @media (max-width: 600px) {
   html { width: 100%; overflow-x: hidden; overscroll-behavior: none; }
@@ -125,6 +125,21 @@ button,select,input{touch-action:manipulation;-webkit-tap-highlight-color:transp
 @media (max-width: 600px) and (display-mode: standalone) {
   body { padding-top: max(5px, env(safe-area-inset-top, 0px));
          padding-bottom: max(5px, env(safe-area-inset-bottom, 0px)); }
+}
+
+/* v6.3.3: Home Screen presentation uses the usable safe area more efficiently.
+   Normal Safari keeps the browser-chrome-aware height fit above. */
+@media (max-width: 600px) {
+  html, body { overscroll-behavior: none; }
+  body { -webkit-text-size-adjust: 100%; }
+  .frame, .frame canvas { -webkit-user-select: none; user-select: none; }
+}
+@media (max-width: 600px) and (display-mode: standalone) {
+  body { padding-left: 3px; padding-right: 3px;
+         padding-top: max(3px, env(safe-area-inset-top, 0px));
+         padding-bottom: max(3px, env(safe-area-inset-bottom, 0px)); }
+  .app { gap: 3px; }
+  .playerBuild .frame { margin-bottom: 0; }
 }
 </style><style>
 .primarySettings{margin:4px 0 10px}.primarySettings button{text-align:center;font-weight:700}.primarySettings button:first-child{background:#174c61;border-color:#70c8d6}.settingsCard{max-height:85%;overflow:auto}.settingsCard{gap:12px;padding:17px;max-height:88%;overflow-y:auto}.settingsHeader{display:flex;align-items:center;gap:12px;justify-content:flex-start;margin-bottom:6px}.settingsHeader h2{margin:0;flex:1;text-align:center}.settingsHeader button{padding:8px 12px;white-space:nowrap}.songRow{display:flex;align-items:center;gap:12px;border:1px solid #31596a;background:#0a2230;padding:11px 12px;border-radius:7px;color:#7cdde9}.songRow strong{color:#dcfbff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.settingMenu{display:grid;gap:8px;margin:12px 0}.settingMenu button{text-align:left;padding:13px 14px;font-size:13px}.wideAction{width:100%;margin-top:10px;min-height:42px}.submenuCard{width:min(94%,375px);max-height:85%;overflow-y:auto;padding:19px}.controlHelp{display:grid;gap:9px;margin:16px 0}.controlHelp>div{background:#0a2332;border:1px solid #35596a;border-radius:7px;padding:11px;display:grid;gap:4px}.controlHelp b{color:#8deaf2}.controlHelp span,.hubIntro{font-size:12px;color:#a8c9d3;line-height:1.55}.newMapBox{display:grid;gap:8px;padding:12px;background:#0a2332;border-radius:8px;border:1px solid #35596a;margin:12px 0}.newMapBox input{background:#071722;border:1px solid #437488;color:#ecffff;border-radius:6px;padding:12px;font:inherit;min-width:0}.hubHeading{font-size:11px;letter-spacing:.12em;color:#78e4e9;margin:16px 0 8px}.sandboxGallery{display:grid;gap:9px}.sandboxItem{border:1px solid #355e70;border-radius:8px;background:#0b2837;padding:10px;display:grid;gap:9px}.sandboxItem b{font-size:13px}.sandboxItem small{display:block;color:#91b6c4;padding-top:4px}.sandboxActions{display:flex;gap:7px}.sandboxActions button{flex:1;min-height:37px;padding:7px}.sandboxActions button:last-child{flex:0 0 39px;color:#ffc1b6}#modToolsMount .hubHeading{border-top:1px solid #335665;padding-top:12px}
@@ -231,8 +246,87 @@ input:not([type=range]),textarea,[contenteditable="true"]{user-select:text;-webk
 #homeCellWallet .goldStar,#levelProgressWallet .goldStar{color:#ffc64a;font-style:normal;font-size:15px}
 #homeCellWallet .blueStar,#levelProgressWallet .blueStar{color:#38b9ff;font-style:normal;font-size:15px}
 #homeCellWallet .creditIcon,#levelProgressWallet .creditIcon{color:#8ee8e9;font-style:normal;font-size:15px}
-</style></head><body><main class="app"><div class="header versionOnly"><div class="pill">v6.2.5</div></div>
-<div class="frame" id="frame"><canvas id="game" width="420" height="740" aria-label="Gravity Launch playable chamber"></canvas><div class="overlaytop"><div class="status hudleft"><b id="phaseLabel">Act 1 / Sector 01</b><div class="hudshot">ORBS <b id="orbCount">0/0</b> · <b id="starCount">☆☆☆</b></div></div><div class="status hudright"><div class="hudrow"><span>Shots</span><b id="shotCount">0</b></div><div class="hudrow"><span>Deaths</span><b id="deaths">0</b></div><div class="hudrow"><span>Time</span><b id="timeElapsed">00:00.00</b></div><div class="hudrow"><span>PB</span><b id="personalBest">—</b></div><div id="timeStarTargets" class="timeStarTargets" aria-label="Current time star target"></div></div><button type="button" id="hudRestart" class="hudRestart" title="Restart current chamber" aria-label="Restart current chamber">↻</button></div><div class="finishOverlay" id="finishOverlay"><div class="finishCard"><h2 id="finishTitle">Sector Report</h2><div id="finishStars" class="finishStars">☆☆☆ ☆☆☆</div><div id="finishSummary" class="finishStats">Course finished</div><div class="finishChoices"><button id="finishNext">Next Level →</button><button id="finishRestart">↻ Restart</button><button id="finishAscend">↑ Ascension</button><button id="finishLevelSelect">☷ Level select</button><button id="finishHome">⌂ Home</button></div></div></div><div class="finishOverlay" id="levelOverlay"><div class="finishCard" style="width:min(94%,380px);max-height:88%;overflow:auto"><h2>Select Sector</h2><p>Complete all five Descent chambers to unlock Ascension.</p><div id="levelProgressWallet" class="cellWallet" aria-live="polite"></div><div class="levelModeActions"><button id="levelSandbox">✦ Sandbox Mode</button><button id="levelAscension" type="button" disabled>↑ Ascension 🔒</button></div><div id="levelMenuEntries" class="levelMenuEntries"></div><div class="levelExitActions"><button id="closeLevels" type="button">← Back</button><button id="levelsHome" type="button">⌂ Home</button></div></div></div><button id="pauseGear" title="Pause and settings" aria-label="Pause and open settings">⚙</button><div class="topActions" style="display:none"><button id="openLevelsInGame">☷ Levels</button><button id="openSettings">⚙ Settings</button></div><div class="finishOverlay" id="settingsOverlay"><div class="finishCard settingsCard">
+</style><style>
+/* v6.3.3: Sandbox completion is a modal above all editor controls. */
+body.gl-sandbox #finishOverlay.visible{z-index:35!important;}
+body.gl-sandbox:has(#finishOverlay.visible) #sandboxSandButton,
+body.gl-sandbox:has(#finishOverlay.visible) #sandboxSandMenu,
+body.gl-sandbox:has(#finishOverlay.visible) #sandboxObjectTools,
+body.gl-sandbox:has(#finishOverlay.visible) #pauseGear{pointer-events:none!important;visibility:hidden!important;}
+/* Sandbox picker must remain clickable above the canvas and menu. */
+#sandboxPicker{pointer-events:auto!important;}
+#sandboxPicker button{pointer-events:auto;touch-action:manipulation;}
+/* Plain object labels: no misleading icon-only pseudo previews. */
+#sandboxPickerObjects button{justify-content:flex-start;padding-left:15px;}
+</style></head><body><main class="app">
+<style>
+/* v6.3.3: accessible touch targets and consistent centre-aligned navigation */
+@media (pointer:coarse){
+ .settingsExitRow .settingsBack,
+ .settingsCard .settingsBack,
+ .levelExitActions button,
+ #controlsBack,#modBack,#sandboxBack,
+ #settingsClose,#finishHome,#finishLevelSelect,
+ #closeLevels,#levelsHome{
+   display:flex!important;align-items:center!important;justify-content:center!important;
+   text-align:center!important;min-height:46px!important;
+   padding:11px 12px!important;font-size:14px!important;line-height:1.25!important;
+   touch-action:manipulation;
+ }
+ .settingsExitRow .settingsBack{width:auto!important;flex:1 1 0!important;max-width:none!important;margin:0!important;}
+ .settingsExitRow{width:100%;gap:10px!important;}
+ .settingsCard button,.levelExitActions button{touch-action:manipulation;}
+}
+</style>
+<style id="gl628Style">
+/* One responsive build for desktop and mobile: no platform-specific button logic. */
+.settingsExitRow .settingsBack, #settingsBack, #settingsHome,
+#controlsBack, #modBack, #sandboxBack, .levelExitActions button,
+#closeLevels, #levelsHome {display:flex;align-items:center;justify-content:center;text-align:center;
+ min-height:46px;padding:10px 12px;font-size:14px;line-height:1.25;}
+.settingsExitRow .settingsBack {width:auto!important;flex:1 1 0;max-width:none;margin:0!important;display:flex!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:46px!important;}
+.settingsExitRow {display:flex;gap:9px;align-items:stretch;width:100%;}
+/* No old external sandbox editing menu; everything needed is in the chamber. */
+body.gl-sandbox #devToolbar,body.gl-sandbox #editorTools {display:none!important;}
+body.gl-sandbox #hudRestart,body.gl-sandbox .hudright {display:none!important;}
+body.gl-sandbox .hudleft #phaseLabel,body.gl-sandbox .hudleft #starCount {display:none!important;}
+body.gl-sandbox .hudleft .hudshot {margin-top:0;font-size:12px;}
+body.gl-sandbox .hudleft .hudshot b {font-size:13px;}
+body.gl-sandbox .hudleft {min-width:0;}
+#sandboxObjectTools {max-width:calc(100% - 10px);}
+#sandboxObjectTools button {min-width:38px;min-height:40px;width:40px;height:40px;font-size:21px;}
+#sandboxObjectTools #objectChange {color:#b9ffec;border-color:#77cfd1;}
+#sandboxEditorBar {position:absolute;z-index:9;bottom:10px;left:9px;right:9px;
+ display:none;align-items:center;justify-content:center;gap:6px;padding:7px;
+ background:#071923ec;border:1px solid #4f93a5;border-radius:10px;box-shadow:0 5px 20px #0009;}
+#sandboxEditorBar button {min-height:43px;min-width:43px;padding:8px 9px;font-size:12px;display:flex;align-items:center;justify-content:center;flex:1;}
+body.gl-sandbox #sandboxEditorBar {display:flex;}
+#sandboxPicker {bottom:68px;}
+body.gl-sandbox .overlaytop {top:10px;}
+/* v6.3.3: compact sandbox HUD and menu */
+body.gl-sandbox #sandboxEditorBar{display:none!important}
+body.gl-sandbox .overlaytop{top:10px;align-items:flex-start}
+body.gl-sandbox .hudleft{display:block!important;min-width:0;width:auto;max-width:64%;padding:6px 8px}
+body.gl-sandbox .hudleft #phaseLabel{display:block!important;font-size:12px}
+body.gl-sandbox .hudleft .hudshot{display:none!important}
+body.gl-sandbox .hudright{display:none!important}
+#sandboxOrbStatus{display:none;position:absolute;right:12px;top:10px;z-index:7;background:#071722e8;border:1px solid #3a6e81a6;border-radius:6px;padding:8px 10px;color:#90eff1;font-size:12px;font-weight:800;pointer-events:none}
+body.gl-sandbox #sandboxOrbStatus{display:block}
+#sandboxSandButton{display:none;position:absolute;z-index:10;left:13px;top:120px;width:44px;height:44px;min-height:44px;padding:0;border:1px solid #63bdc9;border-radius:10px;background:#102b39;color:#d8f5fc;font-size:26px;align-items:center;justify-content:center}
+body.gl-sandbox #sandboxSandButton{display:flex}
+#sandboxSandMenu{display:none;position:absolute;z-index:12;left:13px;top:170px;width:min(210px,65%);padding:10px;background:#091d2af7;border:1px solid #70c9d9;border-radius:10px;box-shadow:0 8px 24px #000b;gap:7px;flex-direction:column}
+#sandboxSandMenu.open{display:flex}
+#sandboxSandMenu button{min-height:43px;font-size:12px;text-align:center}
+.sandboxMenuTitle{font-size:11px;font-weight:800;letter-spacing:.035em;color:#85e5eb;text-align:center;padding:3px}
+.sandboxScrollRow{display:flex;gap:6px}.sandboxScrollRow button{flex:1}
+body.gl-sandbox #pauseGear{top:67px}
+#sandboxPicker{bottom:12px;max-height:63%;z-index:14}
+#sandboxPickerObjects button{display:flex;align-items:center;gap:8px;text-align:left;min-height:54px}
+#sandboxPickerObjects button.active{background:#1d5260;border-color:#90eaf0}
+.sandboxPreview{flex:0 0 44px;width:44px;height:28px;display:grid;place-items:center;border:1px solid #547d89;border-radius:5px;background:#071823;color:#8ce7ec;font-size:22px;line-height:1}
+#sandboxObjectTools #objectChange{color:#b9ffec;border-color:#77cfd1}
+@media(max-width:600px){body {padding:3px!important;} .app {gap:0!important;}}
+</style><div class="frame" id="frame"><canvas id="game" width="420" height="740" aria-label="Gravity Launch playable chamber"></canvas><div class="overlaytop"><div class="status hudleft"><b id="phaseLabel">Act 1 / Sector 01</b><div class="hudshot">ORBS <b id="orbCount">0/0</b> · <b id="starCount">☆☆☆</b></div></div><div class="status hudright"><div class="hudrow"><span>Shots</span><b id="shotCount">0</b></div><div class="hudrow"><span>Deaths</span><b id="deaths">0</b></div><div class="hudrow"><span>Time</span><b id="timeElapsed">00:00.00</b></div><div class="hudrow"><span>PB</span><b id="personalBest">—</b></div><div id="timeStarTargets" class="timeStarTargets" aria-label="Current time star target"></div></div><button type="button" id="hudRestart" class="hudRestart" title="Restart current chamber" aria-label="Restart current chamber">↻</button></div><div class="finishOverlay" id="finishOverlay"><div class="finishCard"><h2 id="finishTitle">Sector Report</h2><div id="finishStars" class="finishStars">☆☆☆ ☆☆☆</div><div id="finishSummary" class="finishStats">Course finished</div><div class="finishChoices"><button id="finishNext">Next Level →</button><button id="finishRestart">↻ Restart</button><button id="finishAscend">↑ Ascension</button><button id="finishLevelSelect">☷ Level select</button><button id="finishHome">⌂ Home</button></div></div></div><div class="finishOverlay" id="levelOverlay"><div class="finishCard" style="width:min(94%,380px);max-height:88%;overflow:auto"><h2>Select Sector</h2><p>Complete all five Descent chambers to unlock Ascension.</p><div id="levelProgressWallet" class="cellWallet" aria-live="polite"></div><div class="levelModeActions"><button id="levelSandbox">✦ Sandbox Mode</button><button id="levelAscension" type="button" disabled>↑ Ascension 🔒</button></div><div id="levelMenuEntries" class="levelMenuEntries"></div><div class="levelExitActions"><button id="closeLevels" type="button">← Back</button><button id="levelsHome" type="button">⌂ Home</button></div></div></div><div id="sandboxOrbStatus" aria-live="polite">Orbs 0/0</div><button id="pauseGear" title="Pause and settings" aria-label="Pause and open settings">⚙</button><div class="topActions" style="display:none"><button id="openLevelsInGame">☷ Levels</button><button id="openSettings">⚙ Settings</button></div><div class="finishOverlay" id="settingsOverlay"><div class="finishCard settingsCard">
 <h2>Settings</h2><div class="settingsProgress" id="settingsProgress" aria-label="Your stars and credits"></div><div class="buildModeSwitch" aria-label="Build mode"><button id="buildStandard" type="button">Standard</button><button id="buildDeveloper" type="button">Developer</button></div><button id="settingsClose" class="resumeMain">▶ Resume</button><div class="settingsNav"><button id="settingsControls">⌨ Controls →</button><button id="settingsModTools">⚙ Mod Tools →</button></div><details class="audioFold" id="settingsAudio"><summary>♫ Audio <span>Music, effects &amp; tracks</span></summary><div class="audioFoldBody">
 <div class="settingRow"><label for="musicVolume">Music</label><input type="range" id="musicVolume" min="0" max="100" value="45"><output id="musicVolVal">45%</output></div>
 <div class="settingRow"><label for="sfxVolume">Effects</label><input type="range" id="sfxVolume" min="0" max="100" value="65"><output id="sfxVolVal">65%</output></div>
@@ -243,10 +337,10 @@ input:not([type=range]),textarea,[contenteditable="true"]{user-select:text;-webk
 </div></div>
 <div class="finishOverlay" id="modOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Mod Tools</h2><div id="modToolsMount"></div><button id="modBack" class="wideAction">← Settings</button></div></div>
 <div class="finishOverlay" id="controlsOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Controls</h2><div class="controlHelp"><div><b>Launch</b><span>Hold 0.1 seconds, drag backwards to aim, release to fire.</span></div><div><b>Double Shot</b><span>Hold and drag while airborne. Time slows as you aim.</span></div><div><b>Restart</b><span>Press R or tap the ↻ button.</span></div><div><b>Cancel aim</b><span>Press C or use the cancel control.</span></div><div><b>Mobile</b><span>Touch and drag anywhere on the playfield. Tap on-screen buttons normally.</span></div><div><b>Sandbox editor</b><span>Tap to place, drag to move, select an object to rotate or delete.</span></div></div><button id="controlsBack" class="wideAction">← Settings</button></div></div>
-<div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">← Back</button><h2>SANDBOX MODE</h2></div><p class="hubIntro">Create your own chambers or continue a saved layout.</p><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New chamber name" aria-label="New chamber name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR CHAMBERS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
-<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeLevels">☷ Level Select</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v6.2.5</div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><button id="sandboxAddButton" type="button" aria-label="Add sandbox object" title="Add an object">＋</button><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>＋ ADD OBJECT</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Select an object, then tap an empty spot in the chamber to place it.</p></div><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectLeft" title="Rotate left">↶</button><button id="objectRight" title="Rotate right">↷</button><button id="objectLevel" title="Level / reset orientation">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges on landing. Aim in mid-air to slow time.</div></div>
+<div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">← Back</button><h2>SANDBOX MODE</h2></div><p class="hubIntro">Create your own maps or continue a saved layout.</p><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New map name" aria-label="New map name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR MAPS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
+<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeLevels">☷ Level Select</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v6.3.3</div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. Tap a selected object away once to deselect, then tap again for the picker.</p></div><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object">＋</button><button id="objectLeft" title="Rotate left">↶</button><button id="objectRight" title="Rotate right">↷</button><button id="objectLevel" title="Level / reset orientation">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges on landing. Aim in mid-air to slow time.</div></div>
 <div class="toolbar" id="devToolbar"><label style="display:flex;align-items:center;gap:7px;background:#102b39;border:1px solid #3a6c81;border-radius:6px;padding:5px 9px;color:#c2e8ef">LEVEL <select id="levelSelect" style="background:#091a28;color:#9af0de;border:1px solid #466f7d;padding:5px;border-radius:4px"><option value="1">01 · Launch Basics</option><option value="2">02 · First Spikes</option><option value="3">03 · Rolling Slopes</option><option value="4">04 · Slopes & Spikes</option><option value="5">05 · Mastery</option></select></label><button id="selectLevels">☷ Level select</button><button id="audioToggle" title="Enable or mute synthesised music and sound effects">♫ Sound: Off</button><button id="nextTrack" title="Switch to another background music track">♫ Next track</button><button id="cancelShot" type="button" style="display:none">✕ Cancel shot (C)</button><button id="reset">↻ Restart</button><button id="normal" style="display:none">↓ Normal chamber</button><button id="damaged" style="display:none">↑ Damaged ascent</button><button id="sandbox" style="display:none">✦ Sandbox chamber</button><button id="edit" style="display:none">✎ Edit platforms</button><button id="clearMap" style="display:none">Clear added</button><button id="defaults">Reset tuning</button></div>
-<section id="editorTools" style="display:none" class="editorTools"><b>BUILD MODE</b><span>Choose an item, then click to place • Drag to move • Select platforms to rotate • Right-click to delete • Mouse wheel to scroll</span><label>Item <select id="itemType"><option value="platform">Metal platform</option><option value="spikes">Spike trap</option><option value="orb">Collectible orb</option><option value="retract">Retractable platform</option><option value="laser">Pulse laser</option><option value="ram">Hydraulic ram</option><option value="conveyor">Conveyor belt</option><option value="kinetic">Kinetic launch pad</option><option value="vent">Pressure vent</option></select></label><label>Item size <select id="platformSize"><option value="105">Short</option><option value="150" selected>Medium</option><option value="200">Long</option></select></label><div><button id="rotateLeft">↶ Rotate −15°</button><button id="rotateRight">↷ Rotate +15°</button><button id="levelItem">Level item</button><button id="deleteItem">Delete selected</button></div><span id="selectedItem">Select a platform to rotate it. Select an object to edit it.</span><div><button id="upMap">↑ Up</button><button id="downMap">↓ Down</button><button id="saveMap">Save layout</button></div></section><section class="controls" id="devPhysics" aria-label="Physics tuning"><div class="control"><label for="gravity">Gravity <output id="gravityVal">900</output></label><input id="gravity" type="range" min="400" max="1600" value="900" step="25"></div><div class="control"><label for="power">Max launch speed <output id="powerVal">720</output></label><input id="power" type="range" min="400" max="1100" value="720" step="20"></div><div class="control"><label for="drag">Air resistance <output id="dragVal">0.12</output></label><input id="drag" type="range" min="0" max="1" value="0.12" step="0.02"></div><div class="control"><label for="bounce">Bounce <output id="bounceVal">0.10</output></label><input id="bounce" type="range" min="0" max="0.65" value="0.10" step="0.05"></div><div class="control"><label for="wallBounce">Wall ricochet <output id="wallBounceVal">0.65</output></label><input id="wallBounce" type="range" min="0" max="1" value="0.65" step="0.05"></div><div class="control"><label for="arcLength">Trajectory length <output id="arcLengthVal">0.7</output></label><input id="arcLength" type="range" min="0.6" max="3.0" value="0.7" step="0.1"></div></section>
+<section id="editorTools" style="display:none" class="editorTools"><b>BUILD MODE</b><span>Tap empty space to add a platform • Select an object and use ＋ to change its type • Drag to move</span><label>Item <select id="itemType"><option value="platform">Metal platform</option><option value="spikes">Spike trap</option><option value="orb">Collectible orb</option><option value="retract">Retractable platform</option><option value="laser">Pulse laser</option><option value="ram">Hydraulic ram</option><option value="conveyor">Conveyor belt</option><option value="kinetic">Kinetic launch pad</option><option value="vent">Pressure vent</option></select></label><label>Item size <select id="platformSize"><option value="105">Short</option><option value="150" selected>Medium</option><option value="200">Long</option></select></label><div><button id="rotateLeft">↶ Rotate −15°</button><button id="rotateRight">↷ Rotate +15°</button><button id="levelItem">Level item</button><button id="deleteItem">Delete selected</button></div><span id="selectedItem">Select a platform to rotate it. Select an object to edit it.</span><div><button id="upMap">↑ Up</button><button id="downMap">↓ Down</button><button id="saveMap">Save layout</button></div></section><section class="controls" id="devPhysics" aria-label="Physics tuning"><div class="control"><label for="gravity">Gravity <output id="gravityVal">900</output></label><input id="gravity" type="range" min="400" max="1600" value="900" step="25"></div><div class="control"><label for="power">Max launch speed <output id="powerVal">720</output></label><input id="power" type="range" min="400" max="1100" value="720" step="20"></div><div class="control"><label for="drag">Air resistance <output id="dragVal">0.12</output></label><input id="drag" type="range" min="0" max="1" value="0.12" step="0.02"></div><div class="control"><label for="bounce">Bounce <output id="bounceVal">0.10</output></label><input id="bounce" type="range" min="0" max="0.65" value="0.10" step="0.05"></div><div class="control"><label for="wallBounce">Wall ricochet <output id="wallBounceVal">0.65</output></label><input id="wallBounce" type="range" min="0" max="1" value="0.65" step="0.05"></div><div class="control"><label for="arcLength">Trajectory length <output id="arcLengthVal">0.7</output></label><input id="arcLength" type="range" min="0.6" max="3.0" value="0.7" step="0.1"></div></section>
 <style>
 /* v6.2.4: compact audio fold and context-sensitive settings navigation */
 .settingsCard .audioFold{margin:2px 0;padding:0!important;min-height:0!important}
@@ -258,7 +352,7 @@ input:not([type=range]),textarea,[contenteditable="true"]{user-select:text;-webk
 /* v6.2.4 mobile sandbox object palette */
 #sandboxAddButton{position:absolute;z-index:10;bottom:16px;right:14px;width:49px;height:49px;padding:0;border:1px solid #7ddfeb;border-radius:12px;background:#123547;color:#d8fbff;font-size:31px;line-height:1;display:none;box-shadow:0 5px 16px #0009}
 #sandboxPicker{position:absolute;z-index:11;bottom:73px;right:10px;left:10px;max-height:67%;overflow:auto;display:none;background:#091d2af5;border:1px solid #70c9d9;border-radius:12px;padding:12px;box-shadow:0 9px 30px #000c}
-.sandboxPickerHead{display:flex;align-items:center;justify-content:space-between;color:#a4edf4;letter-spacing:.09em;margin-bottom:10px}
+.sandboxPickerHead{display:flex;align-items:center;justify-content:space-between;color:#a4edf4;letter-spacing:.035em;margin-bottom:10px}
 #sandboxPickerClose{padding:5px 11px}
 #sandboxPickerCategories{display:flex;gap:5px;overflow-x:auto;padding-bottom:8px}
 #sandboxPickerCategories button{white-space:nowrap;padding:7px 9px;font-size:11px}
@@ -456,7 +550,7 @@ refreshWallet();
 function applyBuildMode(){
   const dev=isDeveloperMode();
   document.body.classList.toggle('playerBuild',!dev);
-  const footer=$('homeFooter'); if(footer)footer.textContent='v6.2.5 · '+(dev?'Developer':'Standard');
+  const footer=$('homeFooter'); if(footer)footer.textContent='v6.3.3 · '+(dev?'Developer':'Standard');
   const modBtn=$('settingsModTools');
   if(modBtn){modBtn.disabled=!dev;modBtn.textContent=dev?'⚙ Mod Tools →':'⚙ Mod Tools →';}
   const standardBtn=$('buildStandard'),developerBtn=$('buildDeveloper');
@@ -509,6 +603,9 @@ $('nextTrack').onclick=()=>{ensureAudio();trackIndex=(trackIndex+1)%3;refreshTra
  for(const [id,back] of [['controlsOverlay','controlsBack'],['modOverlay','modBack'],['sandboxHub','sandboxBack']]){const el=$(id),btn=$(back);if(el&&btn)el.addEventListener('click',e=>{if(e.target===el)btn.click()});}
 
 let levelIndex=1, phase='normal',camera=0,dead=0,checkpoint={x:93,y:165},lastCheckpoint=0,completed=false,aim=null,flash=0,shake=0,simTime=0,doubleShotAvailable=true;
+let checkpointOrbs=new Set(); // Only collectibles secured at the latest checkpoint survive death.
+let wasGroundedForImpact=true; // Landing FX only, no physics changes.
+
  const mount=$('modToolsMount');
  if(DEV_BUILD_AVAILABLE){
    const title=document.createElement('div');title.className='modToolsTitle';title.textContent='MOD TOOLS · DEVELOPER ONLY';mount.append(title);
@@ -553,7 +650,7 @@ const normalPlatforms=[
 const sandboxBase=[{x:40,y:182,w:180,h:19},{x:43,y:1745,w:334,h:24}];
 let sandboxAdded=[]; try {let saved=JSON.parse(localStorage.getItem("gravityLaunchSandboxV05")||"[]");if(Array.isArray(saved))sandboxAdded=saved.filter(q=>q&&[q.x,q.y,q.w,q.h].every(Number.isFinite)&&q.x>=22&&q.y>=220&&(q.type==='orb'?q.x<=386:q.x+q.w<=398)&&q.y<1710).slice(0,55).map(q=>({...q,type:['platform','spikes','orb','retract','laser','ram','conveyor','kinetic','vent'].includes(q.type)?q.type:'platform',angle:q.type==='orb'?(Number.isFinite(q.angle)?q.angle:0):q.type==='spikes'?(Number.isFinite(q.angle)?q.angle:0):(Number.isFinite(q.angle)?Math.max(-90,Math.min(90,q.angle)):0)}))}catch(e){}
 let editing=false,editHover=null,editDrag=null,selectedIndex=-1;
-function saveMap(){showTimer();try{localStorage.setItem("gravityLaunchSandboxV05",JSON.stringify(sandboxAdded));$("notice").textContent="SANDBOX SAVED • Your platform layout is stored in this browser."}catch(e){$("notice").textContent="Cannot save here • Layout will last until refresh."}}
+function saveMap(){showTimer();if(phase==='sandbox')updateOrbs();try{localStorage.setItem("gravityLaunchSandboxV05",JSON.stringify(sandboxAdded));$("notice").textContent="SANDBOX SAVED • Your platform layout is stored in this browser."}catch(e){$("notice").textContent="Cannot save here • Layout will last until refresh."}}
 // Named Sandbox library: keep the V05 legacy layout intact and import it as a slot.
 const SANDBOX_LIBRARY_KEY='gravityLaunchSandboxLibraryV59';
 let activeSandboxId=null,sandboxHubReturn='settings';
@@ -565,12 +662,13 @@ function persistActiveSandbox(){if(activeSandboxId){const map=sandboxLibrary.fin
 const originalSaveMap=saveMap;
 saveMap=function(){originalSaveMap();persistActiveSandbox()};
 function renderSandboxGallery(){const gallery=$('sandboxGallery');gallery.textContent='';
- if(!sandboxLibrary.length){const empty=document.createElement('p');empty.className='hubIntro';empty.textContent='No saved chambers yet. Create one above to start building.';gallery.append(empty)}
+ if(!sandboxLibrary.length){const empty=document.createElement('p');empty.className='hubIntro';empty.textContent='No saved maps yet. Create one above to start building.';gallery.append(empty)}
  for(const item of [...sandboxLibrary].sort((a,b)=>(b.updated||0)-(a.updated||0))){const row=document.createElement('div');row.className='sandboxItem';const info=document.createElement('div');const name=document.createElement('b');name.textContent=item.name;const sub=document.createElement('small');sub.textContent=item.objects.length+' objects';info.append(name,sub);const actions=document.createElement('div');actions.className='sandboxActions';const play=document.createElement('button');play.textContent='▶ Play';play.onclick=()=>loadNamedSandbox(item.id,false);const edit=document.createElement('button');edit.textContent='✎ Edit';edit.onclick=()=>loadNamedSandbox(item.id,true);const del=document.createElement('button');del.textContent='×';del.title='Delete saved map';del.setAttribute('aria-label','Delete '+item.name);del.onclick=()=>{if(!confirm('Delete '+item.name+'? This cannot be undone.'))return;sandboxLibrary=sandboxLibrary.filter(v=>v.id!==item.id);if(activeSandboxId===item.id)activeSandboxId=null;saveSandboxLibrary();renderSandboxGallery()};actions.append(play,edit,del);row.append(info,actions);gallery.append(row)}
 }
 function openSandboxHub(origin='settings'){cancelAim();sandboxHubReturn=origin;['settingsOverlay','levelOverlay','controlsOverlay'].forEach(id=>$(id).classList.remove('visible'));renderSandboxGallery();$('sandboxHub').classList.add('visible')}
-function loadNamedSandbox(id,editNow){const item=sandboxLibrary.find(v=>v.id===id);if(!item)return;activeSandboxId=id;sandboxAdded=JSON.parse(JSON.stringify(item.objects));$('sandboxHub').classList.remove('visible');choose('sandbox');if(editNow)$('edit').click()}
-$('sandboxCreate').onclick=()=>{const name=$('sandboxName').value.trim()||'Untitled Chamber';const id='map-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);sandboxLibrary.push({id,name,objects:[],updated:Date.now()});saveSandboxLibrary();$('sandboxName').value='';loadNamedSandbox(id,true)};
+function loadNamedSandbox(id,editNow){const item=sandboxLibrary.find(v=>v.id===id);if(!item)return;activeSandboxId=id;sandboxAdded=JSON.parse(JSON.stringify(item.objects));$('sandboxHub').classList.remove('visible');choose('sandbox');if(editNow)$('edit').click();updateHud()}
+$('sandboxName').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('sandboxCreate').click();}});
+$('sandboxCreate').onclick=()=>{const name=$('sandboxName').value.trim()||'Untitled Map';const id='map-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);sandboxLibrary.push({id,name,objects:[],updated:Date.now()});saveSandboxLibrary();$('sandboxName').value='';loadNamedSandbox(id,true)};
 $('sandboxBack').onclick=()=>{$('sandboxHub').classList.remove('visible');if(sandboxHubReturn==='levels')openLevels();else $('settingsOverlay').classList.add('visible')};
 if($('settingsSandbox'))$('settingsSandbox').onclick=()=>openSandboxHub('settings');
 $('settingsControls').onclick=()=>{$('settingsOverlay').classList.remove('visible');$('controlsOverlay').classList.add('visible')};
@@ -603,7 +701,7 @@ function orbs(){
  });
 }
 function starsFor(n,total){const pct=total? n/total : 0;return total===0?0:pct>=1?3:pct>=.8?2:pct>=.6?1:0}
-function updateOrbs(){const total=orbs().length, count=collectedOrbs.size, stars=finalStars===null?starsFor(count,total):finalStars;$('orbCount').textContent=`${count}/${total}`;$('starCount').textContent='★'.repeat(stars)+'☆'.repeat(3-stars)}
+function updateOrbs(){const total=orbs().length, count=collectedOrbs.size, stars=finalStars===null?starsFor(count,total):finalStars;$('orbCount').textContent=`${count}/${total}`;$('starCount').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);const sandboxOrb=$('sandboxOrbStatus');if(sandboxOrb)sandboxOrb.textContent=`Orbs ${count}/${total}`}
 let elapsed=0,runStarted=false,shotCount=0;
 function formatTime(t){let cs=Math.floor(t*100)%100,sec=Math.floor(t)%60,min=Math.floor(t/60);return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`}
 function recordKey(){let suffix=phase==='sandbox'?JSON.stringify([...sandboxAdded].map(p=>[p.x,p.y,p.w,p.h,p.type||'platform',p.angle||0])):phase;return 'gravityLaunchPBv1:'+suffix+':L'+levelIndex}
@@ -710,9 +808,10 @@ function showCompletion(){
  $('finishTitle').textContent=phase==='sandbox'?'Sandbox Complete':'Sector Report';
  const e=v6LastEvaluation;
  if(phase==='sandbox'){
-  $('finishStars').textContent='★'.repeat(finalStars||0)+'☆'.repeat(3-(finalStars||0));
+  $('finishStars').textContent='';$('finishStars').style.display='none';
   $('finishSummary').innerHTML=`<div class="resultRow"><span>TIME</span><strong>${formatTime(elapsed)}</strong></div><div class="resultRow"><span>Orbs</span><strong>${collectedOrbs.size}/${orbs().length}</strong></div>`;
  }else{
+  $('finishStars').style.display='';
   const stars=n=>'★'.repeat(n)+'☆'.repeat(3-n);
   $('finishStars').textContent=stars(e.time)+'  '+stars(e.collection);
   $('finishStars').style.fontSize='22px';
@@ -727,6 +826,7 @@ function showCompletion(){
  $('finishAscend').style.display='none';
  $('finishHome').style.display='';
  $('finishOverlay').classList.add('visible');
+ if(phase==='sandbox'){$('sandboxSandMenu').classList.remove('open');$('sandboxPicker').style.display='none';selectedIndex=-1;updateSelected();}
 }
 $('finishLevelSelect').onclick=()=>{ $('finishOverlay').classList.remove('visible');openLevels() };
 $('finishHome').onclick=()=>{ $('finishOverlay').classList.remove('visible');$('levelOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');$('homeOverlay').classList.add('visible');refreshWallet(); };
@@ -768,7 +868,7 @@ window.addEventListener('keydown',e=>{
  if(e.key.toLowerCase()!=='r'||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
  const target=e.target;
  if(target && (['INPUT','TEXTAREA','SELECT'].includes(target.tagName)||target.isContentEditable))return;
- if(['homeOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','upgradeOverlay'].some(id=>$(id).classList.contains('visible')))return;
+ if(['homeOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay'].some(id=>$(id).classList.contains('visible')))return;
  e.preventDefault();cancelPendingShot();reset(true);
 },true);
 window.addEventListener('keydown',e=>{
@@ -776,9 +876,9 @@ window.addEventListener('keydown',e=>{
     e.preventDefault();e.stopPropagation();cancelAim();
   }
 },true);
-function reset(all=false){v6LastEvaluation=null;retrievalStart=0;chargeUntil=0;chargeAward=0;cancelPendingShot();idleWait=0;idleKind='';idleAge=0;$('finishOverlay').classList.remove('visible');if(all){collectedOrbs.clear();finalStars=null;elapsed=0;runStarted=false;shotCount=0;checkpoint=phase==='damaged'?{...activeCheckpointList()[0]}:{x:phase==='sandbox'?125:93,y:165};lastCheckpoint=0;dead=0;$('deaths').textContent=dead}player.x=checkpoint.x;player.y=checkpoint.y;player.vx=0;player.vy=0;player.grounded=true;player.angle=0;doubleShotAvailable=true;aim=null;completed=false;flash=0;camera=Math.max(0,Math.min(WORLD-H,player.y-H*.36));updateHud();showTimer();updateOrbs()}
-function updateHud(){ $('cancelShot').style.display=aim&&!editing?'':'none';$('phaseLabel').textContent=phase==='sandbox'?'Sandbox / Test Sector':'Act 1 / Sector '+String(levelIndex).padStart(2,'0');}
-function choose(mode){$('homeOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');if((mode==='damaged'&&!canPlayAscent(levelIndex))||(mode==='normal'&&!canPlayDescent(levelIndex))){openLevels();return}closeLevels();if(phase!==mode){trackIndex=0}phase=mode;refreshTrack();editing=false;editDrag=null;selectedIndex=-1;$('sandbox').classList.toggle('active',mode==='sandbox');$('edit').style.display=mode==='sandbox'?'':'none';$('clearMap').style.display=mode==='sandbox'?'':'none';$('edit').textContent='✎ Edit platforms';$('edit').classList.remove('active');$('editorTools').style.display='none';syncSandboxAdd();$('normal').classList.toggle('active',mode==='normal');$('damaged').classList.toggle('active',mode==='damaged');reset(true);$('notice').textContent=mode==='normal'?'Retrieve the Power Cell at the bottom of the shaft.':mode==='damaged'?'ASCENSION • Start at the bottom. Climb against gravity and reach the escape hatch above. Touch checkpoint buttons on a platform to save.':'Sandbox: hit Edit platforms, design a route, then press Play sandbox.';}
+function reset(all=false){v6LastEvaluation=null;retrievalStart=0;chargeUntil=0;chargeAward=0;cancelPendingShot();idleWait=0;idleKind='';idleAge=0;$('finishOverlay').classList.remove('visible');if(all){checkpointOrbs.clear();collectedOrbs.clear();finalStars=null;elapsed=0;runStarted=false;shotCount=0;checkpoint=phase==='damaged'?{...activeCheckpointList()[0]}:{x:phase==='sandbox'?125:93,y:165};lastCheckpoint=0;dead=0;$('deaths').textContent=dead}player.x=checkpoint.x;player.y=checkpoint.y;player.vx=0;player.vy=0;player.grounded=true;wasGroundedForImpact=true;player.angle=0;doubleShotAvailable=true;aim=null;completed=false;flash=0;camera=Math.max(0,Math.min(WORLD-H,player.y-H*.36));updateHud();showTimer();updateOrbs()}
+function updateHud(){ $('cancelShot').style.display=aim&&!editing?'':'none';$('phaseLabel').textContent=phase==='sandbox'?((sandboxLibrary.find(m=>m.id===activeSandboxId)?.name||'Sandbox')+' / '+(editing?'Build':'Test')):'Act 1 / Sector '+String(levelIndex).padStart(2,'0');}
+function choose(mode){$('homeOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');if((mode==='damaged'&&!canPlayAscent(levelIndex))||(mode==='normal'&&!canPlayDescent(levelIndex))){openLevels();return}closeLevels();if(phase!==mode){trackIndex=0}phase=mode;refreshTrack();editing=false;editDrag=null;selectedIndex=-1;$('sandbox').classList.toggle('active',mode==='sandbox');$('edit').style.display=mode==='sandbox'?'':'none';$('clearMap').style.display=mode==='sandbox'?'':'none';$('edit').textContent='✎ Edit platforms';$('edit').classList.remove('active');$('editorTools').style.display='none';syncSandboxAdd();$('normal').classList.toggle('active',mode==='normal');$('damaged').classList.toggle('active',mode==='damaged');reset(true);$('notice').textContent=mode==='normal'?'Retrieve the Power Cell at the bottom of the shaft.':mode==='damaged'?'ASCENSION • Start at the bottom. Climb against gravity and reach the escape hatch above. Touch checkpoint buttons on a platform to save.':'Sandbox: use the sand menu to edit, save or play your chamber.';}
 $('levelSelect').onchange=()=>{levelIndex=Number($('levelSelect').value);if(phase!=='sandbox'){if((phase==='damaged'&&!canPlayAscent(levelIndex))||(phase==='normal'&&!canPlayDescent(levelIndex))){openLevels()}else choose(phase)}else{reset(true)};$('notice').textContent='CHAMBER '+String(levelIndex).padStart(2,'0')+' • '+levelNames[levelIndex-1]+' • '+(phase==='damaged'?'Hard ascent remix':'Learn the new mechanic');};$('normal').onclick=()=>choose('normal');$('damaged').onclick=()=>choose('damaged');$('sandbox').onclick=()=>openSandboxHub('settings');
 const sandboxObjectCategories=[
  ['Platforms',[['platform','Metal platform'],['retract','Retractable platform'],['conveyor','Conveyor belt']]],
@@ -787,16 +887,93 @@ const sandboxObjectCategories=[
  ['Collectibles',[['orb','Collectible orb']]]
 ];
 let sandboxPickerCategory=0;
+let sandboxPlacementType=null;
+let sandboxPendingPoint=null;
+const sandboxPreviewIcons={platform:'▰',retract:'▱',conveyor:'⇢',spikes:'▲',laser:'━',ram:'▣',kinetic:'↗',vent:'≋',orb:'◉'};
+function placeSandboxObject(p,type){
+ if(!editing||phase!=='sandbox'||sandboxAdded.length>=55)return false;
+ if(!((type==='spikes'&&p.y>=8&&p.y<WORLD-5)||(p.y>226&&p.y<1705)))return false;
+ const w=type==='orb'?18:type==='vent'?66:type==='kinetic'?76:type==='ram'?105:type==='laser'?105:+$('platformSize').value;
+ const x=type==='orb'?Math.max(34,Math.min(386,snap(p.x))):Math.max(23,Math.min(397-w,snap(p.x-w/2)));
+ const y=type==='spikes'?snap(p.y):Math.max(230,Math.min(1705,snap(p.y)));
+ const obj={x,y,w,h:type==='vent'?110:type==='ram'?30:type==='laser'?5:type==='spikes'?8:type==='orb'?18:19,type,angle:0,direction:1};
+ if(type==='spikes'&&!mountSpikes(obj,p)){$('notice').textContent='SPIKES MUST ATTACH TO A SURFACE';return false}
+ sandboxAdded.push(obj);selectedIndex=-1;updateSelected();saveMap();updateOrbs();return true;
+}
 function renderSandboxPicker(){
  const categories=$('sandboxPickerCategories'),items=$('sandboxPickerObjects');
  categories.replaceChildren();items.replaceChildren();
  sandboxObjectCategories.forEach(([name],i)=>{const b=document.createElement('button');b.textContent=name;b.classList.toggle('active',i===sandboxPickerCategory);b.onclick=()=>{sandboxPickerCategory=i;renderSandboxPicker()};categories.appendChild(b)});
- sandboxObjectCategories[sandboxPickerCategory][1].forEach(([type,name])=>{const b=document.createElement('button');b.textContent=name;b.classList.toggle('active',$('itemType').value===type);b.onclick=()=>{$('itemType').value=type;$('sandboxPicker').style.display='none';$('sandboxAddButton').textContent='＋';$('notice').textContent='ADD '+name.toUpperCase()+' • Tap an empty position in the chamber.'};items.appendChild(b)});
+ sandboxObjectCategories[sandboxPickerCategory][1].forEach(([type,name])=>{
+  const b=document.createElement('button');b.classList.toggle('active',sandboxPlacementType===type);
+  const label=document.createElement('span');label.textContent=name;b.append(label);
+  b.onclick=()=>{sandboxPlacementType=type;$('itemType').value=type;$('sandboxPicker').style.display='none';if(sandboxPendingPoint)placeSandboxObject(sandboxPendingPoint,type);sandboxPendingPoint=null};items.appendChild(b)
+ });
 }
-$('sandboxAddButton').onclick=()=>{const picker=$('sandboxPicker');const opening=picker.style.display!=='block';picker.style.display=opening?'block':'none';if(opening)renderSandboxPicker()};
-$('sandboxPickerClose').onclick=()=>{$('sandboxPicker').style.display='none'};
-function syncSandboxAdd(){const show=editing&&phase==='sandbox';$('sandboxAddButton').style.display=show?'block':'none';if(!show)$('sandboxPicker').style.display='none'}
-$('edit').onclick=()=>{if(!isDeveloperMode())return;editing=!editing;aim=null;editDrag=null;selectedIndex=-1;updateSelected();$('edit').textContent=editing?'▶ Play sandbox':'✎ Edit platforms';$('edit').classList.toggle('active',editing);$('editorTools').style.display=editing?'flex':'none';syncSandboxAdd();if(editing){player.vx=player.vy=0;camera=0;$('notice').textContent='EDIT MODE • Click to add, drag to move, right-click to remove; scroll to navigate.'}else {saveMap();reset(true);$('notice').textContent='PLAY SANDBOX • Reach the cell with the platforms you designed.'}updateHud()};
+$('objectChange').onclick=()=>{
+ if(!editing||selectedIndex<0||sandboxAdded.length>=55)return;
+ const original=sandboxAdded[selectedIndex];if(!original)return;
+ const duplicate={...original,x:original.x+20,y:original.y+20};
+ duplicate.x=duplicate.type==='orb'?Math.min(386,duplicate.x):Math.min(397-duplicate.w,duplicate.x);
+ duplicate.y=Math.min(1705,duplicate.y);
+ if(duplicate.type==='spikes'){
+  const mount=nearestSpikeMount({x:duplicate.x+duplicate.w/2,y:duplicate.y},duplicate.w);
+  if(!mount){$('notice').textContent='NO VALID SURFACE FOR DUPLICATE';return}Object.assign(duplicate,mount);
+ }
+ sandboxAdded.push(duplicate);selectedIndex=sandboxAdded.length-1;updateSelected();saveMap();updateOrbs();
+};
+$('sandboxPickerClose').onclick=()=>{$('sandboxPicker').style.display='none';sandboxPendingPoint=null;sandboxEmptyGesture=null};
+// The picker is a real interactive dialog; clicks on its controls must not reach the shaft.
+$('sandboxPicker').addEventListener('pointerdown',e=>e.stopPropagation());
+$('sandboxPicker').addEventListener('click',e=>e.stopPropagation());
+// v6.3.3: The picker is non-modal. A click/tap on the shaft outside
+// the picker dismisses it without selecting, dragging, or placing anything.
+// Capture the pointerdown before the canvas receives it; otherwise its
+// pointerup would open the picker again immediately.
+document.addEventListener('pointerdown',e=>{
+ const picker=$('sandboxPicker');
+ if(phase!=='sandbox'||!editing||picker.style.display==='none')return;
+ if(picker.contains(e.target))return;
+ picker.style.display='none';
+ sandboxPendingPoint=null;
+ sandboxEmptyGesture=null;
+ e.preventDefault();
+ e.stopImmediatePropagation();
+},true);
+
+function syncSandboxAdd(){if(!editing||phase!=='sandbox'){$('sandboxPicker').style.display='none';sandboxPendingPoint=null}syncSandboxBar()}
+function syncSandboxBar(){const show=phase==='sandbox';document.body.classList.toggle('gl-sandbox',show);const toggle=$('sandboxBarToggle');if(toggle)toggle.textContent=editing?'▶ Play':'✎ Edit';if(!show)$('sandboxSandMenu').classList.remove('open')}
+$('sandboxSandButton').onclick=()=>{$('sandboxSandMenu').classList.toggle('open');$('sandboxPicker').style.display='none'};
+// A click outside the open Sand menu is ONLY a dismissal. It must never
+// also place an object, start a drag, or open the object picker.
+document.addEventListener('pointerdown',e=>{
+ const menu=$('sandboxSandMenu');
+ if(phase!=='sandbox'||!menu.classList.contains('open'))return;
+ if(e.target.closest('#sandboxSandMenu,#sandboxSandButton,#sandboxPicker'))return;
+ menu.classList.remove('open');
+ e.preventDefault();
+ e.stopImmediatePropagation();
+},true);
+
+function changeSelectedSandboxType(type){
+ if(!editing||selectedIndex<0)return;
+ const old=sandboxAdded[selectedIndex];if(!old)return;
+ if(type==='spikes'){
+   const mount=nearestSpikeMount({x:old.x+old.w/2,y:old.y},Math.max(60,Math.min(150,old.w)));
+   if(!mount){$('notice').textContent='Spikes must be near a surface to attach.';return;}
+   sandboxAdded[selectedIndex]={...old,...mount,type:'spikes',h:8,angle:mount.angle||0};
+ }else{
+   const w=type==='orb'?18:type==='vent'?66:type==='kinetic'?76:type==='ram'?105:type==='laser'?105:old.w;
+   const x=type==='orb'?Math.max(34,Math.min(386,old.x+old.w/2)):Math.max(23,Math.min(397-w,old.x));
+   sandboxAdded[selectedIndex]={...old,type,w,h:type==='vent'?110:type==='ram'?30:type==='laser'?5:type==='orb'?18:19,x,y:old.y,angle:0,direction:1};
+ }
+ $('itemType').value='platform';updateSelected();saveMap();updateOrbs();
+ $('notice').textContent='OBJECT CHANGED • Tap empty space to add another platform.';
+}
+$('sandboxBarToggle').onclick=()=>{$('sandboxSandMenu').classList.remove('open');$('edit').click()};
+$('sandboxBarSave').onclick=()=>{saveMap();persistActiveSandbox();$('sandboxSandMenu').classList.remove('open')};
+$('sandboxBarBack').onclick=()=>{if(editing){saveMap();$('edit').click()}else saveMap();openSandboxHub('levels')};
+$('edit').onclick=()=>{if(!isDeveloperMode())return;$('sandboxPicker').style.display='none';$('sandboxSandMenu').classList.remove('open');editing=!editing;aim=null;editDrag=null;selectedIndex=-1;$('itemType').value='platform';updateSelected();$('edit').textContent=editing?'▶ Play sandbox':'✎ Edit platforms';$('edit').classList.toggle('active',editing);$('editorTools').style.display=editing?'flex':'none';syncSandboxAdd();if(editing){player.vx=player.vy=0;camera=0;sandboxPlacementType=null;$('notice').textContent='BUILD MODE • Drag empty space to scroll; tap to choose or place objects.'}else {saveMap();reset(true);$('notice').textContent='PLAY SANDBOX • Reach the cell with the platforms you designed.'}updateHud()};
 $('clearMap').onclick=()=>{if(!confirm('Remove all the platforms you added to the sandbox?'))return;sandboxAdded=[];selectedIndex=-1;updateSelected();saveMap();if(!editing)reset(true)};
 $('saveMap').onclick=saveMap; $('upMap').onclick=()=>{camera=Math.max(0,camera-270)};$('downMap').onclick=()=>{camera=Math.min(WORLD-H,camera+270)};$('reset').onclick=()=>reset(true);$('hudRestart').addEventListener('pointerdown',e=>{e.stopPropagation();cancelPendingShot();});$('hudRestart').onclick=e=>{e.stopPropagation();cancelPendingShot();reset(true)};$('defaults').onclick=()=>{input.gravity.value=900;input.power.value=720;input.drag.value=.12;input.bounce.value=.10;input.wallBounce.value=.65;input.arcLength.value=0.7;sync()};
 const levelNames=['Launch Basics','First Spikes','Rolling Slopes','Slopes & Spikes','Mastery'];
@@ -920,7 +1097,7 @@ function hazards(){
   return support?[{...h,y:support.y}]:[];
  });
 }
-function die(){playSfx('death');dead++;$('deaths').textContent=dead;shake=10;flash=1;reset(false)}
+function die(){playSfx('death');dead++;$('deaths').textContent=dead;collectedOrbs=new Set(checkpointOrbs);reset(false);shake=10;flash=1;updateOrbs()}
 function hitRect(b,physics){let nx=Math.max(b.x,Math.min(player.x,b.x+b.w)),ny=Math.max(b.y,Math.min(player.y,b.y+b.h));let dx=player.x-nx,dy=player.y-ny,dist=Math.hypot(dx,dy);if(dist>=R)return false;
 if(dist<.0001){let l=player.x-b.x,r=b.x+b.w-player.x,t=player.y-b.y,bot=b.y+b.h-player.y;let min=Math.min(l,r,t,bot);if(min===l){dx=-1;dy=0}else if(min===r){dx=1;dy=0}else if(min===t){dx=0;dy=-1}else{dx=0;dy=1}dist=1}else{dx/=dist;dy/=dist}
 player.x+=dx*(R-dist+.08);player.y+=dy*(R-dist+.08);let vn=player.vx*dx+player.vy*dy;if(vn<0){let bounce=Math.abs(vn)<35?0:(Math.abs(dx)>.7 && b.w<=22 && b.h===WORLD ? settings().wallBounce : settings().bounce);player.vx-=(1+bounce)*vn*dx;player.vy-=(1+bounce)*vn*dy}if(dy<-.45){player.grounded=true;doubleShotAvailable=true;player.vx*=.985}if(Math.abs(dx)>.7){player.vy*=.995}return true}
@@ -967,8 +1144,14 @@ function updateIdle(dt){
 let accumulator=0,last=performance.now();function frame(now){if(editing&&selectedIndex>=0)positionObjectTools();tickMusic();if(completed&&chargeUntil&&now>=chargeUntil){chargeUntil=0;retrievalStart=0;showCompletion()}
 if(completed&&retrievalStart&&!retrievalZapped&&retrievalProgress()>.57){retrievalZapped=true;playSfx('cell')}let dt=Math.min(.04,(now-last)/1000);last=now;if(isModalOpen()){draw();requestAnimationFrame(frame);return;}if(runStarted&&!completed&&!editing){elapsed+=dt;showTimer()}accumulator+=dt*(aim&&!player.grounded&&doubleShotAvailable?.17:1);let iters=0;while(accumulator>=1/120&&iters++<6){step(1/120);accumulator-=1/120}updateIdle(dt);draw();requestAnimationFrame(frame)}
 function step(dt){if(editing)return;simTime+=dt;if(flash>0)flash=Math.max(0,flash-dt*2.3);if(shake>0)shake=Math.max(0,shake-dt*20);if(completed)return;let s=settings();player.grounded=false;player.vy+=s.g*dt;let friction=Math.exp(-s.drag*dt);player.vx*=friction;player.vy*=friction;player.x+=player.vx*dt;player.y+=player.vy*dt;player.angle+=player.vx*dt/R;
+const preCollisionDownwardSpeed=player.vy;
 for(let b of [...solidWalls,...plat(),...facilityMachinery().filter(m=>(m.kind==='retract'&&m.active)||(m.kind==='ram'&&m.active)||m.kind==='conveyor'||m.kind==='kinetic')]){if(b.angle)collideSlope(player,b);else hitRect(b);}
 detectRestingSurface();
+// Camera-only landing feedback: only a genuinely airborne, fast downward impact.
+if(!wasGroundedForImpact && player.grounded && preCollisionDownwardSpeed>420){
+  shake=Math.max(shake,Math.min(2.8,(preCollisionDownwardSpeed-420)*.006));
+}
+wasGroundedForImpact=player.grounded;
 // Surface mechanics use the same rectangles as their rendered geometry.
 for(const m of facilityMachinery()){
  if(m.kind==='conveyor'&&player.grounded&&player.x+R>m.x&&player.x-R<m.x+m.w&&Math.abs(player.y+R-m.y)<3){player.vx+=m.direction*180*dt;player.vx=Math.max(-340,Math.min(340,player.vx));}
@@ -993,6 +1176,7 @@ for(const m of facilityMachinery()){
  if(m.kind==='ram'&&m.active&&player.x<=m.x+R+3&&player.x>=m.x-R-5&&player.y+R>m.y&&player.y-R<m.y+m.h){die();return}
 }
 if(player.y>WORLD+50){die();return}
+for(const [index, orb] of orbs().entries()){if(!collectedOrbs.has(index)&&Math.hypot(player.x-orb.x,player.y-orb.y)<R+7){collectedOrbs.add(index);playSfx('orb');updateOrbs();}}
 // Physical button: contact is based on the droid's circular footprint against
 // the raised plate, not whether it has already passed the checkpoint position.
 if(phase!=='sandbox') {
@@ -1003,12 +1187,12 @@ if(phase!=='sandbox') {
     const overlapsPlate=player.x+R>plateLeft && player.x-R<plateRight;
     const closeToButton=Math.hypot(player.x-cp.x,player.y-cp.y)<66;
     if(i>lastCheckpoint && (closeToButton || (overlapsPlate && player.grounded && Math.abs(player.y-cp.y)<16))){
-      lastCheckpoint=i;checkpoint={...cp};playSfx('checkpoint');
+      lastCheckpoint=i;checkpoint={...cp};checkpointOrbs=new Set(collectedOrbs);playSfx('checkpoint');
       $('notice').textContent='CHECKPOINT ACTIVATED • Retries start here';
     }
   }
 }
-for(const [index, orb] of orbs().entries()){if(!collectedOrbs.has(index)&&Math.hypot(player.x-orb.x,player.y-orb.y)<R+7){collectedOrbs.add(index);playSfx('orb');updateOrbs();}}
+
 if(phase==='damaged'&&Math.hypot(player.x-ascentExit.x,player.y-ascentExit.y)<R+8){completeRun();updateHud();$('notice').textContent='ESCAPE SUCCESSFUL! You climbed the damaged chamber against gravity.';}
 if(Math.hypot(player.x-cell.x,player.y-(cell.y+Math.sin(simTime*2.3)*4))<R+8&&(phase==='normal'||phase==='sandbox')){completeRun();updateHud()}
 let target=Math.min(WORLD-H,Math.max(0,player.y-H*.36));camera+=(target-camera)*Math.min(1,dt*4);updateHud();}
@@ -1053,7 +1237,7 @@ function levelSelected(){const q=sandboxAdded[selectedIndex];if(!q)return;
   if(mount)Object.assign(q,mount);
  }else q.angle=0;
  updateSelected();saveMap();}
-function deleteSelected(){if(selectedIndex<0)return;sandboxAdded.splice(selectedIndex,1);selectedIndex=-1;updateSelected();saveMap()}
+function deleteSelected(){if(selectedIndex<0)return;sandboxAdded.splice(selectedIndex,1);selectedIndex=-1;updateSelected();saveMap();updateOrbs()}
 $('rotateLeft').onclick=()=>rotateSelected(-1);$('rotateRight').onclick=()=>rotateSelected(1);
 $('levelItem').onclick=levelSelected;$('deleteItem').onclick=deleteSelected;
 $('objectLeft').onclick=()=>rotateSelected(-1);$('objectRight').onclick=()=>rotateSelected(1);
@@ -1112,7 +1296,16 @@ function collideSlope(body,b,physical=true){
  return true;
 }
 
-canvas.addEventListener('wheel',e=>{if(!editing)return;e.preventDefault();camera=Math.max(0,Math.min(WORLD-H,camera+Math.sign(e.deltaY)*105))},{passive:false});
+function scrollSandbox(delta){if(phase!=='sandbox'||!editing||completed)return;camera=Math.max(0,Math.min(WORLD-H,camera+delta));positionObjectTools();}
+// The whole shaft frame accepts the wheel, not only the canvas pixel area.
+// Menus and dialogs retain their own normal scrolling.
+$('frame').addEventListener('wheel',e=>{
+ if(phase!=='sandbox'||!editing||completed)return;
+ if(e.target.closest('#sandboxPicker,#sandboxSandMenu,.finishOverlay,input,textarea,select'))return;
+ e.preventDefault();
+ scrollSandbox(e.deltaY);
+},{passive:false});
+window.addEventListener('keydown',e=>{if(phase!=='sandbox'||!editing||completed||isEditableTarget(e.target)||$('sandboxPicker').style.display==='block')return;const step={'ArrowUp':-100,'ArrowDown':100,'PageUp':-450,'PageDown':450}[e.key];if(step!==undefined){e.preventDefault();scrollSandbox(step)}},true);
 canvas.addEventListener('contextmenu',e=>{if(!editing)return;e.preventDefault();const p=pos(e),i=platformAt(p);if(i>=0){sandboxAdded.splice(i,1);selectedIndex=-1;updateSelected();saveMap()}});
 // Only a deliberate half-second hold arms the slingshot. Simple taps never shoot.
 const HOLD_TO_AIM_MS=100;
@@ -1122,10 +1315,15 @@ function armPendingShot(id){if(!pendingShot||pendingShot.id!==id||editing||compl
  const shot=pendingShot;pendingShot=null;
  aim={start:shot.start,end:shot.end,id};updateHud();
 }
-canvas.addEventListener('pointerdown',e=>{if(editing){if(e.button===2)return;const p=pos(e),i=platformAt(p);if(i>=0){selectedIndex=i;updateSelected();const b=sandboxAdded[i];editDrag={id:e.pointerId,i,dx:p.x-b.x,dy:p.y-b.y,lastValid:{...b}};canvas.setPointerCapture(e.pointerId)}else if((($('itemType').value==='spikes'&&p.y>=8&&p.y<WORLD-5)||(p.y>226&&p.y<1705))&&sandboxAdded.length<55){const type=$('itemType').value,w=type==='orb'?18:type==='vent'?66:type==='kinetic'?76:type==='ram'?105:+$('platformSize').value, x=type==='orb'?Math.max(34,Math.min(386,snap(p.x))):Math.max(23,Math.min(397-w,snap(p.x-w/2))),y=type==='spikes'?snap(p.y):Math.max(230,Math.min(1705,snap(p.y)));const obj={x,y,w,h:type==='vent'?110:type==='ram'?30:type==='laser'?5:type==='spikes'?8:type==='orb'?18:19,type,angle:0,direction:1};if(type!=='spikes'||mountSpikes(obj,p)){sandboxAdded.push(obj);selectedIndex=sandboxAdded.length-1;updateSelected();saveMap()}else $('notice').textContent='SPIKES MUST ATTACH TO A WALL, CEILING, FLOOR OR PLATFORM';}e.preventDefault();return}if(completed)return;cancelPendingShot();const p=pos(e);const shot={id:e.pointerId,start:p,end:p,timer:null};pendingShot=shot;shot.timer=setTimeout(()=>armPendingShot(shot.id),HOLD_TO_AIM_MS);try{canvas.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
-canvas.addEventListener('pointermove',e=>{if(editing){const p=pos(e);editHover=p;if(editDrag&&editDrag.id===e.pointerId){const b=sandboxAdded[editDrag.i];if(b){b.x=b.type==='orb'?Math.max(34,Math.min(386,snap(p.x-editDrag.dx))):Math.max(23,Math.min(397-b.w,snap(p.x-editDrag.dx)));b.y=Math.max(230,Math.min(1705,snap(p.y-editDrag.dy)));if(b.type==='spikes'){const mount=nearestSpikeMount({x:p.x,y:p.y},b.w);if(mount)Object.assign(b,mount);else Object.assign(b,editDrag.lastValid||{});editDrag.lastValid={...b}}positionObjectTools()}}return}if(pendingShot&&e.pointerId===pendingShot.id){pendingShot.end=pos(e);e.preventDefault();return}if(aim&&e.pointerId===aim.id){aim.end=pos(e);e.preventDefault()}});
-function release(e){if(pendingShot&&e.pointerId===pendingShot.id){cancelPendingShot();return}if(editing){if(editDrag&&e.pointerId===editDrag.id){editDrag=null;saveMap()}return}if(!aim||e.pointerId!==aim.id)return;const dx=aim.end.x-aim.start.x,dy=aim.end.y-aim.start.y,len=Math.hypot(dx,dy);if(len>14&&(player.grounded||doubleShotAvailable)&&!completed){const fromAir=!player.grounded;let speed=settings().power*Math.min(1,len/155)*(fromAir?effectiveDoubleShot():1);player.vx=-dx/len*speed;player.vy=-dy/len*speed;if(fromAir)doubleShotAvailable=false;shotCount++;showTimer();runStarted=true;player.grounded=false;flash=.28;$('notice').textContent=fromAir?'DOUBLE SHOT FIRED • Touch a surface to recharge.':'SHOT FIRED • Drag mid-air to aim a slowed Double Shot.'}else if(len>14&&!player.grounded&&!doubleShotAvailable){$('notice').textContent='DOUBLE SHOT SPENT • Land on a surface to recharge.'}aim=null;updateHud()}
-canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',()=>{cancelPendingShot();cancelAim();editDrag=null});
+// Empty-space taps are deferred until pointer-up so dragging pans the shaft.
+let sandboxEmptyGesture=null;
+canvas.addEventListener('pointerdown',e=>{if(editing){if(e.button===2)return;const p=pos(e),i=platformAt(p);if(i>=0){sandboxEmptyGesture=null;sandboxPlacementType=null;selectedIndex=i;updateSelected();const b=sandboxAdded[i];editDrag={id:e.pointerId,i,dx:p.x-b.x,dy:p.y-b.y,lastValid:{...b}};canvas.setPointerCapture(e.pointerId)}else{
+  sandboxEmptyGesture={id:e.pointerId,x:e.clientX,y:e.clientY,lastY:e.clientY,moved:false,point:p,hadSelection:selectedIndex>=0};
+  try{canvas.setPointerCapture(e.pointerId)}catch(_){}
+ }e.preventDefault();return}if(completed)return;cancelPendingShot();const p=pos(e);const shot={id:e.pointerId,start:p,end:p,timer:null};pendingShot=shot;shot.timer=setTimeout(()=>armPendingShot(shot.id),HOLD_TO_AIM_MS);try{canvas.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+canvas.addEventListener('pointermove',e=>{if(editing){if(sandboxEmptyGesture&&sandboxEmptyGesture.id===e.pointerId){const g=sandboxEmptyGesture;const dy=e.clientY-g.lastY;if(Math.hypot(e.clientX-g.x,e.clientY-g.y)>9)g.moved=true;if(g.moved){scrollSandbox(-dy*H/canvas.getBoundingClientRect().height);g.lastY=e.clientY;}e.preventDefault();return;}const p=pos(e);editHover=p;if(editDrag&&editDrag.id===e.pointerId){const b=sandboxAdded[editDrag.i];if(b){b.x=b.type==='orb'?Math.max(34,Math.min(386,snap(p.x-editDrag.dx))):Math.max(23,Math.min(397-b.w,snap(p.x-editDrag.dx)));b.y=Math.max(230,Math.min(1705,snap(p.y-editDrag.dy)));if(b.type==='spikes'){const mount=nearestSpikeMount({x:p.x,y:p.y},b.w);if(mount)Object.assign(b,mount);else Object.assign(b,editDrag.lastValid||{});editDrag.lastValid={...b}}positionObjectTools()}}return}if(pendingShot&&e.pointerId===pendingShot.id){pendingShot.end=pos(e);e.preventDefault();return}if(aim&&e.pointerId===aim.id){aim.end=pos(e);e.preventDefault()}});
+function release(e){if(editing&&sandboxEmptyGesture&&sandboxEmptyGesture.id===e.pointerId){const g=sandboxEmptyGesture;sandboxEmptyGesture=null;if(!g.moved){if(g.hadSelection){selectedIndex=-1;updateSelected();}else if(sandboxPlacementType){placeSandboxObject(g.point,sandboxPlacementType);}else{sandboxPendingPoint=g.point;$('sandboxSandMenu').classList.remove('open');renderSandboxPicker();$('sandboxPicker').style.display='block';}}return;}if(pendingShot&&e.pointerId===pendingShot.id){cancelPendingShot();return}if(editing){if(editDrag&&e.pointerId===editDrag.id){editDrag=null;saveMap()}return}if(!aim||e.pointerId!==aim.id)return;const dx=aim.end.x-aim.start.x,dy=aim.end.y-aim.start.y,len=Math.hypot(dx,dy);if(len>14&&(player.grounded||doubleShotAvailable)&&!completed){const fromAir=!player.grounded;let speed=settings().power*Math.min(1,len/155)*(fromAir?effectiveDoubleShot():1);player.vx=-dx/len*speed;player.vy=-dy/len*speed;if(fromAir)doubleShotAvailable=false;shotCount++;showTimer();runStarted=true;player.grounded=false;flash=.28;$('notice').textContent=fromAir?'DOUBLE SHOT FIRED • Touch a surface to recharge.':'SHOT FIRED • Drag mid-air to aim a slowed Double Shot.'}else if(len>14&&!player.grounded&&!doubleShotAvailable){$('notice').textContent='DOUBLE SHOT SPENT • Land on a surface to recharge.'}aim=null;updateHud()}
+canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',()=>{cancelPendingShot();cancelAim();editDrag=null;sandboxEmptyGesture=null});
 // Prevent browser-native text selection and element dragging while aiming.
 // Never interfere with editable fields (including Sandbox map naming).
 function isEditableTarget(target){
@@ -1505,7 +1703,7 @@ if(aim){const dx=aim.end.x-aim.start.x,dy=aim.end.y-aim.start.y,len=Math.hypot(d
  }
  ctx.restore();
  ctx.strokeStyle='#86aab7';ctx.lineWidth=1.3;rounded(barX+.65,barY+.65,barW-1.3,barH-1.3,(barH-1.3)/2);ctx.stroke();}}
-ctx.restore();if(editing){ctx.fillStyle='#04121bdc';ctx.fillRect(70,13,280,39);text('SANDBOX EDITOR  •  '+sandboxAdded.length+' ITEMS',210,29,12,'#86eaf5','center');text('Wheel / arrows: scroll  •  Edit button: play',210,45,10,'#c3dbe3','center')}if(aim&&!player.grounded&&doubleShotAvailable){ctx.fillStyle='rgba(18,73,94,.16)';ctx.fillRect(0,0,W,H)}if(flash>0){ctx.fillStyle=`rgba(96,227,235,${flash*.1})`;ctx.fillRect(0,0,W,H)}
+ctx.restore();if(aim&&!player.grounded&&doubleShotAvailable){ctx.fillStyle='rgba(18,73,94,.16)';ctx.fillRect(0,0,W,H)}if(flash>0){ctx.fillStyle=`rgba(96,227,235,${flash*.1})`;ctx.fillRect(0,0,W,H)}
 // screen-space lines
 ctx.fillStyle='#83afbc';ctx.globalAlpha=.65;ctx.fillRect(0,0,W,2);ctx.globalAlpha=1;ctx.restore()}
 reset(true);sync();
@@ -1547,56 +1745,63 @@ requestAnimationFrame(frame);
 })();
 </script>
 <script>
-/* v6.2.5 mobile display sizing. The world, physics and input coordinates
-   stay 420 x 740; only the rendered frame's CSS width changes. */
+/* v6.3.3 mobile screen-fit: presentation-only changes.
+   Preserve the 420 x 740 world, physics and touch coordinate mapping. */
 (function () {
   'use strict';
   const app = document.querySelector('.app');
   const frame = document.getElementById('frame');
   if (!app || !frame) return;
-  const standalone = () => window.matchMedia('(display-mode: standalone)').matches ||
-    window.navigator.standalone === true;
-  let scheduled = false;
-  function fitMobileViewport() {
-    scheduled = false;
-    if (!window.matchMedia('(max-width: 600px)').matches) {
+  const mobileQuery = window.matchMedia('(max-width: 600px)');
+  const standaloneQuery = window.matchMedia('(display-mode: standalone)');
+  const standalone = () => standaloneQuery.matches || navigator.standalone === true;
+  let pending = false;
+
+  function fit() {
+    pending = false;
+    if (!mobileQuery.matches) {
       app.style.removeProperty('--gl-visible-fit-width');
+      document.documentElement.classList.remove('gl-standalone');
       return;
     }
-    const viewport = window.visualViewport;
-    const visibleHeight = viewport ? viewport.height : window.innerHeight;
-    const visibleTop = viewport ? viewport.offsetTop : 0;
-    const frameTop = frame.getBoundingClientRect().top - visibleTop;
-    // In Safari the visual viewport already excludes the browser toolbar.
-    // Standalone mode needs to leave room for the iPhone home-indicator area.
-    const style = getComputedStyle(document.body);
-    const bodyBottomPadding = parseFloat(style.paddingBottom) || 0;
-    const extraBottom = standalone() ? Math.max(8, bodyBottomPadding) : 10;
-    const availableFrameHeight = Math.max(180, visibleHeight - Math.max(0, frameTop) - extraBottom);
-    const heightLimitedWidth = Math.floor((availableFrameHeight - 2) * 420 / 740);
-    const bodySideSpace = (parseFloat(style.paddingLeft) || 0) + (parseFloat(style.paddingRight) || 0);
-    const availableWidth = Math.floor(document.documentElement.clientWidth - bodySideSpace);
-    const desiredWidth = Math.max(100, Math.min(availableWidth, heightLimitedWidth));
-    app.style.setProperty('--gl-visible-fit-width', desiredWidth + 'px');
+    document.documentElement.classList.toggle('gl-standalone', standalone());
+    const vv = window.visualViewport;
+    // visualViewport.height excludes Safari's visible address and navigation bars.
+    const visibleHeight = vv ? vv.height : window.innerHeight;
+    const visibleOffset = vv ? vv.offsetTop : 0;
+    const bodyCSS = getComputedStyle(document.body);
+    const bottomPadding = parseFloat(bodyCSS.paddingBottom) || 0;
+    const horizontalPadding = (parseFloat(bodyCSS.paddingLeft) || 0) +
+                              (parseFloat(bodyCSS.paddingRight) || 0);
+    const frameTop = frame.getBoundingClientRect().top - visibleOffset;
+    // A few pixels of clearance keeps the charging bar off Safari's toolbar
+    // and the standalone app's home-indicator safe area.
+    const clearance = standalone() ? Math.max(4, bottomPadding) : 5;
+    const heightAvailable = Math.max(150, visibleHeight - Math.max(0, frameTop) - clearance);
+    const widthByHeight = Math.floor(Math.max(0, heightAvailable - 1) * 420 / 740);
+    const widthByScreen = Math.floor(document.documentElement.clientWidth - horizontalPadding);
+    const width = Math.max(100, Math.min(widthByHeight, widthByScreen));
+    app.style.setProperty('--gl-visible-fit-width', width + 'px');
   }
   function scheduleFit() {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(fitMobileViewport);
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(fit);
   }
-  window.addEventListener('resize', scheduleFit, {passive: true});
-  window.addEventListener('orientationchange', scheduleFit, {passive: true});
-  window.addEventListener('pageshow', scheduleFit, {passive: true});
+  window.addEventListener('resize', scheduleFit, {passive:true});
+  window.addEventListener('orientationchange', scheduleFit, {passive:true});
+  window.addEventListener('pageshow', scheduleFit, {passive:true});
   if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', scheduleFit, {passive: true});
-    window.visualViewport.addEventListener('scroll', scheduleFit, {passive: true});
+    window.visualViewport.addEventListener('resize', scheduleFit, {passive:true});
+    window.visualViewport.addEventListener('scroll', scheduleFit, {passive:true});
   }
-  // Prevent iOS rubber-band scrolling when swiping the playfield itself;
-  // menu cards and sandbox controls retain their normal scrolling.
+  if (standaloneQuery.addEventListener) standaloneQuery.addEventListener('change', scheduleFit);
+  // Only prevent browser panning on the playable surface; settings,
+  // level-select and sandbox panels still scroll normally.
   frame.addEventListener('touchmove', function (event) {
     if (event.target.closest('.finishCard, #sandboxPicker, #modToolsMount, input, select, textarea')) return;
     if (event.cancelable) event.preventDefault();
-  }, {passive: false});
+  }, {passive:false});
   scheduleFit();
 })();
 </script>
