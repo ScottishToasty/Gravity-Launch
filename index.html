@@ -114,7 +114,7 @@ button,select,input{touch-action:manipulation;-webkit-tap-highlight-color:transp
 @media(prefers-reduced-motion:reduce){.starAppear,.starFade,.starWarning{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 @media (pointer:fine) and (min-width:850px){body{cursor:crosshair}.app,button,input,select,textarea{cursor:auto}.frame canvas{cursor:crosshair}}
 
-/* v6.3.3 mobile: scale the complete frame, not its 420 x 740 game world.
+/* v6.3.5 mobile: scale the complete frame, not its 420 x 740 game world.
    Browser mode fits above Safari chrome; Home Screen mode uses the extra height. */
 @media (max-width: 600px) {
   html { width: 100%; overflow-x: hidden; overscroll-behavior: none; }
@@ -127,7 +127,7 @@ button,select,input{touch-action:manipulation;-webkit-tap-highlight-color:transp
          padding-bottom: max(5px, env(safe-area-inset-bottom, 0px)); }
 }
 
-/* v6.3.3: Home Screen presentation uses the usable safe area more efficiently.
+/* v6.3.5: Home Screen presentation uses the usable safe area more efficiently.
    Normal Safari keeps the browser-chrome-aware height fit above. */
 @media (max-width: 600px) {
   html, body { overscroll-behavior: none; }
@@ -247,7 +247,15 @@ input:not([type=range]),textarea,[contenteditable="true"]{user-select:text;-webk
 #homeCellWallet .blueStar,#levelProgressWallet .blueStar{color:#38b9ff;font-style:normal;font-size:15px}
 #homeCellWallet .creditIcon,#levelProgressWallet .creditIcon{color:#8ee8e9;font-style:normal;font-size:15px}
 </style><style>
-/* v6.3.3: Sandbox completion is a modal above all editor controls. */
+/* v6.3.5: visible placement exit and reliable touch tools. */
+#sandboxCancelPlacement{display:none;position:absolute;z-index:16;right:12px;bottom:15px;
+ min-width:48px;min-height:48px;padding:0;border:1px solid #82e6eb;border-radius:10px;
+ background:#0c2738f2;color:#e3fbff;font-size:25px;line-height:1;touch-action:manipulation;
+ box-shadow:0 5px 18px #000a}
+body.gl-sandbox:has(#finishOverlay.visible) #sandboxCancelPlacement{display:none!important}
+#sandboxObjectTools{z-index:17;touch-action:manipulation}
+#sandboxObjectTools button{touch-action:manipulation;pointer-events:auto;}
+/* v6.3.5: Sandbox completion is a modal above all editor controls. */
 body.gl-sandbox #finishOverlay.visible{z-index:35!important;}
 body.gl-sandbox:has(#finishOverlay.visible) #sandboxSandButton,
 body.gl-sandbox:has(#finishOverlay.visible) #sandboxSandMenu,
@@ -260,7 +268,7 @@ body.gl-sandbox:has(#finishOverlay.visible) #pauseGear{pointer-events:none!impor
 #sandboxPickerObjects button{justify-content:flex-start;padding-left:15px;}
 </style></head><body><main class="app">
 <style>
-/* v6.3.3: accessible touch targets and consistent centre-aligned navigation */
+/* v6.3.5: accessible touch targets and consistent centre-aligned navigation */
 @media (pointer:coarse){
  .settingsExitRow .settingsBack,
  .settingsCard .settingsBack,
@@ -303,7 +311,7 @@ body.gl-sandbox .hudleft {min-width:0;}
 body.gl-sandbox #sandboxEditorBar {display:flex;}
 #sandboxPicker {bottom:68px;}
 body.gl-sandbox .overlaytop {top:10px;}
-/* v6.3.3: compact sandbox HUD and menu */
+/* v6.3.5: compact sandbox HUD and menu */
 body.gl-sandbox #sandboxEditorBar{display:none!important}
 body.gl-sandbox .overlaytop{top:10px;align-items:flex-start}
 body.gl-sandbox .hudleft{display:block!important;min-width:0;width:auto;max-width:64%;padding:6px 8px}
@@ -338,7 +346,7 @@ body.gl-sandbox #pauseGear{top:67px}
 <div class="finishOverlay" id="modOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Mod Tools</h2><div id="modToolsMount"></div><button id="modBack" class="wideAction">← Settings</button></div></div>
 <div class="finishOverlay" id="controlsOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Controls</h2><div class="controlHelp"><div><b>Launch</b><span>Hold 0.1 seconds, drag backwards to aim, release to fire.</span></div><div><b>Double Shot</b><span>Hold and drag while airborne. Time slows as you aim.</span></div><div><b>Restart</b><span>Press R or tap the ↻ button.</span></div><div><b>Cancel aim</b><span>Press C or use the cancel control.</span></div><div><b>Mobile</b><span>Touch and drag anywhere on the playfield. Tap on-screen buttons normally.</span></div><div><b>Sandbox editor</b><span>Tap to place, drag to move, select an object to rotate or delete.</span></div></div><button id="controlsBack" class="wideAction">← Settings</button></div></div>
 <div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">← Back</button><h2>SANDBOX MODE</h2></div><p class="hubIntro">Create your own maps or continue a saved layout.</p><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New map name" aria-label="New map name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR MAPS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
-<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeLevels">☷ Level Select</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v6.3.3</div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. Tap a selected object away once to deselect, then tap again for the picker.</p></div><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object">＋</button><button id="objectLeft" title="Rotate left">↶</button><button id="objectRight" title="Rotate right">↷</button><button id="objectLevel" title="Level / reset orientation">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges on landing. Aim in mid-air to slow time.</div></div>
+<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeLevels">☷ Level Select</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v6.3.5</div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. Tap a selected object away once to deselect, then tap again for the picker.</p></div><button id="sandboxCancelPlacement" type="button" title="Cancel placing objects" aria-label="Cancel object placement">✕</button><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object">＋</button><button id="objectLeft" title="Rotate left">↶</button><button id="objectRight" title="Rotate right">↷</button><button id="objectLevel" title="Level / reset orientation">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges on landing. Aim in mid-air to slow time.</div></div>
 <div class="toolbar" id="devToolbar"><label style="display:flex;align-items:center;gap:7px;background:#102b39;border:1px solid #3a6c81;border-radius:6px;padding:5px 9px;color:#c2e8ef">LEVEL <select id="levelSelect" style="background:#091a28;color:#9af0de;border:1px solid #466f7d;padding:5px;border-radius:4px"><option value="1">01 · Launch Basics</option><option value="2">02 · First Spikes</option><option value="3">03 · Rolling Slopes</option><option value="4">04 · Slopes & Spikes</option><option value="5">05 · Mastery</option></select></label><button id="selectLevels">☷ Level select</button><button id="audioToggle" title="Enable or mute synthesised music and sound effects">♫ Sound: Off</button><button id="nextTrack" title="Switch to another background music track">♫ Next track</button><button id="cancelShot" type="button" style="display:none">✕ Cancel shot (C)</button><button id="reset">↻ Restart</button><button id="normal" style="display:none">↓ Normal chamber</button><button id="damaged" style="display:none">↑ Damaged ascent</button><button id="sandbox" style="display:none">✦ Sandbox chamber</button><button id="edit" style="display:none">✎ Edit platforms</button><button id="clearMap" style="display:none">Clear added</button><button id="defaults">Reset tuning</button></div>
 <section id="editorTools" style="display:none" class="editorTools"><b>BUILD MODE</b><span>Tap empty space to add a platform • Select an object and use ＋ to change its type • Drag to move</span><label>Item <select id="itemType"><option value="platform">Metal platform</option><option value="spikes">Spike trap</option><option value="orb">Collectible orb</option><option value="retract">Retractable platform</option><option value="laser">Pulse laser</option><option value="ram">Hydraulic ram</option><option value="conveyor">Conveyor belt</option><option value="kinetic">Kinetic launch pad</option><option value="vent">Pressure vent</option></select></label><label>Item size <select id="platformSize"><option value="105">Short</option><option value="150" selected>Medium</option><option value="200">Long</option></select></label><div><button id="rotateLeft">↶ Rotate −15°</button><button id="rotateRight">↷ Rotate +15°</button><button id="levelItem">Level item</button><button id="deleteItem">Delete selected</button></div><span id="selectedItem">Select a platform to rotate it. Select an object to edit it.</span><div><button id="upMap">↑ Up</button><button id="downMap">↓ Down</button><button id="saveMap">Save layout</button></div></section><section class="controls" id="devPhysics" aria-label="Physics tuning"><div class="control"><label for="gravity">Gravity <output id="gravityVal">900</output></label><input id="gravity" type="range" min="400" max="1600" value="900" step="25"></div><div class="control"><label for="power">Max launch speed <output id="powerVal">720</output></label><input id="power" type="range" min="400" max="1100" value="720" step="20"></div><div class="control"><label for="drag">Air resistance <output id="dragVal">0.12</output></label><input id="drag" type="range" min="0" max="1" value="0.12" step="0.02"></div><div class="control"><label for="bounce">Bounce <output id="bounceVal">0.10</output></label><input id="bounce" type="range" min="0" max="0.65" value="0.10" step="0.05"></div><div class="control"><label for="wallBounce">Wall ricochet <output id="wallBounceVal">0.65</output></label><input id="wallBounce" type="range" min="0" max="1" value="0.65" step="0.05"></div><div class="control"><label for="arcLength">Trajectory length <output id="arcLengthVal">0.7</output></label><input id="arcLength" type="range" min="0.6" max="3.0" value="0.7" step="0.1"></div></section>
 <style>
@@ -501,7 +509,7 @@ const W=420,H=740, WORLD=1880,R=17, canvas=document.getElementById('game'),ctx=c
 const $=id=>document.getElementById(id), input={gravity:$('gravity'),power:$('power'),drag:$('drag'),bounce:$('bounce'),wallBounce:$('wallBounce'),arcLength:$('arcLength')};
 $('trackSeek').addEventListener('input',e=>{beatN=Math.floor(+e.target.value/100*TRACK_STEPS/16)*16;nextBeat=audioCtx?audioCtx.currentTime+.04:0;updateTrackSeek();});
 // V6.0.8: isolated progression store. V5.9 saves remain untouched.
-const CELL_SAVE='gravityLaunchV6AProgressV1';
+const CELL_SAVE='gravityLaunchV6AProgressV1:test:v6.3.5';
 const V6_REWARDS=Object.freeze({first:20,star:15,six:30,perfect:50}); // provisional tuning values
 const V6_TIME_TARGETS=Object.freeze({normal:[0,26,36,42,50,58],damaged:[0,52,64,72,80,92]}); // provisional; rebalance after route tests
 let progression={claimed:{},spent:0,devCredits:0,upgrades:{launch:0,ricochet:0,double:0},records:{},creditLedger:{}};
@@ -550,7 +558,7 @@ refreshWallet();
 function applyBuildMode(){
   const dev=isDeveloperMode();
   document.body.classList.toggle('playerBuild',!dev);
-  const footer=$('homeFooter'); if(footer)footer.textContent='v6.3.3 · '+(dev?'Developer':'Standard');
+  const footer=$('homeFooter'); if(footer)footer.textContent='v6.3.5 · '+(dev?'Developer':'Standard');
   const modBtn=$('settingsModTools');
   if(modBtn){modBtn.disabled=!dev;modBtn.textContent=dev?'⚙ Mod Tools →':'⚙ Mod Tools →';}
   const standardBtn=$('buildStandard'),developerBtn=$('buildDeveloper');
@@ -704,7 +712,7 @@ function starsFor(n,total){const pct=total? n/total : 0;return total===0?0:pct>=
 function updateOrbs(){const total=orbs().length, count=collectedOrbs.size, stars=finalStars===null?starsFor(count,total):finalStars;$('orbCount').textContent=`${count}/${total}`;$('starCount').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);const sandboxOrb=$('sandboxOrbStatus');if(sandboxOrb)sandboxOrb.textContent=`Orbs ${count}/${total}`}
 let elapsed=0,runStarted=false,shotCount=0;
 function formatTime(t){let cs=Math.floor(t*100)%100,sec=Math.floor(t)%60,min=Math.floor(t/60);return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`}
-function recordKey(){let suffix=phase==='sandbox'?JSON.stringify([...sandboxAdded].map(p=>[p.x,p.y,p.w,p.h,p.type||'platform',p.angle||0])):phase;return 'gravityLaunchPBv1:'+suffix+':L'+levelIndex}
+function recordKey(){let suffix=phase==='sandbox'?JSON.stringify([...sandboxAdded].map(p=>[p.x,p.y,p.w,p.h,p.type||'platform',p.angle||0])):phase;return 'gravityLaunchPBv1:test:v6.3.5:'+suffix+':L'+levelIndex}
 let displayedTimeTier=null;
 let lastTimeStarContext='';
 function updateTimeTargets(){
@@ -772,7 +780,7 @@ function nextChargeReaction(){
  return chargeReactionBag.shift();
 }
 function completeRun(){completed=true;runStarted=false;retrievalStart=performance.now();retrievalZapped=false;retrievalX=phase==='damaged'?ascentExit.x:cell.x;retrievalY=phase==='damaged'?ascentExit.y:cell.y+Math.sin(simTime*2.3)*4;retrievalSide=retrievalX>=player.x?1:-1;player.vx=0;player.vy=0;aim=null;chargeVariant=nextChargeReaction();chargeUntil=performance.now()+RETRIEVAL_MS;finalStars=starsFor(collectedOrbs.size,orbs().length);v6LastEvaluation=applyEvaluation();chargeAward=v6LastEvaluation.reward;if(phase==='normal')saveDescentStars(levelIndex,finalStars);updateOrbs();try{let key=recordKey(),prior=Number(localStorage.getItem(key));if(!prior||elapsed<prior){localStorage.setItem(key,String(elapsed));$('notice').textContent+=' • NEW PERSONAL BEST!'}}catch(e){}showTimer();$('notice').textContent=chargeAward?'TERMINAL ACTIVATED • +'+chargeAward+' UPGRADE CREDITS':'TERMINAL ACTIVATED • RECORD UPDATED';retrievalStart=0;chargeUntil=0;playSfx('cell');showCompletion();}
-const STAR_KEY='gravityLaunchDescentStarsV154:';
+const STAR_KEY='gravityLaunchDescentStarsV154:test:v6.3.5:';
 function descentStars(level){try{return Math.max(0,Math.min(3,Number(localStorage.getItem(STAR_KEY+level))||0))}catch(e){return 0}}
 function saveDescentStars(level,stars){try{if(stars>descentStars(level))localStorage.setItem(STAR_KEY+level,String(stars))}catch(e){}}
 function descentChapterComplete(){return Array.from({length:5},(_,i)=>getRecord('normal:'+(i+1)).completed).every(Boolean)}
@@ -888,6 +896,18 @@ const sandboxObjectCategories=[
 ];
 let sandboxPickerCategory=0;
 let sandboxPlacementType=null;
+function syncPlacementCancel(){
+ const cancel=$('sandboxCancelPlacement');
+ cancel.style.display=(phase==='sandbox'&&editing&&sandboxPlacementType&&selectedIndex<0)?'flex':'none';
+ cancel.setAttribute('aria-hidden',cancel.style.display==='none'?'true':'false');
+}
+$('sandboxCancelPlacement').addEventListener('pointerdown',e=>e.stopPropagation());
+$('sandboxCancelPlacement').onclick=e=>{
+ e.preventDefault();e.stopPropagation();sandboxPlacementType=null;sandboxPendingPoint=null;
+ sandboxEmptyGesture=null;syncPlacementCancel();
+ $('notice').textContent='PLACEMENT CANCELLED • Tap empty space to choose a new object.';
+};
+
 let sandboxPendingPoint=null;
 const sandboxPreviewIcons={platform:'▰',retract:'▱',conveyor:'⇢',spikes:'▲',laser:'━',ram:'▣',kinetic:'↗',vent:'≋',orb:'◉'};
 function placeSandboxObject(p,type){
@@ -907,7 +927,7 @@ function renderSandboxPicker(){
  sandboxObjectCategories[sandboxPickerCategory][1].forEach(([type,name])=>{
   const b=document.createElement('button');b.classList.toggle('active',sandboxPlacementType===type);
   const label=document.createElement('span');label.textContent=name;b.append(label);
-  b.onclick=()=>{sandboxPlacementType=type;$('itemType').value=type;$('sandboxPicker').style.display='none';if(sandboxPendingPoint)placeSandboxObject(sandboxPendingPoint,type);sandboxPendingPoint=null};items.appendChild(b)
+  b.onclick=()=>{sandboxPlacementType=type;$('itemType').value=type;$('sandboxPicker').style.display='none';if(sandboxPendingPoint)placeSandboxObject(sandboxPendingPoint,type);sandboxPendingPoint=null;syncPlacementCancel()};items.appendChild(b)
  });
 }
 $('objectChange').onclick=()=>{
@@ -922,11 +942,11 @@ $('objectChange').onclick=()=>{
  }
  sandboxAdded.push(duplicate);selectedIndex=sandboxAdded.length-1;updateSelected();saveMap();updateOrbs();
 };
-$('sandboxPickerClose').onclick=()=>{$('sandboxPicker').style.display='none';sandboxPendingPoint=null;sandboxEmptyGesture=null};
+$('sandboxPickerClose').onclick=()=>{$('sandboxPicker').style.display='none';sandboxPendingPoint=null;sandboxEmptyGesture=null;syncPlacementCancel()};
 // The picker is a real interactive dialog; clicks on its controls must not reach the shaft.
 $('sandboxPicker').addEventListener('pointerdown',e=>e.stopPropagation());
 $('sandboxPicker').addEventListener('click',e=>e.stopPropagation());
-// v6.3.3: The picker is non-modal. A click/tap on the shaft outside
+// v6.3.5: The picker is non-modal. A click/tap on the shaft outside
 // the picker dismisses it without selecting, dragging, or placing anything.
 // Capture the pointerdown before the canvas receives it; otherwise its
 // pointerup would open the picker again immediately.
@@ -941,7 +961,7 @@ document.addEventListener('pointerdown',e=>{
  e.stopImmediatePropagation();
 },true);
 
-function syncSandboxAdd(){if(!editing||phase!=='sandbox'){$('sandboxPicker').style.display='none';sandboxPendingPoint=null}syncSandboxBar()}
+function syncSandboxAdd(){if(!editing||phase!=='sandbox'){$('sandboxPicker').style.display='none';sandboxPendingPoint=null;sandboxPlacementType=null}syncSandboxBar();syncPlacementCancel()}
 function syncSandboxBar(){const show=phase==='sandbox';document.body.classList.toggle('gl-sandbox',show);const toggle=$('sandboxBarToggle');if(toggle)toggle.textContent=editing?'▶ Play':'✎ Edit';if(!show)$('sandboxSandMenu').classList.remove('open')}
 $('sandboxSandButton').onclick=()=>{$('sandboxSandMenu').classList.toggle('open');$('sandboxPicker').style.display='none'};
 // A click outside the open Sand menu is ONLY a dismissal. It must never
@@ -1206,6 +1226,7 @@ function updateSelected(){
  const q=sandboxAdded[selectedIndex];
  $('selectedItem').textContent=q?`Selected: ${q.type.toUpperCase()} (${q.angle||0}°) — drag to move.`:'Select an object to edit it.';
  positionObjectTools();
+ syncPlacementCancel();
 }
 function positionObjectTools(){
  const tools=$('sandboxObjectTools'),q=sandboxAdded[selectedIndex];
@@ -1219,17 +1240,25 @@ function positionObjectTools(){
 }
 function rotationAllowed(q,angle){if(q.type!=='spikes')return true;return canAttachSpikes(q,angle)}
 function rotateSelected(delta){
+ if(phase!=='sandbox'||!editing||selectedIndex<0)return;
  const q=sandboxAdded[selectedIndex];if(!q)return;
- const step=q.type==='spikes'?90:q.type==='orb'?30:15;
- const a=((q.angle||0)+Math.sign(delta)*step+360)%360;
+ const step=q.type==='spikes'?90:15;
  if(q.type==='spikes'){
+   const a=((q.angle||0)+Math.sign(delta)*step+360)%360;
    if(!canAttachSpikes(q,a)){
      const candidate=nearestSpikeMount({x:q.x+q.w/2,y:q.y},q.w,a);
-     if(!candidate)return;
+     if(!candidate){$('notice').textContent='SPIKES MUST FACE AN ATTACHMENT SURFACE';return}
      Object.assign(q,candidate);
    }else q.angle=a;
- }else q.angle=q.type==='platform'?Math.max(-90,Math.min(90,(q.angle||0)+Math.sign(delta)*15)):['orb','retract','laser','ram','conveyor','kinetic','vent'].includes(q.type)?0:a;
+ }else if(q.type==='orb'){
+   $('notice').textContent='ORBS ARE ROUND • No rotation needed';return;
+ }else{
+   // Platforms and mechanical objects retain their new angle in the saved map.
+   const current=Number.isFinite(q.angle)?q.angle:0;
+   q.angle=Math.max(-90,Math.min(90,current+Math.sign(delta)*step));
+ }
  updateSelected();saveMap();
+ $('notice').textContent='OBJECT ROTATED • '+q.angle+'°';
 }
 function levelSelected(){const q=sandboxAdded[selectedIndex];if(!q)return;
  if(q.type==='spikes'){
@@ -1240,7 +1269,10 @@ function levelSelected(){const q=sandboxAdded[selectedIndex];if(!q)return;
 function deleteSelected(){if(selectedIndex<0)return;sandboxAdded.splice(selectedIndex,1);selectedIndex=-1;updateSelected();saveMap();updateOrbs()}
 $('rotateLeft').onclick=()=>rotateSelected(-1);$('rotateRight').onclick=()=>rotateSelected(1);
 $('levelItem').onclick=levelSelected;$('deleteItem').onclick=deleteSelected;
-$('objectLeft').onclick=()=>rotateSelected(-1);$('objectRight').onclick=()=>rotateSelected(1);
+$('sandboxObjectTools').addEventListener('pointerdown',e=>e.stopPropagation());
+$('sandboxObjectTools').addEventListener('pointerup',e=>e.stopPropagation());
+$('objectLeft').onclick=e=>{e.stopPropagation();rotateSelected(-1)};
+$('objectRight').onclick=e=>{e.stopPropagation();rotateSelected(1)};
 $('objectLevel').onclick=levelSelected;$('objectDelete').onclick=deleteSelected;
 // Mounts are chosen from solid walls, floor, ceiling and existing platform top edges.
 function nearestSpikeMount(point,width,angleFilter=null){
@@ -1745,7 +1777,7 @@ requestAnimationFrame(frame);
 })();
 </script>
 <script>
-/* v6.3.3 mobile screen-fit: presentation-only changes.
+/* v6.3.5 mobile screen-fit: presentation-only changes.
    Preserve the 420 x 740 world, physics and touch coordinate mapping. */
 (function () {
   'use strict';
