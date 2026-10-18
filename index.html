@@ -114,7 +114,7 @@ button,select,input{touch-action:manipulation;-webkit-tap-highlight-color:transp
 @media(prefers-reduced-motion:reduce){.starAppear,.starFade,.starWarning{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 @media (pointer:fine) and (min-width:850px){body{cursor:crosshair}.app,button,input,select,textarea{cursor:auto}.frame canvas{cursor:crosshair}}
 
-/* v6.3.8 mobile: scale the complete frame, not its 420 x 740 game world.
+/* v6.3.13 mobile: scale the complete frame, not its 420 x 740 game world.
    Browser mode fits above Safari chrome; Home Screen mode uses the extra height. */
 @media (max-width: 600px) {
   html { width: 100%; overflow-x: hidden; overscroll-behavior: none; }
@@ -362,20 +362,73 @@ body.playerBuild #settingsAudio:not([open]) .audioFoldBody{display:none!importan
 @media (orientation:landscape) and (pointer:coarse) and (max-height:600px){#portraitGuard{display:flex}}
 #objectChange svg,#objectCancelMove svg{width:26px;height:26px;display:block;stroke:#baf8f7;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
 #sandboxObjectTools button:disabled{opacity:.43;cursor:default}
-</style><div id="portraitGuard" role="status" aria-label="Portrait orientation required"><div class="portraitPanel"><div class="portraitSymbol">▯ ↻</div><strong>Portrait mode</strong><p>Rotate your phone upright to continue Gravity Launch.</p></div></div><div class="frame" id="frame"><canvas id="game" width="420" height="740" aria-label="Gravity Launch playable chamber"></canvas><div class="overlaytop"><div class="status hudleft"><b id="phaseLabel">Act 1 / Sector 01</b><div class="hudshot">ORBS <b id="orbCount">0/0</b> · <b id="starCount">☆☆☆</b></div></div><div class="status hudright"><div class="hudrow"><span>Shots</span><b id="shotCount">0</b></div><div class="hudrow"><span>Deaths</span><b id="deaths">0</b></div><div class="hudrow"><span>Time</span><b id="timeElapsed">00:00.00</b></div><div class="hudrow"><span>PB</span><b id="personalBest">—</b></div><div id="timeStarTargets" class="timeStarTargets" aria-label="Current time star target"></div></div><button type="button" id="hudRestart" class="hudRestart" title="Restart current chamber" aria-label="Restart current chamber">↻</button></div><div class="finishOverlay" id="finishOverlay"><div class="finishCard"><h2 id="finishTitle">Sector Report</h2><div id="finishStars" class="finishStars">☆☆☆ ☆☆☆</div><div id="finishSummary" class="finishStats">Course finished</div><div class="finishChoices"><button id="finishNext">Next Level →</button><button id="finishRestart">↻ Restart</button><button id="finishAscend">↑ Ascension</button><button id="finishLevelSelect">☷ Level select</button><button id="finishHome">⌂ Home</button></div></div></div><div class="finishOverlay" id="levelOverlay"><div class="finishCard" style="width:min(94%,380px);max-height:88%;overflow:auto"><h2>Select Sector</h2><p>Complete all five Descent chambers to unlock Ascension.</p><div id="levelProgressWallet" class="cellWallet" aria-live="polite"></div><div class="levelModeActions"><button id="levelSandbox">✦ Sandbox Mode</button><button id="levelAscension" type="button" disabled>↑ Ascension 🔒</button></div><div id="levelMenuEntries" class="levelMenuEntries"></div><div class="levelExitActions"><button id="closeLevels" type="button">← Back</button><button id="levelsHome" type="button">⌂ Home</button></div></div></div><div id="sandboxOrbStatus" aria-live="polite">Orbs 0/0</div><button id="pauseGear" title="Pause and settings" aria-label="Pause and open settings">⚙</button><div class="topActions" style="display:none"><button id="openLevelsInGame">☷ Levels</button><button id="openSettings">⚙ Settings</button></div><div class="finishOverlay" id="settingsOverlay"><div class="finishCard settingsCard">
-<h2>Settings</h2><div class="settingsProgress" id="settingsProgress" aria-label="Your stars and credits"></div><div class="buildModeSwitch" aria-label="Build mode"><button id="buildStandard" type="button">Standard</button><button id="buildDeveloper" type="button">Developer</button></div><button id="settingsClose" class="resumeMain">▶ Resume</button><button id="settingsLevelSelect" class="resumeMain settingsLevelSelect" type="button">☷ Level Select</button><div class="settingsNav"><button id="settingsControls">⌨ Controls →</button><button id="settingsModTools">⚙ Mod Tools →</button></div><details class="audioFold" id="settingsAudio"><summary>♫ Audio <span>Music, effects &amp; tracks</span></summary><div class="audioFoldBody">
+
+/* v6.3.11 — consistent menu widths and context-aware navigation */
+.settingsCard{width:min(90%,345px)!important;max-height:88%!important;overflow-y:auto!important;scrollbar-width:none!important;-ms-overflow-style:none!important}
+.settingsCard::-webkit-scrollbar,#levelOverlay .finishCard::-webkit-scrollbar,.submenuCard::-webkit-scrollbar,.sandboxGallery::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+#levelOverlay .finishCard,.submenuCard{scrollbar-width:none!important;-ms-overflow-style:none!important}
+#settingsLevelSelect{background:#102b39!important;border-color:#376477!important;color:#d7ebef!important;box-shadow:none!important}
+#settingsLevelSelect:hover{background:#17394a!important}
+#settingsOverlay.from-home #settingsClose,#settingsOverlay.from-home #settingsHome{display:none!important}
+#levelOverlay.from-home #levelsHome{display:none!important}
+#levelOverlay.from-home .levelExitActions{justify-content:center!important}
+#levelOverlay.from-home #closeLevels{flex:0 0 auto!important;width:112px!important;min-width:0!important}
+
+/* v6.3.11 — compact menu and sandbox quality-of-life */
+#settingsAudio>summary{justify-content:center!important;position:relative;text-align:center!important}
+#settingsAudio>summary::before{position:absolute;left:12px;margin:0!important}
+#settingsAudio>summary span{display:none!important}
+#levelOverlay .finishCard>p{margin-bottom:5px!important}
+#levelProgressWallet{margin-top:0!important;margin-bottom:7px!important}
+.sandboxActions button{touch-action:manipulation}
+.sandboxActions button[data-confirm="yes"]{background:#702a38!important;border-color:#ff8a9b!important;color:#fff!important;font-size:11px!important}
+
+/* v6.3.13 — dedicated pause controls and compact settings navigation */
+#pauseOverlay{z-index:17}
+.pauseCard{width:min(90%,345px)!important;padding:20px 17px 23px!important}
+.pauseCard h2{text-align:center;margin:0 0 17px}
+.pauseIconRow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.pauseIconRow button{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;padding:9px;border-radius:9px;background:#102b39;border:1px solid #3c7488;color:#c8f7ff;min-width:0}
+.pauseIconRow button:hover,.pauseIconRow button:focus-visible{background:#194c60;border-color:#6ae3f0}
+.pauseIconRow svg{height:26px;width:26px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#settingsClose,#settingsLevelSelect,#settingsHome{display:none!important}
+#settingsBack{display:block;width:112px;margin:14px auto 0;background:#102b39;border-color:#376477}
+.sandboxHeading{flex:1;min-width:0;text-align:center}
+.sandboxHeading h2{margin:0 0 4px!important;font-size:19px}
+.sandboxHeading .hubIntro{margin:0!important;font-size:11px;line-height:1.4}
+#sandboxHub .settingsHeader{align-items:flex-start}
+#sandboxHub .settingsHeader>button{flex-shrink:0}
+
+/* v7.0.3: resume primary, compact three-icon navigation beneath */
+.pauseCard{width:min(78%,280px)!important;padding:18px 14px 19px!important}
+.pauseCard h2{margin-bottom:14px!important}
+.pauseResumeMain{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:48px;margin-bottom:12px;background:#1b5268;border:1px solid #69cfe3;border-radius:8px;color:#e2fbff;font-weight:750;font-size:16px}
+.pauseResumeMain svg{width:30px;height:30px;fill:currentColor}
+.pauseResumeMain{width:102px!important;height:42px!important;min-height:42px!important;margin:0 auto 12px!important;padding:5px!important}
+.replayHud{position:absolute;top:11%;left:50%;transform:translateX(-50%);z-index:40;display:none;align-items:center;gap:12px;white-space:nowrap;background:#0a2736ee;border:1px solid #65c9dc;border-radius:9px;padding:9px 13px;color:#e0faff;font-weight:700;font-size:13px}
+.replayHud.visible{display:flex}.replayHud button{padding:5px 10px;border:1px solid #6acfe1;background:#143d51;color:#e0faff;border-radius:6px}.replayHud span{font-variant-numeric:tabular-nums}
+.pauseIconRow{grid-template-columns:repeat(3,52px)!important;justify-content:center;gap:12px!important}
+.pauseIconRow button{width:52px;height:52px;aspect-ratio:auto!important;padding:12px!important}
+.pauseIconRow svg{height:25px;width:25px}
+#settingsBack{display:block!important;visibility:visible!important}
+
+/* Sector Report: primary progression action, no arrow glyph. */
+.finishChoices #finishNext.reportPrimary:not(:disabled){background:#1b627a;border:1px solid #72e5f2;color:#f2ffff;box-shadow:0 0 12px #35c8e52b;font-weight:800}
+.finishChoices #finishNext.reportPrimary:not(:disabled):active{background:#247b91}
+</style><div id="portraitGuard" role="status" aria-label="Portrait orientation required"><div class="portraitPanel"><div class="portraitSymbol">▯ ↻</div><strong>Portrait mode</strong><p>Rotate your phone upright to continue Gravity Launch.</p></div></div><div class="frame" id="frame"><canvas id="game" width="420" height="740" aria-label="Gravity Launch playable chamber"></canvas><div class="overlaytop"><div class="status hudleft"><b id="phaseLabel">Act 1 / Sector 01</b><div class="hudshot">ORBS <b id="orbCount">0/0</b> · <b id="starCount">☆☆☆</b></div></div><div class="status hudright"><div class="hudrow"><span>Shots</span><b id="shotCount">0</b></div><div class="hudrow"><span>Deaths</span><b id="deaths">0</b></div><div class="hudrow"><span>Time</span><b id="timeElapsed">00:00.00</b></div><div class="hudrow"><span>PB</span><b id="personalBest">—</b></div><div id="timeStarTargets" class="timeStarTargets" aria-label="Current time star target"></div></div><button type="button" id="hudRestart" class="hudRestart" title="Restart current chamber" aria-label="Restart current chamber">↻</button></div><div class="finishOverlay" id="finishOverlay"><div class="finishCard"><h2 id="finishTitle">Sector Report</h2><div id="finishStars" class="finishStars">☆☆☆ ☆☆☆</div><div id="finishSummary" class="finishStats">Course finished</div><div class="finishChoices"><button id="finishNext" class="reportPrimary">Next Level</button><button id="finishRestart">↻ Restart</button><button id="finishReplay" type="button">▶ Replay attempts</button><button id="finishAscend">↑ Ascension</button><button id="finishLevelSelect">☷ Level select</button><button id="finishHome">⌂ Home</button></div></div></div><div id="replayHud" class="replayHud"><span id="replayInfo">Replay · 3×</span><button id="replayClose" type="button">✕ Close</button></div><div class="finishOverlay" id="levelOverlay"><div class="finishCard" style="width:min(94%,380px);max-height:88%;overflow:auto"><h2>Select Sector</h2><p>Complete all 10 Descent sectors to unlock Ascension.</p><div id="levelProgressWallet" class="cellWallet" aria-live="polite"></div><div class="levelModeActions"><button id="levelSandbox">✦ Sandbox Mode</button><button id="levelAscension" type="button" disabled>↑ Ascension 🔒</button></div><div id="levelMenuEntries" class="levelMenuEntries"></div><div class="levelExitActions"><button id="closeLevels" type="button">← Back</button><button id="levelsHome" type="button">⌂ Home</button></div></div></div><div id="sandboxOrbStatus" aria-live="polite">Orbs 0/0</div><button id="pauseGear" title="Pause and settings" aria-label="Pause and open settings">⚙</button><div class="topActions" style="display:none"><button id="openLevelsInGame">☷ Levels</button><button id="openSettings">⚙ Settings</button></div><div class="finishOverlay" id="pauseOverlay" aria-label="Pause menu"><div class="finishCard pauseCard"><h2>Paused</h2><button id="pauseResume" class="pauseResumeMain" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg></button><div class="pauseIconRow" aria-label="Pause actions"><button id="pauseLevels" type="button" aria-label="Level Select" title="Level Select"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M7 8h10M7 12h10M7 16h10"/></svg></button><button id="pauseHome" type="button" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8M5 10v11h14V10M10 21v-7h4v7"/></svg></button><button id="pauseSettings" type="button" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M10 2h4l.6 2.5 2.2 1.1 2.3-1.1 2.7 3-1.3 2.2.5 2.5 2 1.6-1.3 3.7-2.6-.1-1.7 1.7.1 2.6-3.7 1.3-1.6-2-2.5-.5-2.2 1.3-3-2.7 1.1-2.3-1.1-2.2L2 14v-4l2.5-.6 1.1-2.2-1.1-2.3 3-2.7L9.7 3.5z"/></svg></button></div></div></div><div class="finishOverlay" id="settingsOverlay"><div class="finishCard settingsCard">
+<h2>Settings</h2><div class="settingsProgress" id="settingsProgress" aria-label="Your stars and credits"></div><div class="buildModeSwitch" aria-label="Build mode"><button id="buildStandard" type="button">Standard</button><button id="buildDeveloper" type="button">Developer</button></div><button id="settingsClose" class="resumeMain">▶ Resume</button><button id="settingsLevelSelect" class="resumeMain settingsLevelSelect" type="button">☷ Level Select</button><div class="settingsNav"><button id="settingsControls">⌨ Controls →</button><button id="settingsModTools">⚙ Mod Tools →</button></div><details class="audioFold" id="settingsAudio"><summary>♫ Audio <span></span></summary><div class="audioFoldBody">
 <div class="settingRow"><label for="musicVolume">Music</label><input type="range" id="musicVolume" min="0" max="100" value="45"><output id="musicVolVal">45%</output></div>
 <div class="settingRow"><label for="sfxVolume">Effects</label><input type="range" id="sfxVolume" min="0" max="100" value="65"><output id="sfxVolVal">65%</output></div>
 <div class="songRow">♫ <strong id="currentTrackLabel">Neon Current</strong></div>
 <div class="settingRow seekRow"><label for="trackSeek">Track position</label><input type="range" id="trackSeek" min="0" max="100" step="0.1" value="12.5" aria-label="Seek through current track"><output id="trackTime">00:00 / 00:00</output></div>
 <div class="settingRow"><button id="settingsMute">♫ Enable sound</button><button id="settingsNext">Next track →</button></div></div></details>
-<div class="settingsExitRow"><button id="settingsHome" type="button" class="wideAction settingsBack">⌂ Home</button></div>
+<div class="settingsExitRow"><button id="settingsHome" type="button" class="wideAction settingsBack" hidden>⌂ Home</button><button id="settingsBack" type="button" class="wideAction settingsBack">← Back</button></div>
 </div></div>
 <div class="finishOverlay" id="modOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Mod Tools</h2><div id="modToolsMount"></div><button id="modBack" class="wideAction">← Settings</button></div></div>
 <div class="finishOverlay" id="controlsOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Controls</h2><div class="controlHelp"><div><b>Launch</b><span>Hold 0.1 seconds, drag backwards to aim, release to fire.</span></div><div><b>Double Shot</b><span>Hold and drag while airborne. Time slows as you aim.</span></div><div><b>Restart</b><span>Press R or tap the ↻ button.</span></div><div><b>Cancel aim</b><span>Press C or use the cancel control.</span></div><div><b>Mobile</b><span>Touch and drag anywhere on the playfield. Tap on-screen buttons normally.</span></div><div><b>Sandbox editor</b><span>Tap an object to select it, drag anywhere to move it, double-tap blank space to deselect. Use ⊘ to undo the last move.</span></div></div><button id="controlsBack" class="wideAction">← Settings</button></div></div>
-<div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">← Back</button><h2>SANDBOX MODE</h2></div><p class="hubIntro">Create your own maps or continue a saved layout.</p><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New map name" aria-label="New map name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR MAPS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
-<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeLevels">☷ Level Select</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v6.3.7</div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. When an object is selected, drag anywhere to move it. Double-tap empty space or use ✕ to deselect.</p></div><button id="sandboxCancelPlacement" type="button" title="Cancel placing objects" aria-label="Cancel object placement">✕</button><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="17" height="19" rx="2"/><path d="M11 25v3h16V10h-5"/><path d="M12 15h10M17 10v10"/></svg></button><button id="objectCancelMove" title="Undo last move" aria-label="Cancel last object move"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M8 24 24 8"/></svg></button><button id="objectLeft" title="Rotate left 15°">↶</button><button id="objectRight" title="Rotate right 15°">↷</button><button id="objectLevel" title="Level / reset orientation" style="display:none">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarClear" type="button">Clear all objects</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges on landing. Aim in mid-air to slow time.</div></div>
-<div class="toolbar" id="devToolbar"><label style="display:flex;align-items:center;gap:7px;background:#102b39;border:1px solid #3a6c81;border-radius:6px;padding:5px 9px;color:#c2e8ef">LEVEL <select id="levelSelect" style="background:#091a28;color:#9af0de;border:1px solid #466f7d;padding:5px;border-radius:4px"><option value="1">01 · Launch Basics</option><option value="2">02 · First Spikes</option><option value="3">03 · Rolling Slopes</option><option value="4">04 · Slopes & Spikes</option><option value="5">05 · Mastery</option></select></label><button id="selectLevels">☷ Level select</button><button id="audioToggle" title="Enable or mute synthesised music and sound effects">♫ Sound: Off</button><button id="nextTrack" title="Switch to another background music track">♫ Next track</button><button id="cancelShot" type="button" style="display:none">✕ Cancel shot (C)</button><button id="reset">↻ Restart</button><button id="normal" style="display:none">↓ Normal chamber</button><button id="damaged" style="display:none">↑ Damaged ascent</button><button id="sandbox" style="display:none">✦ Sandbox chamber</button><button id="edit" style="display:none">✎ Edit platforms</button><button id="clearMap" style="display:none">Clear added</button><button id="defaults">Reset tuning</button></div>
+<div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">← Back</button><div class="sandboxHeading"><h2>SANDBOX MODE</h2><p class="hubIntro">Create or play your own maps.</p></div></div><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New map name" aria-label="New map name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR MAPS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
+<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">v7.0.3</div></div></div><div class="finishOverlay" id="playChoiceOverlay" style="z-index:16"><div class="finishCard" style="width:min(88%,340px)"><h2>Play</h2><div class="finishChoices"><button id="playResumeChoice" class="reportPrimary">▶ Resume</button><button id="playLevelChoice">☷ Level Select</button><button id="playChoiceBack">← Back</button></div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">← Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. When an object is selected, drag anywhere to move it. Double-tap empty space or use ✕ to deselect.</p></div><button id="sandboxCancelPlacement" type="button" title="Cancel placing objects" aria-label="Cancel object placement">✕</button><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="17" height="19" rx="2"/><path d="M11 25v3h16V10h-5"/><path d="M12 15h10M17 10v10"/></svg></button><button id="objectCancelMove" title="Undo last move" aria-label="Cancel last object move"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M8 24 24 8"/></svg></button><button id="objectLeft" title="Rotate left 15°">↶</button><button id="objectRight" title="Rotate right 15°">↷</button><button id="objectLevel" title="Level / reset orientation" style="display:none">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox Menu</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarClear" type="button">Clear all objects</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges in 0.9 seconds or on landing. Aim in mid-air to slow time.</div></div>
+<div class="toolbar" id="devToolbar"><label style="display:flex;align-items:center;gap:7px;background:#102b39;border:1px solid #3a6c81;border-radius:6px;padding:5px 9px;color:#c2e8ef">LEVEL <select id="levelSelect" style="background:#091a28;color:#9af0de;border:1px solid #466f7d;padding:5px;border-radius:4px"><option value="1">01 · First Steps</option><option value="2">02 · Precision Movement</option><option value="3">03 · Spike Training</option><option value="4">04 · Spike Course</option><option value="5">05 · Retracting Platforms</option><option value="6">06 · Retract & Spikes</option><option value="7">07 · Conveyor Training</option><option value="8">08 · Moving Machinery</option><option value="9">09 · Laser Training</option><option value="10">10 · Systems Test</option></select></label><button id="selectLevels">☷ Level select</button><button id="audioToggle" title="Enable or mute synthesised music and sound effects">♫ Sound: Off</button><button id="nextTrack" title="Switch to another background music track">♫ Next track</button><button id="cancelShot" type="button" style="display:none">✕ Cancel shot (C)</button><button id="reset">↻ Restart</button><button id="normal" style="display:none">↓ Normal chamber</button><button id="damaged" style="display:none">↑ Damaged ascent</button><button id="sandbox" style="display:none">✦ Sandbox chamber</button><button id="edit" style="display:none">✎ Edit platforms</button><button id="clearMap" style="display:none">Clear added</button><button id="defaults">Reset tuning</button></div>
 <section id="editorTools" style="display:none" class="editorTools"><b>BUILD MODE</b><span>Tap empty space to add a platform • Select an object and use ＋ to change its type • Drag to move</span><label>Item <select id="itemType"><option value="platform">Metal platform</option><option value="spikes">Spike trap</option><option value="orb">Collectible orb</option><option value="retract">Retractable platform</option><option value="laser">Pulse laser</option><option value="ram">Hydraulic ram</option><option value="conveyor">Conveyor belt</option><option value="kinetic">Kinetic launch pad</option><option value="vent">Pressure vent</option></select></label><label>Item size <select id="platformSize"><option value="105">Short</option><option value="150" selected>Medium</option><option value="200">Long</option></select></label><div><button id="rotateLeft">↶ Rotate −15°</button><button id="rotateRight">↷ Rotate +15°</button><button id="levelItem">Level item</button><button id="deleteItem">Delete selected</button></div><span id="selectedItem">Select a platform to rotate it. Select an object to edit it.</span><div><button id="upMap">↑ Up</button><button id="downMap">↓ Down</button><button id="saveMap">Save layout</button></div></section><section class="controls" id="devPhysics" aria-label="Physics tuning"><div class="control"><label for="gravity">Gravity <output id="gravityVal">900</output></label><input id="gravity" type="range" min="400" max="1600" value="900" step="25"></div><div class="control"><label for="power">Max launch speed <output id="powerVal">720</output></label><input id="power" type="range" min="400" max="1100" value="720" step="20"></div><div class="control"><label for="drag">Air resistance <output id="dragVal">0.12</output></label><input id="drag" type="range" min="0" max="1" value="0.12" step="0.02"></div><div class="control"><label for="bounce">Bounce <output id="bounceVal">0.10</output></label><input id="bounce" type="range" min="0" max="0.65" value="0.10" step="0.05"></div><div class="control"><label for="wallBounce">Wall ricochet <output id="wallBounceVal">0.65</output></label><input id="wallBounce" type="range" min="0" max="1" value="0.65" step="0.05"></div><div class="control"><label for="arcLength">Trajectory length <output id="arcLengthVal">0.7</output></label><input id="arcLength" type="range" min="0.6" max="3.0" value="0.7" step="0.1"></div></section>
 <style>
 /* v6.2.4: compact audio fold and context-sensitive settings navigation */
@@ -425,7 +478,7 @@ const tracks={
 function currentTrack(){return tracks[phase==='damaged'?'damaged':'normal'][trackIndex%3]}
 function refreshTrack(){nextBeat=0;beatN=4*16;trackStarted=audioCtx?audioCtx.currentTime:0;updateTrackSeek();if(typeof $==='function'){$('nextTrack').textContent='♫ '+currentTrack().name;const label=$('currentTrackLabel');if(label)label.textContent=currentTrack().name}}
 function trackDuration(){return TRACK_BARS*4*60/currentTrack().bpm}
-function fmtAudioTime(sec){const n=Math.max(0,Math.floor(sec));return String(Math.floor(n/60)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
+function fmtAudioTime(sec){const n=Math.max(0,Math.floor(sec));return String(Math.floor(n/120)).padStart(2,'0')+':'+String(n%60).padStart(2,'0')}
 function updateTrackSeek(){const seek=$('trackSeek'),label=$('trackTime');if(!seek||!label)return;
  if(document.activeElement!==seek)seek.value=String(Math.min(100,(beatN%TRACK_STEPS)/TRACK_STEPS*100));
  label.textContent=fmtAudioTime((beatN%TRACK_STEPS)/TRACK_STEPS*trackDuration())+' / '+fmtAudioTime(trackDuration());}
@@ -537,9 +590,9 @@ const W=420,H=740, WORLD=1880,R=17, canvas=document.getElementById('game'),ctx=c
 const $=id=>document.getElementById(id), input={gravity:$('gravity'),power:$('power'),drag:$('drag'),bounce:$('bounce'),wallBounce:$('wallBounce'),arcLength:$('arcLength')};
 $('trackSeek').addEventListener('input',e=>{beatN=Math.floor(+e.target.value/100*TRACK_STEPS/16)*16;nextBeat=audioCtx?audioCtx.currentTime+.04:0;updateTrackSeek();});
 // V6.0.8: isolated progression store. V5.9 saves remain untouched.
-const CELL_SAVE='gravityLaunchV6AProgressV1:test:v6.3.7';
+const CELL_SAVE='gravityLaunchV7Progress:test:v7.0.3';
 const V6_REWARDS=Object.freeze({first:20,star:15,six:30,perfect:50}); // provisional tuning values
-const V6_TIME_TARGETS=Object.freeze({normal:[0,26,36,42,50,58],damaged:[0,52,64,72,80,92]}); // provisional; rebalance after route tests
+const V6_TIME_TARGETS=Object.freeze({normal:[0,30,38,42,44,48,52,55,58,64,75],damaged:[0,45,52,58,60,64,68,72,76,84,95]}); // provisional; rebalance after route tests
 let progression={claimed:{},spent:0,devCredits:0,upgrades:{launch:0,ricochet:0,double:0},records:{},creditLedger:{}};
 try{const loaded=JSON.parse(localStorage.getItem(CELL_SAVE)||'null');if(loaded&&typeof loaded==='object'){
  progression={...progression,...loaded,claimed:loaded.claimed||{},records:loaded.records||{},creditLedger:loaded.creditLedger||{},upgrades:{launch:Math.min(3,Math.max(0,Number(loaded.upgrades?.launch)||0)),ricochet:Math.min(3,Math.max(0,Number(loaded.upgrades?.ricochet)||0)),double:Math.min(3,Math.max(0,Number(loaded.upgrades?.double)||0))}};
@@ -548,14 +601,14 @@ const upgradeCost=level=>level+1; // legacy shop retained during milestone A
 const chamberId=()=>phase+':'+levelIndex;
 function creditsEarned(){return Object.values(progression.creditLedger).reduce((n,v)=>n+(Number(v)||0),0)}
 function creditsAvailable(){return Math.max(0,creditsEarned()+progression.devCredits-progression.spent)}
-const PERFECT_ELIGIBLE=Object.freeze(["normal:1","normal:2","normal:3","normal:4","normal:5","damaged:5"]); // test chamber candidates; rebalance after route verification
+const PERFECT_ELIGIBLE=Object.freeze(Array.from({length:10},(_,i)=>"normal:"+(i+1)).concat(["damaged:10"])); // test chamber candidates; rebalance after route verification
 function perfectCount(){return Object.values(progression.records).filter(v=>v.perfect).length}
 function evaluationScore(){const r=Object.values(progression.records);return r.reduce((n,v)=>n+(v.time||0)+(v.collection||0),0)}
 function saveProgression(){try{localStorage.setItem(CELL_SAVE,JSON.stringify(progression))}catch(e){}refreshWallet()}
-function compactWalletMarkup(){const reveal=perfectCount()>=3||!document.body.classList.contains('playerBuild');return `<span title="Normal stars"><i class="goldStar">★</i> ${evaluationScore()}/60</span>${reveal?`<span title="Perfect Runs"><i class="blueStar">★</i> ${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</span>`:''}<span title="Credits"><i class="creditIcon">◈</i> ${creditsAvailable()}</span>`;}
+function compactWalletMarkup(){const reveal=perfectCount()>=3||!document.body.classList.contains('playerBuild');return `<span title="Normal stars"><i class="goldStar">★</i> ${evaluationScore()}/120</span>${reveal?`<span title="Perfect Runs"><i class="blueStar">★</i> ${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</span>`:''}<span title="Credits"><i class="creditIcon">◈</i> ${creditsAvailable()}</span>`;}
 function refreshWallet(){const owned=Object.keys(progression.records).filter(k=>progression.records[k].completed).length;
  $('homeCellWallet').innerHTML=compactWalletMarkup();
- const progress=$('settingsProgress');if(progress)progress.innerHTML=`<span title="Total stars"><i class="goldStar">★</i> <b>${evaluationScore()}/60</b></span>${(perfectCount()>=3||!document.body.classList.contains("playerBuild"))?`<span title="Perfect runs"><i class="blueStar">★</i> <b>${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</b></span>`:''}<span title="Available credits"><i class="creditIcon">◈</i> <b>${creditsAvailable()}</b></span>`;
+ const progress=$('settingsProgress');if(progress)progress.innerHTML=`<span title="Total stars"><i class="goldStar">★</i> <b>${evaluationScore()}/120</b></span>${(perfectCount()>=3||!document.body.classList.contains("playerBuild"))?`<span title="Perfect runs"><i class="blueStar">★</i> <b>${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</b></span>`:''}<span title="Available credits"><i class="creditIcon">◈</i> <b>${creditsAvailable()}</b></span>`;
  if($('upgradeBalance'))$('upgradeBalance').textContent=`◈ ${creditsAvailable()} available · ${creditsEarned()} earned total`;
 }
 function getRecord(key=chamberId()){return progression.records[key]||{completed:false,time:0,collection:0,bestTime:null,perfect:false}}
@@ -583,10 +636,11 @@ function showUpgradeShop(){refreshWallet();const opts=[['launch','Launch Thruste
 $('homeUpgrades').onclick=e=>{e.stopPropagation();showUpgradeShop()};
 $('closeUpgrades').onclick=()=>{$('upgradeOverlay').classList.remove('visible')};
 refreshWallet();
+const BUILD_VERSION='v7.0.3';
 function applyBuildMode(){
   const dev=isDeveloperMode();
   document.body.classList.toggle('playerBuild',!dev);
-  const footer=$('homeFooter'); if(footer)footer.textContent='v6.3.7 · '+(dev?'Developer':'Standard');
+  const footer=$('homeFooter'); if(footer)footer.textContent=BUILD_VERSION+' · '+(dev?'Developer':'Standard');
   const modBtn=$('settingsModTools');
   if(modBtn){modBtn.disabled=!dev;modBtn.hidden=!dev;modBtn.style.display=dev?'':'none';}
   const standardBtn=$('buildStandard'),developerBtn=$('buildDeveloper');
@@ -611,14 +665,17 @@ $('settingsNext').onclick=()=>{ensureAudio();trackIndex=(trackIndex+1)%3;refresh
 $('audioToggle').onclick=()=>{ensureAudio();audioEnabled=!audioEnabled;refreshTrack();$('audioToggle').textContent=audioEnabled?'♫ Sound: On':'♫ Sound: Off';$('audioToggle').classList.toggle('active',audioEnabled);$('settingsMute').textContent=audioEnabled?'♫ Mute sound':'♫ Enable sound';};
 $('nextTrack').onclick=()=>{ensureAudio();trackIndex=(trackIndex+1)%3;refreshTrack()};
  // All menus are modal: physics, elapsed time and procedural audio scheduling pause.
- const isModalOpen=()=>['homeOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay'].some(id=>$(id).classList.contains('visible'));
- function openSettingsPanel(){cancelAim();refreshTrackLabel();$('settingsOverlay').classList.add('visible');$('settingsHome').style.display=$('homeOverlay').classList.contains('visible')?'none':'inline-flex'}
+ const isModalOpen=()=>['homeOverlay','pauseOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay','playChoiceOverlay'].some(id=>$(id).classList.contains('visible'));
+ function openSettingsPanel(){cancelAim();refreshTrackLabel();const home=$('homeOverlay').classList.contains('visible');$('settingsOverlay').classList.toggle('from-home',home);$('settingsOverlay').classList.add('visible');$('settingsHome').style.display=home?'none':'inline-flex'}
  function refreshTrackLabel(){const label=$('currentTrackLabel');if(label)label.textContent=currentTrack().name}
  $('pauseGear').onclick=openSettingsPanel;
  $('openSettings').onclick=openSettingsPanel;
  $('homeSettings').onclick=openSettingsPanel;
- $('homePlay').onclick=()=>{ $('homeOverlay').classList.remove('visible');closeLevels();reset(true) };
- $('homeLevels').onclick=()=>{openLevels()};
+ $('homePlay').onclick=()=>{$('playChoiceOverlay').classList.add('visible')};
+ $('playResumeChoice').onclick=()=>{$('playChoiceOverlay').classList.remove('visible');$('homeOverlay').classList.remove('visible');closeLevels();reset(true)};
+ $('playLevelChoice').onclick=()=>{$('playChoiceOverlay').classList.remove('visible');openLevels()};
+ $('playChoiceBack').onclick=()=>{$('playChoiceOverlay').classList.remove('visible')};
+ 
  $('settingsModTools').onclick=()=>{if(!isDeveloperMode())return;$('settingsOverlay').classList.remove('visible');$('modOverlay').classList.add('visible')};
  $('modBack').onclick=()=>{$('modOverlay').classList.remove('visible');$('settingsOverlay').classList.add('visible')};
  $('settingsLevelSelect').onclick=()=>{$('settingsOverlay').classList.remove('visible');openLevels()};
@@ -633,12 +690,12 @@ $('nextTrack').onclick=()=>{ensureAudio();trackIndex=(trackIndex+1)%3;refreshTra
  // Clicking the shaded backdrop exits a menu. Buttons and sliders don't bubble to it.
  $('settingsOverlay').addEventListener('click',e=>{if(e.target===$('settingsOverlay'))$('settingsClose').click()});
  $('levelOverlay').addEventListener('click',e=>{if(e.target===$('levelOverlay'))closeLevels()});
- $('homeOverlay').addEventListener('click',e=>{if(e.target===$('homeOverlay')||e.target.closest('.gameArt'))$('homePlay').click()});
+ $('homeOverlay').addEventListener('click',e=>{if(e.target===$('homeOverlay')||e.target.closest('.gameArt'))return});
  $('upgradeOverlay').addEventListener('click',e=>{if(e.target===$('upgradeOverlay'))$('closeUpgrades').click()});
  $('finishOverlay').addEventListener('click',e=>{if(e.target===$('finishOverlay'))return;});
  for(const [id,back] of [['controlsOverlay','controlsBack'],['modOverlay','modBack'],['sandboxHub','sandboxBack']]){const el=$(id),btn=$(back);if(el&&btn)el.addEventListener('click',e=>{if(e.target===el)btn.click()});}
 
-let levelIndex=1, phase='normal',camera=0,dead=0,checkpoint={x:93,y:165},lastCheckpoint=0,completed=false,aim=null,flash=0,shake=0,simTime=0,doubleShotAvailable=true;
+let levelIndex=1, phase='normal',camera=0,dead=0,checkpoint={x:93,y:165},lastCheckpoint=0,completed=false,aim=null,flash=0,shake=0,simTime=0,doubleShotAvailable=true,airShotRechargeAt=0;
 let checkpointOrbs=new Set(); // Only collectibles secured at the latest checkpoint survive death.
 let wasGroundedForImpact=true; // Landing FX only, no physics changes.
 
@@ -664,7 +721,7 @@ let wasGroundedForImpact=true; // Landing FX only, no physics changes.
    updateDevCredits();
    const debugTitle=document.createElement('h3');debugTitle.className='hubHeading';debugTitle.textContent='Chamber records · Test controls';mount.append(debugTitle);
    const debugPanel=document.createElement('div');debugPanel.className='devCreditPanel';
-   debugPanel.innerHTML=`<label class="settingRow">Act <select id="debugAct"><option value="normal">Descent</option><option value="damaged">Ascension</option></select></label><label class="settingRow">Chamber <select id="debugLevel">${[1,2,3,4,5].map(n=>`<option value="${n}">${String(n).padStart(2,'0')}</option>`).join('')}</select></label><label class="settingRow">Time stars <select id="debugTime">${[0,1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label><label class="settingRow">Collection stars <select id="debugCollection">${[0,1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label><label class="settingRow">Perfect Run <input id="debugPerfect" type="checkbox"></label><label class="settingRow">Completed <input id="debugCompleted" type="checkbox"></label><button id="debugSave" type="button">Apply chamber record</button><button id="debugReset" type="button">Clear chamber record</button><label class="settingRow">Simulate deaths <input id="debugDeaths" type="number" min="0" max="100000" value="100"></label><button id="debugApplyDeaths" type="button">Set deaths for this run</button><small>Test-only overrides; star and perfect awards are not granted as credits.</small>`;
+   debugPanel.innerHTML=`<label class="settingRow">Act <select id="debugAct"><option value="normal">Descent</option><option value="damaged">Ascension</option></select></label><label class="settingRow">Chamber <select id="debugLevel">${Array.from({length:10},(_,i)=>i+1).map(n=>`<option value="${n}">${String(n).padStart(2,'0')}</option>`).join('')}</select></label><label class="settingRow">Time stars <select id="debugTime">${[0,1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label><label class="settingRow">Collection stars <select id="debugCollection">${[0,1,2,3].map(n=>`<option>${n}</option>`).join('')}</select></label><label class="settingRow">Perfect Run <input id="debugPerfect" type="checkbox"></label><label class="settingRow">Completed <input id="debugCompleted" type="checkbox"></label><button id="debugSave" type="button">Apply chamber record</button><button id="debugReset" type="button">Clear chamber record</button><label class="settingRow">Simulate deaths <input id="debugDeaths" type="number" min="0" max="100000" value="100"></label><button id="debugApplyDeaths" type="button">Set deaths for this run</button><small>Test-only overrides; star and perfect awards are not granted as credits.</small>`;
    mount.append(debugPanel);
    const dbg=id=>document.getElementById(id);
    function loadDebugRecord(){const r=getRecord(dbg('debugAct').value+':'+dbg('debugLevel').value);dbg('debugTime').value=r.time||0;dbg('debugCollection').value=r.collection||0;dbg('debugPerfect').checked=!!r.perfect;dbg('debugCompleted').checked=!!r.completed;}
@@ -684,12 +741,12 @@ const normalPlatforms=[
 {x:20,y:776,w:143,h:19},{x:214,y:941,w:181,h:19},{x:52,y:1104,w:143,h:19},{x:259,y:1269,w:133,h:19},
 {x:30,y:1425,w:140,h:19},{x:194,y:1603,w:195,h:19},{x:43,y:1745,w:334,h:24}];
 const sandboxBase=[{x:40,y:182,w:180,h:19},{x:43,y:1745,w:334,h:24}];
-let sandboxAdded=[]; try {let saved=JSON.parse(localStorage.getItem("gravityLaunchSandboxV05:test:v6.3.8")||"[]");if(Array.isArray(saved))sandboxAdded=saved.filter(q=>q&&[q.x,q.y,q.w,q.h].every(Number.isFinite)&&q.x>=22&&q.y>=220&&(q.type==='orb'?q.x<=386:q.x+q.w<=398)&&q.y<1710).slice(0,55).map(q=>({...q,type:['platform','spikes','orb','retract','laser','ram','conveyor','kinetic','vent'].includes(q.type)?q.type:'platform',angle:q.type==='orb'?(Number.isFinite(q.angle)?q.angle:0):q.type==='spikes'?(Number.isFinite(q.angle)?q.angle:0):(Number.isFinite(q.angle)?Math.max(-90,Math.min(90,q.angle)):0)}))}catch(e){}
+let sandboxAdded=[]; try {let saved=JSON.parse(localStorage.getItem("gravityLaunchSandboxV7:test:v7.0.2")||"[]");if(Array.isArray(saved))sandboxAdded=saved.filter(q=>q&&[q.x,q.y,q.w,q.h].every(Number.isFinite)&&q.x>=22&&q.y>=220&&(q.type==='orb'?q.x<=386:q.x+q.w<=398)&&q.y<1710).slice(0,55).map(q=>({...q,type:['platform','spikes','orb','retract','laser','ram','conveyor','kinetic','vent'].includes(q.type)?q.type:'platform',angle:q.type==='orb'?(Number.isFinite(q.angle)?q.angle:0):q.type==='spikes'?(Number.isFinite(q.angle)?q.angle:0):(Number.isFinite(q.angle)?Math.max(-90,Math.min(90,q.angle)):0)}))}catch(e){}
 let editing=false,editHover=null,editDrag=null,selectedIndex=-1;
 let sandboxLastMove=null, sandboxLastBlankTap=null;
-function saveMap(){showTimer();if(phase==='sandbox')updateOrbs();try{localStorage.setItem("gravityLaunchSandboxV05:test:v6.3.8",JSON.stringify(sandboxAdded));$("notice").textContent="SANDBOX SAVED • Your platform layout is stored in this browser."}catch(e){$("notice").textContent="Cannot save here • Layout will last until refresh."}}
+function saveMap(){if(sandboxAdded.some(o=>o._pendingDuplicate)){if($('notice'))$('notice').textContent='MOVE OR CANCEL THE INVALID DUPLICATE BEFORE SAVING';return;}showTimer();if(phase==='sandbox')updateOrbs();try{localStorage.setItem("gravityLaunchSandboxV7:test:v7.0.2",JSON.stringify(sandboxAdded));$("notice").textContent="SANDBOX SAVED • Your platform layout is stored in this browser."}catch(e){$("notice").textContent="Cannot save here • Layout will last until refresh."}}
 // Sandbox library is isolated per test build; older versions remain untouched.
-const SANDBOX_LIBRARY_KEY='gravityLaunchSandboxLibraryV59:test:v6.3.7';
+const SANDBOX_LIBRARY_KEY='gravityLaunchSandboxLibraryV7:test:v7.0.3';
 let activeSandboxId=null,sandboxHubReturn='settings';
 let sandboxLibrary=[];
 try{const raw=JSON.parse(localStorage.getItem(SANDBOX_LIBRARY_KEY)||'[]');if(Array.isArray(raw))sandboxLibrary=raw.filter(v=>v&&typeof v.id==='string'&&Array.isArray(v.objects)).slice(0,40)}catch(_){}
@@ -700,18 +757,45 @@ const originalSaveMap=saveMap;
 saveMap=function(){originalSaveMap();persistActiveSandbox()};
 function renderSandboxGallery(){const gallery=$('sandboxGallery');gallery.textContent='';
  if(!sandboxLibrary.length){const empty=document.createElement('p');empty.className='hubIntro';empty.textContent='No saved maps yet. Create one above to start building.';gallery.append(empty)}
- for(const item of [...sandboxLibrary].sort((a,b)=>(b.updated||0)-(a.updated||0))){const row=document.createElement('div');row.className='sandboxItem';const info=document.createElement('div');const name=document.createElement('b');name.textContent=item.name;const sub=document.createElement('small');sub.textContent=item.objects.length+' objects';info.append(name,sub);const actions=document.createElement('div');actions.className='sandboxActions';const play=document.createElement('button');play.textContent='▶ Play';play.onclick=()=>loadNamedSandbox(item.id,false);const edit=document.createElement('button');edit.textContent='✎ Edit';edit.onclick=()=>loadNamedSandbox(item.id,true);const del=document.createElement('button');del.textContent='×';del.title='Delete saved map';del.setAttribute('aria-label','Delete '+item.name);del.onclick=()=>{if(!confirm('Delete '+item.name+'? This cannot be undone.'))return;sandboxLibrary=sandboxLibrary.filter(v=>v.id!==item.id);if(activeSandboxId===item.id)activeSandboxId=null;saveSandboxLibrary();renderSandboxGallery()};actions.append(play,edit,del);row.append(info,actions);gallery.append(row)}
+ for(const item of [...sandboxLibrary].sort((a,b)=>(b.updated||0)-(a.updated||0))){const row=document.createElement('div');row.className='sandboxItem';const info=document.createElement('div');const name=document.createElement('b');name.textContent=item.name;const sub=document.createElement('small');sub.textContent=item.objects.length+' objects';info.append(name,sub);const actions=document.createElement('div');actions.className='sandboxActions';const play=document.createElement('button');play.textContent='▶ Play';play.onclick=()=>loadNamedSandbox(item.id,false);const edit=document.createElement('button');edit.textContent='✎ Edit';edit.onclick=()=>loadNamedSandbox(item.id,true);const del=document.createElement('button');del.textContent='×';del.title='Delete saved map';del.setAttribute('aria-label','Delete '+item.name);del.onclick=()=>{if(del.dataset.confirm!=='yes'){del.dataset.confirm='yes';del.textContent='Confirm';del.title='Tap again to permanently delete '+item.name;del.setAttribute('aria-label','Confirm deletion of '+item.name);return;}sandboxLibrary=sandboxLibrary.filter(v=>v.id!==item.id);if(activeSandboxId===item.id)activeSandboxId=null;saveSandboxLibrary();renderSandboxGallery()};actions.append(play,edit,del);row.append(info,actions);gallery.append(row)}
 }
+// v6.3.13: Separate gameplay pause from the settings screen.
+let settingsReturnTo='home';
+let levelsReturnToPause=false;
+function openPauseMenu(){
+  cancelAim();
+  $('settingsOverlay').classList.remove('visible');
+  $('pauseOverlay').classList.add('visible');
+}
+function returnFromSettings(){
+  $('settingsOverlay').classList.remove('visible');
+  if(settingsReturnTo==='pause' && !$('homeOverlay').classList.contains('visible')) $('pauseOverlay').classList.add('visible');
+}
+$('pauseGear').onclick=openPauseMenu;
+$('pauseResume').onclick=()=>{$('pauseOverlay').classList.remove('visible')};
+// Replay button bindings are installed below, after gameplay state is initialised.
+
+$('pauseLevels').onclick=()=>{levelsReturnToPause=true;$('pauseOverlay').classList.remove('visible');openLevels()};
+$('pauseHome').onclick=()=>{levelsReturnToPause=false;$('pauseOverlay').classList.remove('visible');$('homeOverlay').classList.add('visible');refreshWallet()};
+$('pauseSettings').onclick=()=>{settingsReturnTo='pause';$('pauseOverlay').classList.remove('visible');refreshTrackLabel();$('settingsOverlay').classList.add('visible')};
+$('homeSettings').onclick=()=>{settingsReturnTo='home';refreshTrackLabel();$('settingsOverlay').classList.add('visible')};
+$('settingsBack').onclick=returnFromSettings;
+$('settingsClose').onclick=returnFromSettings;
+$('settingsOverlay').addEventListener('click',e=>{if(e.target===$('settingsOverlay'))returnFromSettings()});
+const originalLevelBack=$('closeLevels').onclick;
+$('closeLevels').onclick=()=>{originalLevelBack();if(levelsReturnToPause&&!$('homeOverlay').classList.contains('visible'))$('pauseOverlay').classList.add('visible');levelsReturnToPause=false};
+const originalLevelHome=$('levelsHome').onclick;
+$('levelsHome').onclick=()=>{levelsReturnToPause=false;originalLevelHome()};
 function openSandboxHub(origin='settings'){cancelAim();sandboxHubReturn=origin;['settingsOverlay','levelOverlay','controlsOverlay'].forEach(id=>$(id).classList.remove('visible'));renderSandboxGallery();$('sandboxHub').classList.add('visible')}
 function loadNamedSandbox(id,editNow){const item=sandboxLibrary.find(v=>v.id===id);if(!item)return;activeSandboxId=id;sandboxAdded=JSON.parse(JSON.stringify(item.objects));$('sandboxHub').classList.remove('visible');choose('sandbox');if(editNow)$('edit').click();updateHud()}
 $('sandboxName').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('sandboxCreate').click();}});
-$('sandboxCreate').onclick=()=>{const name=$('sandboxName').value.trim()||'Untitled Map';const id='map-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);sandboxLibrary.push({id,name,objects:[],updated:Date.now()});saveSandboxLibrary();$('sandboxName').value='';loadNamedSandbox(id,true)};
+$('sandboxCreate').onclick=()=>{const name=$('sandboxName').value.trim()||('Map '+(Math.max(0,...sandboxLibrary.map(m=>{const match=/^Map (\d+)$/.exec(m.name);return match?Number(match[1]):0}))+1));const id='map-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);sandboxLibrary.push({id,name,objects:[],updated:Date.now()});saveSandboxLibrary();$('sandboxName').value='';loadNamedSandbox(id,true)};
 $('sandboxBack').onclick=()=>{$('sandboxHub').classList.remove('visible');if(sandboxHubReturn==='levels')openLevels();else $('settingsOverlay').classList.add('visible')};
 if($('settingsSandbox'))$('settingsSandbox').onclick=()=>openSandboxHub('settings');
 $('settingsControls').onclick=()=>{$('settingsOverlay').classList.remove('visible');$('controlsOverlay').classList.add('visible')};
 $('controlsBack').onclick=()=>{$('controlsOverlay').classList.remove('visible');$('settingsOverlay').classList.add('visible')};
 const damageExtras=[{x:165,y:553,w:87,h:16},{x:32,y:1180,w:112,h:15},{x:233,y:1518,w:82,h:18}];
-const solidWalls=[{x:0,y:0,w:22,h:WORLD},{x:398,y:0,w:22,h:WORLD},{x:22,y:1810,w:376,h:34}];
+const solidWalls=[{x:0,y:0,w:6,h:WORLD},{x:414,y:0,w:6,h:WORLD},{x:6,y:1810,w:408,h:34}];
 const spikesNormal=[{x:23,y:758,w:80},{x:307,y:1251,w:80}];
 const spikesDamaged=[...spikesNormal,{x:240,y:297,w:95},{x:58,y:1086,w:70},{x:45,y:1407,w:45}];
 const player={x:93,y:165,vx:0,vy:0,angle:0,grounded:true};
@@ -734,14 +818,15 @@ function orbs(){
     if(x>=spike.x-38&&x<=spike.x+spike.w+38){x=210;y=spike.y-70;}
    }
   }
+  if(phase==='normal'&&Math.hypot(x-cell.x,y-cell.y)<115){x=Math.max(55,Math.min(365,cell.x-68));y=cell.y-122;}
   return {x,y};
  });
 }
 function starsFor(n,total){const pct=total? n/total : 0;return total===0?0:pct>=1?3:pct>=.8?2:pct>=.6?1:0}
 function updateOrbs(){const total=orbs().length, count=collectedOrbs.size, stars=finalStars===null?starsFor(count,total):finalStars;$('orbCount').textContent=`${count}/${total}`;$('starCount').textContent='★'.repeat(stars)+'☆'.repeat(3-stars);const sandboxOrb=$('sandboxOrbStatus');if(sandboxOrb)sandboxOrb.textContent=`Orbs ${count}/${total}`}
 let elapsed=0,runStarted=false,shotCount=0;
-function formatTime(t){let cs=Math.floor(t*100)%100,sec=Math.floor(t)%60,min=Math.floor(t/60);return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`}
-function recordKey(){let suffix=phase==='sandbox'?JSON.stringify([...sandboxAdded].map(p=>[p.x,p.y,p.w,p.h,p.type||'platform',p.angle||0])):phase;return 'gravityLaunchPBv1:test:v6.3.7:'+suffix+':L'+levelIndex}
+function formatTime(t){let cs=Math.floor(t*100)%100,sec=Math.floor(t)%60,min=Math.floor(t/120);return `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}.${String(cs).padStart(2,'0')}`}
+function recordKey(){let suffix=phase==='sandbox'?JSON.stringify([...sandboxAdded].map(p=>[p.x,p.y,p.w,p.h,p.type||'platform',p.angle||0])):phase;return 'gravityLaunchPBv1:test:v7.0.3:'+suffix+':L'+levelIndex}
 let displayedTimeTier=null;
 let lastTimeStarContext='';
 function updateTimeTargets(){
@@ -808,29 +893,29 @@ function nextChargeReaction(){
  }
  return chargeReactionBag.shift();
 }
-function completeRun(){completed=true;runStarted=false;retrievalStart=performance.now();retrievalZapped=false;retrievalX=phase==='damaged'?ascentExit.x:cell.x;retrievalY=phase==='damaged'?ascentExit.y:cell.y+Math.sin(simTime*2.3)*4;retrievalSide=retrievalX>=player.x?1:-1;player.vx=0;player.vy=0;aim=null;chargeVariant=nextChargeReaction();chargeUntil=performance.now()+RETRIEVAL_MS;finalStars=starsFor(collectedOrbs.size,orbs().length);v6LastEvaluation=applyEvaluation();chargeAward=v6LastEvaluation.reward;if(phase==='normal')saveDescentStars(levelIndex,finalStars);updateOrbs();try{let key=recordKey(),prior=Number(localStorage.getItem(key));if(!prior||elapsed<prior){localStorage.setItem(key,String(elapsed));$('notice').textContent+=' • NEW PERSONAL BEST!'}}catch(e){}showTimer();$('notice').textContent=chargeAward?'TERMINAL ACTIVATED • +'+chargeAward+' UPGRADE CREDITS':'TERMINAL ACTIVATED • RECORD UPDATED';retrievalStart=0;chargeUntil=0;playSfx('cell');showCompletion();}
-const STAR_KEY='gravityLaunchDescentStarsV154:test:v6.3.7:';
+function completeRun(){recordReplaySample();replayWinning=normaliseReplayTrace(replayCurrent);completed=true;runStarted=false;retrievalStart=performance.now();retrievalZapped=false;retrievalX=phase==='damaged'?ascentExit.x:cell.x;retrievalY=phase==='damaged'?ascentExit.y:cell.y+Math.sin(simTime*2.3)*4;retrievalSide=retrievalX>=player.x?1:-1;player.vx=0;player.vy=0;aim=null;chargeVariant=nextChargeReaction();chargeUntil=performance.now()+RETRIEVAL_MS;finalStars=starsFor(collectedOrbs.size,orbs().length);v6LastEvaluation=applyEvaluation();chargeAward=v6LastEvaluation.reward;if(phase==='normal')saveDescentStars(levelIndex,finalStars);updateOrbs();try{let key=recordKey(),prior=Number(localStorage.getItem(key));if(!prior||elapsed<prior){localStorage.setItem(key,String(elapsed));$('notice').textContent+=' • NEW PERSONAL BEST!'}}catch(e){}showTimer();$('notice').textContent=chargeAward?'TERMINAL ACTIVATED • +'+chargeAward+' UPGRADE CREDITS':'TERMINAL ACTIVATED • RECORD UPDATED';retrievalStart=0;chargeUntil=0;playSfx('cell');showCompletion();}
+const STAR_KEY='gravityLaunchDescentStars:test:v7.0.3:';
 function descentStars(level){try{return Math.max(0,Math.min(3,Number(localStorage.getItem(STAR_KEY+level))||0))}catch(e){return 0}}
 function saveDescentStars(level,stars){try{if(stars>descentStars(level))localStorage.setItem(STAR_KEY+level,String(stars))}catch(e){}}
-function descentChapterComplete(){return Array.from({length:5},(_,i)=>getRecord('normal:'+(i+1)).completed).every(Boolean)}
+function descentChapterComplete(){return Array.from({length:10},(_,i)=>getRecord('normal:'+(i+1)).completed).every(Boolean)}
 function canAscend(level){return isDeveloperMode() || descentChapterComplete()}
 function canPlayDescent(level){return isDeveloperMode() || level===1 || getRecord('normal:'+(level-1)).completed}
 function canPlayAscent(level){return canAscend(level) && (isDeveloperMode() || level===1 || getRecord('damaged:'+(level-1)).completed)}
 if(!DEV_BUILD_AVAILABLE)$('levelSandbox').style.display='none';
 $('levelSandbox').onclick=()=>{closeLevels();openSandboxHub('levels')};
 $('levelAscension').onclick=()=>{if(!canAscend(1))return;levelIndex=1;$('levelSelect').value='1';closeLevels();choose('damaged')};
-function openLevels(){cancelAim();
+function openLevels(){cancelAim();$('levelOverlay').classList.toggle('from-home',$('homeOverlay').classList.contains('visible'));
  const levelWallet=$('levelProgressWallet');if(levelWallet)levelWallet.innerHTML=compactWalletMarkup();
- const ascBtn=$('levelAscension');const unlocked=canAscend(5);
+ const ascBtn=$('levelAscension');const unlocked=canAscend(10);
  ascBtn.disabled=!unlocked;ascBtn.classList.toggle('unlocked',unlocked);
  ascBtn.textContent=unlocked?'↑ Ascension':'↑ Ascension 🔒';
  const target=$('levelMenuEntries');target.replaceChildren();
- for(let i=1;i<=5;i++){
+ for(let i=1;i<=10;i++){
    const stars=descentStars(i),enabled=canPlayAscent(i),descentEnabled=canPlayDescent(i),v6rec=getRecord('normal:'+i);
    const entry=document.createElement('div');entry.className='levelMenuEntry';
    const heading=document.createElement('b');heading.textContent=String(i).padStart(2,'0')+' · '+levelNames[i-1];
    const rating=document.createElement('span');rating.className='stars';rating.textContent='★'.repeat(v6rec.time||0)+'☆'.repeat(3-(v6rec.time||0))+' / '+'★'.repeat(v6rec.collection||0)+'☆'.repeat(3-(v6rec.collection||0));heading.append(rating);if(v6rec.perfect){const mark=document.createElement('span');mark.className='perfectMark';mark.textContent='✦';mark.title='Perfect Star earned';heading.append(mark)}
-   const note=document.createElement('small');note.textContent=isDeveloperMode()?'DEVELOPER ACCESS · all chambers unlocked':!descentEnabled?'Complete previous Descent chamber to unlock':enabled?'Ascension unlocked':!descentChapterComplete()?'Complete all five Descent chambers to unlock Ascension':'Complete previous Ascension chamber to unlock';
+   const note=document.createElement('small');note.textContent=isDeveloperMode()?'DEVELOPER ACCESS · all chambers unlocked':!descentEnabled?'Complete previous Descent chamber to unlock':enabled?'Ascension unlocked':!descentChapterComplete()?'Complete the Descent sectors to unlock Ascension':'Complete previous Ascension chamber to unlock';
    const row=document.createElement('div');row.className='row';
    const descent=document.createElement('button');descent.textContent=descentEnabled?'↓ Descent':'🔒 Descent';descent.disabled=!descentEnabled;descent.onclick=()=>{if(!canPlayDescent(i))return;levelIndex=i;$('levelSelect').value=i;closeLevels();choose('normal')};
    const ascent=document.createElement('button');ascent.textContent=enabled?'↑ Ascension':'🔒 Ascension';ascent.disabled=!enabled;ascent.onclick=()=>{if(!canPlayAscent(i))return;levelIndex=i;$('levelSelect').value=i;closeLevels();choose('damaged')};
@@ -841,6 +926,50 @@ function openLevels(){cancelAim();
 function closeLevels(){$('levelOverlay').classList.remove('visible');if(completed&&!$('homeOverlay').classList.contains('visible')&&!$('finishOverlay').classList.contains('visible'))showCompletion()}
 $('selectLevels').onclick=openLevels;$('closeLevels').onclick=closeLevels;
 $('levelsHome').onclick=()=>{cancelAim();$('levelOverlay').classList.remove('visible');$('finishOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');$('homeOverlay').classList.add('visible');refreshWallet()};
+// v7.0.3: In-memory attempt traces. These are visual recordings, never physics re-simulation.
+let replayTraces=[],replayCurrent=[],replayClock=0,replayActive=false,replayPosition=0,replayLastFrame=0,replayWinning=[];
+const REPLAY_SAMPLE=1/30,REPLAY_MAX_SAMPLES=3600,REPLAY_MAX_TRACES=32;
+function normaliseReplayTrace(trace){const start=trace.length?trace[0].t:0;return trace.map(p=>({...p,t:p.t-start}));}
+function recordReplaySample(){
+ if(replayActive||editing||completed||!runStarted)return;
+ if(replayCurrent.length>=REPLAY_MAX_SAMPLES)return;
+ if(replayClock===0||simTime-replayClock>=REPLAY_SAMPLE){replayClock=simTime;replayCurrent.push({t:elapsed,x:player.x,y:player.y,a:player.angle})}
+}
+function closeReplay(){replayActive=false;$('replayHud').classList.remove('visible');$('finishOverlay').classList.add('visible');}
+function startReplay(){
+ if(!replayWinning.length)return;
+ replayActive=true;replayPosition=0;replayLastFrame=performance.now();
+ $('finishOverlay').classList.remove('visible');$('replayHud').classList.add('visible');
+}
+function drawReplayGhosts(){
+ const traces=[...replayTraces,replayWinning];
+ const maxTime=Math.max(.1,...traces.map(t=>t.length?t[t.length-1].t:0));
+ const winningDuration=replayWinning[replayWinning.length-1].t;
+ const slow=replayPosition>=Math.max(0,winningDuration-2.8);
+ const winner=replayWinning;
+ const pointAt=(trace,t)=>{if(!trace.length||t<trace[0].t||t>trace[trace.length-1].t+.08)return null;
+ let lo=0,hi=trace.length-1;while(lo<hi){const m=(lo+hi+1)>>1;if(trace[m].t<=t)lo=m;else hi=m-1}
+ const a=trace[lo],b=trace[Math.min(lo+1,trace.length-1)],f=b.t>a.t?Math.max(0,Math.min(1,(t-a.t)/(b.t-a.t))):0;
+ return {x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f,a:a.a+(b.a-a.a)*f};};
+ // Replay is a race of recorded attempts through the physical shaft.
+ // Follow the leading visible droid, rather than locking the camera to the winning trace.
+ const visible=traces.map(t=>pointAt(t,replayPosition)).filter(Boolean);
+ const lead=visible.length?(phase==='damaged'?Math.min(...visible.map(p=>p.y)):Math.max(...visible.map(p=>p.y))):null;
+ if(lead!==null){const target=Math.max(0,Math.min(WORLD-H,lead-H*.44));camera+=(target-camera)*.16;}
+ draw();ctx.save();ctx.translate(0,-camera);
+ traces.forEach((trace,i)=>{const p=pointAt(trace,replayPosition);if(!p)return;
+ const win=i===traces.length-1;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);
+ ctx.globalAlpha=win?1:.58;
+ const hull=ctx.createRadialGradient(-5,-7,1,0,0,R);hull.addColorStop(0,'#8197a7');hull.addColorStop(.52,'#43596d');hull.addColorStop(1,'#101d2b');
+ ctx.fillStyle=hull;ctx.strokeStyle='#091b29';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,R-1,0,Math.PI*2);ctx.fill();ctx.stroke();
+ ctx.strokeStyle='#9cabb3';ctx.lineWidth=1.8;ctx.beginPath();ctx.arc(0,0,R-4,Math.PI*1.04,Math.PI*1.67);ctx.stroke();
+ ctx.fillStyle='#0b1a28';ctx.beginPath();ctx.arc(-.5,.1,12.8,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#adbbc2';ctx.lineWidth=1.7;ctx.stroke();
+ const eye=ctx.createRadialGradient(-1,-1,0,0,0,7);eye.addColorStop(0,'#eaffff');eye.addColorStop(.35,'#6df6ff');eye.addColorStop(.8,'#009ddd');eye.addColorStop(1,'#07518a');
+ ctx.fillStyle=eye;ctx.beginPath();ctx.arc(0,0,7,0,Math.PI*2);ctx.fill();ctx.restore();});
+ ctx.restore();$('replayInfo').textContent=`Attempts racing · ${slow?'1.15×':'3.5×'} · ${traces.length} runs · ${Math.min(replayPosition,maxTime).toFixed(1)}s`;
+ if(replayPosition>=maxTime+.4)closeReplay();
+}
+$('finishReplay').onclick=startReplay;$('replayClose').onclick=closeReplay;
 function showCompletion(){
  $('finishTitle').textContent=phase==='sandbox'?'Sandbox Complete':'Sector Report';
  const e=v6LastEvaluation;
@@ -852,23 +981,24 @@ function showCompletion(){
   const stars=n=>'★'.repeat(n)+'☆'.repeat(3-n);
   $('finishStars').textContent=stars(e.time)+'  '+stars(e.collection);
   $('finishStars').style.fontSize='22px';
-  const results=[['Time',formatTime(elapsed)],['Time Rating',stars(e.time)],['Orbs',`${collectedOrbs.size}/${orbs().length}`],['Collection Rating',stars(e.collection)],['New Stars',`+${e.newStars}`],['Credits',e.reward?`+${e.reward}`:'No new rewards'],['Chamber Record',`${e.record.time+e.record.collection}/6`],['Total Stars',`${evaluationScore()}/60`],...((perfectCount()>=3||!document.body.classList.contains("playerBuild"))?[['Perfect Stars',`${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}`]]:[]),['Shots',String(shotCount)],['Deaths',String(dead)]];
+  const results=[['Time',formatTime(elapsed)],['Time Rating',stars(e.time)],['Orbs',`${collectedOrbs.size}/${orbs().length}`],['Collection Rating',stars(e.collection)],['New Stars',`+${e.newStars}`],['Credits',e.reward?`+${e.reward}`:'No new rewards'],['Chamber Record',`${e.record.time+e.record.collection}/6`],['Total Stars',`${evaluationScore()}/120`],...((perfectCount()>=3||!document.body.classList.contains("playerBuild"))?[['Perfect Stars',`${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}`]]:[]),['Shots',String(shotCount)],['Deaths',String(dead)]];
   $('finishSummary').innerHTML=(e.newPerfect?'<div class="perfectReveal" aria-label="Secret seventh star earned"><span class="perfectBigStar">★</span><span class="perfectCaption">Perfect Run</span></div>':'')+
     `<div class="resultGroup"><div class="resultRow"><span>Time</span><strong>${formatTime(elapsed)} · ${stars(e.time)}</strong></div><div class="resultRow"><span>Orbs</span><strong>${collectedOrbs.size}/${orbs().length} · ${stars(e.collection)}</strong></div><div class="resultRow"><span>Sector stars</span><strong>${e.record.time+e.record.collection}/6</strong></div></div>`+
-    `<div class="resultGroup"><div class="resultRow"><span>New stars</span><strong>+${e.newStars}</strong></div><div class="resultRow"><span>Credits</span><strong>${e.reward?'+'+e.reward:'No new rewards'}</strong></div><div class="resultRow"><span>Total stars</span><strong>${evaluationScore()}/60</strong></div>${(perfectCount()>=3||!document.body.classList.contains("playerBuild"))?`<div class="resultRow"><span>Perfect stars</span><strong>${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</strong></div>`:''}</div>`+
+    `<div class="resultGroup"><div class="resultRow"><span>New stars</span><strong>+${e.newStars}</strong></div><div class="resultRow"><span>Credits</span><strong>${e.reward?'+'+e.reward:'No new rewards'}</strong></div><div class="resultRow"><span>Total stars</span><strong>${evaluationScore()}/120</strong></div>${(perfectCount()>=3||!document.body.classList.contains("playerBuild"))?`<div class="resultRow"><span>Perfect stars</span><strong>${perfectCount()}/${Math.max(PERFECT_ELIGIBLE.length,perfectCount())}</strong></div>`:''}</div>`+
     `<details class="reportDetails"><summary>Run details</summary><div class="resultRow"><span>Shots</span><strong>${shotCount}</strong></div><div class="resultRow"><span>Deaths</span><strong>${dead}</strong></div></details>`;
  }
- $('finishNext').disabled=phase==='sandbox'||(phase==='normal'&&levelIndex>=5&&!descentChapterComplete())||(phase==='damaged'&&levelIndex>=5);
- $('finishNext').textContent=phase==='normal'&&levelIndex===5&&descentChapterComplete()?'Begin Ascension ↑':'Next Level →';$('finishNext').classList.toggle('ascensionNext',phase==='normal'&&levelIndex===5&&descentChapterComplete());
+ $('finishNext').disabled=phase==='sandbox'||(phase==='normal'&&levelIndex>=10&&!descentChapterComplete())||(phase==='damaged'&&levelIndex>=10);
+ $('finishNext').textContent=phase==='normal'&&levelIndex===10&&descentChapterComplete()?'Begin Ascension':'Next Level';$('finishNext').classList.toggle('ascensionNext',phase==='normal'&&levelIndex===10&&descentChapterComplete());
  $('finishAscend').style.display='none';
  $('finishHome').style.display='';
+ $('finishReplay').style.display=replayWinning.length?'':'none';
  $('finishOverlay').classList.add('visible');
  if(phase==='sandbox'){$('sandboxSandMenu').classList.remove('open');$('sandboxPicker').style.display='none';selectedIndex=-1;updateSelected();}
 }
 $('finishLevelSelect').onclick=()=>{ $('finishOverlay').classList.remove('visible');openLevels() };
 $('finishHome').onclick=()=>{ $('finishOverlay').classList.remove('visible');$('levelOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');$('homeOverlay').classList.add('visible');refreshWallet(); };
 $('finishRestart').onclick=()=>{reset(true);$('homeOverlay').classList.remove('visible')};
-$('finishNext').onclick=()=>{if(phase==='sandbox')return;if(phase==='normal'&&levelIndex===5&&descentChapterComplete()){levelIndex=1;$('levelSelect').value=levelIndex;choose('damaged');return}if(phase==='damaged'){if(levelIndex>=5||!canPlayAscent(levelIndex+1))return;levelIndex++;}else{if(levelIndex>=5||!canPlayDescent(levelIndex+1))return;levelIndex++;}$('levelSelect').value=levelIndex;choose(phase)};
+$('finishNext').onclick=()=>{if(phase==='sandbox')return;if(phase==='normal'&&levelIndex===10&&descentChapterComplete()){levelIndex=1;$('levelSelect').value=levelIndex;choose('damaged');return}if(phase==='damaged'){if(levelIndex>=10||!canPlayAscent(levelIndex+1))return;levelIndex++;}else{if(levelIndex>=10||!canPlayDescent(levelIndex+1))return;levelIndex++;}$('levelSelect').value=levelIndex;choose(phase)};
 $('finishAscend').onclick=()=>{if(phase==='sandbox'||!canAscend(1))return;levelIndex=1;$('levelSelect').value='1';choose('damaged')};
 
 const AIR_AIM_TIMESCALE=.17, DOUBLE_SHOT_POWER_FACTOR=.82, SPIKE_HEIGHT=9;
@@ -905,7 +1035,7 @@ window.addEventListener('keydown',e=>{
  if(e.key.toLowerCase()!=='r'||e.repeat||e.ctrlKey||e.altKey||e.metaKey)return;
  const target=e.target;
  if(target && (['INPUT','TEXTAREA','SELECT'].includes(target.tagName)||target.isContentEditable))return;
- if(['homeOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay'].some(id=>$(id).classList.contains('visible')))return;
+ if(['homeOverlay','pauseOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay','playChoiceOverlay'].some(id=>$(id).classList.contains('visible')))return;
  e.preventDefault();cancelPendingShot();reset(true);
 },true);
 window.addEventListener('keydown',e=>{
@@ -913,9 +1043,9 @@ window.addEventListener('keydown',e=>{
     e.preventDefault();e.stopPropagation();cancelAim();
   }
 },true);
-function reset(all=false){v6LastEvaluation=null;retrievalStart=0;chargeUntil=0;chargeAward=0;cancelPendingShot();idleWait=0;idleKind='';idleAge=0;$('finishOverlay').classList.remove('visible');if(all){checkpointOrbs.clear();collectedOrbs.clear();finalStars=null;elapsed=0;runStarted=false;shotCount=0;checkpoint=phase==='damaged'?{...activeCheckpointList()[0]}:{x:phase==='sandbox'?125:93,y:165};lastCheckpoint=0;dead=0;$('deaths').textContent=dead}player.x=checkpoint.x;player.y=checkpoint.y;player.vx=0;player.vy=0;player.grounded=true;wasGroundedForImpact=true;player.angle=0;doubleShotAvailable=true;aim=null;completed=false;flash=0;camera=Math.max(0,Math.min(WORLD-H,player.y-H*.36));updateHud();showTimer();updateOrbs()}
+function reset(all=false){if(all){replayTraces=[];replayCurrent=[];replayWinning=[];replayClock=0;replayActive=false;$('replayHud').classList.remove('visible');}v6LastEvaluation=null;retrievalStart=0;chargeUntil=0;chargeAward=0;cancelPendingShot();idleWait=0;idleKind='';idleAge=0;$('finishOverlay').classList.remove('visible');if(all){checkpointOrbs.clear();collectedOrbs.clear();finalStars=null;elapsed=0;runStarted=false;shotCount=0;checkpoint=phase==='damaged'?{...activeCheckpointList()[0]}:{x:phase==='sandbox'?125:93,y:165};lastCheckpoint=0;dead=0;$('deaths').textContent=dead}player.x=checkpoint.x;player.y=checkpoint.y;player.vx=0;player.vy=0;player.grounded=true;wasGroundedForImpact=true;player.angle=0;doubleShotAvailable=true;airShotRechargeAt=0;aim=null;completed=false;flash=0;camera=Math.max(0,Math.min(WORLD-H,player.y-H*.36));updateHud();showTimer();updateOrbs()}
 function updateHud(){ $('cancelShot').style.display=aim&&!editing?'':'none';$('phaseLabel').textContent=phase==='sandbox'?((sandboxLibrary.find(m=>m.id===activeSandboxId)?.name||'Sandbox')+' / '+(editing?'Build':'Test')):'Act 1 / Sector '+String(levelIndex).padStart(2,'0');}
-function choose(mode){$('homeOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');if((mode==='damaged'&&!canPlayAscent(levelIndex))||(mode==='normal'&&!canPlayDescent(levelIndex))){openLevels();return}closeLevels();if(phase!==mode){trackIndex=0}phase=mode;refreshTrack();editing=false;editDrag=null;selectedIndex=-1;$('sandbox').classList.toggle('active',mode==='sandbox');$('edit').style.display=mode==='sandbox'?'':'none';$('clearMap').style.display=mode==='sandbox'?'':'none';$('edit').textContent='✎ Edit platforms';$('edit').classList.remove('active');$('editorTools').style.display='none';syncSandboxAdd();$('normal').classList.toggle('active',mode==='normal');$('damaged').classList.toggle('active',mode==='damaged');reset(true);$('notice').textContent=mode==='normal'?'Retrieve the Power Cell at the bottom of the shaft.':mode==='damaged'?'ASCENSION • Start at the bottom. Climb against gravity and reach the escape hatch above. Touch checkpoint buttons on a platform to save.':'Sandbox: use the sand menu to edit, save or play your chamber.';}
+function choose(mode){levelsReturnToPause=false;$('pauseOverlay').classList.remove('visible');$('homeOverlay').classList.remove('visible');$('settingsOverlay').classList.remove('visible');if((mode==='damaged'&&!canPlayAscent(levelIndex))||(mode==='normal'&&!canPlayDescent(levelIndex))){openLevels();return}closeLevels();if(phase!==mode){trackIndex=0}phase=mode;refreshTrack();editing=false;editDrag=null;selectedIndex=-1;$('sandbox').classList.toggle('active',mode==='sandbox');$('edit').style.display=mode==='sandbox'?'':'none';$('clearMap').style.display=mode==='sandbox'?'':'none';$('edit').textContent='✎ Edit platforms';$('edit').classList.remove('active');$('editorTools').style.display='none';syncSandboxAdd();$('normal').classList.toggle('active',mode==='normal');$('damaged').classList.toggle('active',mode==='damaged');reset(true);$('notice').textContent=mode==='normal'?'Retrieve the Power Cell at the bottom of the shaft.':mode==='damaged'?'ASCENSION • Start at the bottom. Climb against gravity and reach the escape hatch above. Touch checkpoint buttons on a platform to save.':'Sandbox: use the sand menu to edit, save or play your chamber.';}
 $('levelSelect').onchange=()=>{levelIndex=Number($('levelSelect').value);if(phase!=='sandbox'){if((phase==='damaged'&&!canPlayAscent(levelIndex))||(phase==='normal'&&!canPlayDescent(levelIndex))){openLevels()}else choose(phase)}else{reset(true)};$('notice').textContent='CHAMBER '+String(levelIndex).padStart(2,'0')+' • '+levelNames[levelIndex-1]+' • '+(phase==='damaged'?'Hard ascent remix':'Learn the new mechanic');};$('normal').onclick=()=>choose('normal');$('damaged').onclick=()=>choose('damaged');$('sandbox').onclick=()=>openSandboxHub('settings');
 const sandboxObjectCategories=[
  ['Platforms',[['platform','Metal platform'],['retract','Retractable platform'],['conveyor','Conveyor belt']]],
@@ -942,7 +1072,8 @@ const sandboxPreviewIcons={platform:'▰',retract:'▱',conveyor:'⇢',spikes:'�
 function placeSandboxObject(p,type){
  if(!editing||phase!=='sandbox'||sandboxAdded.length>=55)return false;
  if(!((type==='spikes'&&p.y>=8&&p.y<WORLD-5)||(p.y>226&&p.y<1705)))return false;
- const w=type==='orb'?18:type==='vent'?66:type==='kinetic'?76:type==='ram'?105:type==='laser'?105:+$('platformSize').value;
+ const presetWidth=Number($('platformSize').value)||150;
+ const w=type==='orb'?18:type==='vent'?66:type==='kinetic'?76:type==='ram'?105:type==='laser'?105:presetWidth;
  const x=type==='orb'?Math.max(34,Math.min(386,snap(p.x))):Math.max(23,Math.min(397-w,snap(p.x-w/2)));
  const y=type==='spikes'?snap(p.y):Math.max(230,Math.min(1705,snap(p.y)));
  const obj={x,y,w,h:type==='vent'?110:type==='ram'?30:type==='laser'?5:type==='spikes'?8:type==='orb'?18:19,type,angle:0,direction:1};
@@ -967,7 +1098,7 @@ $('objectChange').onclick=()=>{
   const mount=nearestSpikeMount({x:duplicate.x+duplicate.w/2,y:duplicate.y},duplicate.w);
   if(!mount){$('notice').textContent='NO VALID SURFACE FOR DUPLICATE';return}Object.assign(duplicate,mount);
  }
- sandboxAdded.push(duplicate);selectedIndex=sandboxAdded.length-1;updateSelected();updateOrbs();$('notice').textContent='DUPLICATE OVERLAPPING • Drag the red copy to a clear position.';
+ sandboxAdded.push(duplicate);selectedIndex=sandboxAdded.length-1;updateSelected();updateOrbs();$('notice').textContent='DUPLICATE • Faded red outline means invalid. Drag to a clear space to confirm.';
 };
 $('sandboxPickerClose').onclick=()=>{$('sandboxPicker').style.display='none';sandboxPendingPoint=null;sandboxEmptyGesture=null;syncPlacementCancel()};
 // The picker is a real interactive dialog; clicks on its controls must not reach the shaft.
@@ -1020,22 +1151,45 @@ function changeSelectedSandboxType(type){
 $('sandboxBarToggle').onclick=()=>{$('sandboxSandMenu').classList.remove('open');$('edit').click()};
 $('sandboxBarSave').onclick=()=>{saveMap();persistActiveSandbox();$('sandboxSandMenu').classList.remove('open')};
 $('sandboxBarBack').onclick=()=>{if(editing){saveMap();$('edit').click()}else saveMap();openSandboxHub('levels')};
-$('edit').onclick=()=>{if(!isDeveloperMode())return;$('sandboxPicker').style.display='none';$('sandboxSandMenu').classList.remove('open');editing=!editing;aim=null;editDrag=null;selectedIndex=-1;sandboxLastMove=null;sandboxLastBlankTap=null;$('itemType').value='platform';updateSelected();$('edit').textContent=editing?'▶ Play sandbox':'✎ Edit platforms';$('edit').classList.toggle('active',editing);$('editorTools').style.display=editing?'flex':'none';syncSandboxAdd();if(editing){player.vx=player.vy=0;camera=0;sandboxPlacementType=null;$('notice').textContent='BUILD MODE • Drag empty space to scroll; tap to choose or place objects.'}else {saveMap();reset(true);$('notice').textContent='PLAY SANDBOX • Reach the cell with the platforms you designed.'}updateHud()};
+$('edit').onclick=()=>{if(phase!=='sandbox')return;$('sandboxPicker').style.display='none';$('sandboxSandMenu').classList.remove('open');editing=!editing;aim=null;editDrag=null;selectedIndex=-1;sandboxLastMove=null;sandboxLastBlankTap=null;$('itemType').value='platform';updateSelected();$('edit').textContent=editing?'▶ Play sandbox':'✎ Edit platforms';$('edit').classList.toggle('active',editing);$('editorTools').style.display=editing?'flex':'none';syncSandboxAdd();if(editing){player.vx=player.vy=0;camera=0;sandboxPlacementType=null;$('notice').textContent='BUILD MODE • Drag empty space to scroll; tap to choose or place objects.'}else {saveMap();reset(true);$('notice').textContent='PLAY SANDBOX • Reach the cell with the platforms you designed.'}updateHud()};
 $('sandboxBarClear').onclick=()=>{$('sandboxSandMenu').classList.remove('open');$('clearMap').click()};
 $('clearMap').onclick=()=>{if(!confirm('Remove all the platforms you added to the sandbox?'))return;sandboxAdded=[];selectedIndex=-1;updateSelected();saveMap();if(!editing)reset(true)};
 $('saveMap').onclick=saveMap; $('upMap').onclick=()=>{camera=Math.max(0,camera-270)};$('downMap').onclick=()=>{camera=Math.min(WORLD-H,camera+270)};$('reset').onclick=()=>reset(true);$('hudRestart').addEventListener('pointerdown',e=>{e.stopPropagation();cancelPendingShot();});$('hudRestart').onclick=e=>{e.stopPropagation();cancelPendingShot();reset(true)};$('defaults').onclick=()=>{input.gravity.value=900;input.power.value=720;input.drag.value=.12;input.bounce.value=.10;input.wallBounce.value=.65;input.arcLength.value=0.7;sync()};
-const levelNames=['Launch Basics','First Spikes','Rolling Slopes','Slopes & Spikes','Mastery'];
+const levelNames=['First Steps','Precision Movement','Spike Training','Spike Course','Retracting Platforms','Retract & Spikes','Conveyor Training','Moving Machinery','Laser Training','Systems Test'];
 function plat(){if(phase==='sandbox')return [...sandboxBase,...sandboxAdded.filter(q=>q.type==='platform')];
- let layout=normalPlatforms.map((p,i)=>({...p}));
- // Level 3: preserve a visible clearance between the open end of right-hand
- // platforms and the chamber wall instead of accidentally joining the geometry.
- if(levelIndex===3)for(const p of layout){if(p.x>180&&p.x+p.w>382)p.w=Math.max(105,382-p.x)}
- // A common silhouette persists across both phases; each level adds one lesson.
- if(levelIndex===1)layout=layout.filter((_,i)=>![2,5,8].includes(i));
- if(levelIndex>=3){for(const i of levelIndex===3?[2,6]:levelIndex===4?[2,5,7]:[1,2,5,6,7]){
-   if(layout[i])layout[i].angle=((i%2)?-1:1)*(levelIndex===5?30:15);
- }}
- if(phase==='damaged'){layout=layout.filter((_,i)=>!(levelIndex>1&&i===4));if(levelIndex>=4)layout.push(...damageExtras.map(p=>({...p})));}
+ let layout=normalPlatforms.map(p=>({...p}));
+ // v7.0.3: Distinct authored silhouettes, alternating wide landings and open drops.
+ // Positions stay within the 420px shaft; each sector has several generous recovery ledges.
+ const route={
+  // Two movement lessons: generous landings, then narrower precision gaps.
+  1:[[24,335,310],[76,540,280],[25,755,300],[90,975,270],[24,1200,302],[76,1460,285]],
+  2:[[42,345,185],[220,555,158],[38,780,166],[217,1005,164],[44,1250,150],[220,1480,165]],
+  // Solo spike lesson and then spikes with narrower movement geometry.
+  3:[[25,338,295],[96,545,272],[22,760,295],[94,980,278],[24,1210,300],[90,1480,282]],
+  4:[[35,342,233],[181,548,210],[33,765,226],[178,985,211],[36,1215,220],[181,1480,207]],
+  // Retracting floors: isolated first, then combine with already-taught spikes.
+  5:[[24,339,285],[109,550,245],[24,768,280],[112,988,243],[24,1220,285],[112,1485,246]],
+  6:[[34,340,245],[175,552,218],[34,775,235],[177,1000,215],[35,1230,236],[178,1480,216]],
+  // Conveyor introduction and combination.
+  7:[[25,340,280],[111,552,248],[25,770,282],[111,995,247],[25,1225,284],[112,1490,247]],
+  8:[[35,342,240],[180,554,213],[35,776,242],[178,1005,216],[35,1235,240],[179,1487,216]],
+  // Laser introduction and a restrained final systems test.
+  9:[[24,343,285],[111,550,250],[25,775,285],[112,1005,248],[25,1230,280],[111,1490,250]],
+  10:[[35,345,245],[177,550,216],[35,775,239],[179,1005,213],[35,1235,239],[180,1490,213]]
+ };
+ const starter={...normalPlatforms[0]},finish={...normalPlatforms[10]};
+ layout=[starter,...route[levelIndex].map(([x,y,w])=>({x,y,w,h:19})),finish];
+ // Small bridge-like access decks make the architecture feel connected, but do
+ // not form walls across the route. They are physical platforms, not scenery.
+ const deckY=levelIndex%2?666:897;
+ if(levelIndex>=4)layout.push({x:24,y:deckY,w:91,h:17},{x:115,y:deckY,w:83,h:17});
+ if(levelIndex>=8)layout.push({x:223,y:1138,w:94,h:17},{x:317,y:1138,w:78,h:17});
+
+ if(phase==='damaged'){
+   // Reverse route keeps the same taught hazards, never introduces unseen ones.
+   if(levelIndex>=9)layout[4].angle=10;
+ }
+
  return layout;
 }
 // v6.2.4 facility machinery: all phases use the same sector geometry.
@@ -1043,41 +1197,24 @@ function plat(){if(phase==='sandbox')return [...sandboxBase,...sandboxAdded.filt
 function facilityMachinery(){
  if(phase==='sandbox')return sandboxAdded.filter(o=>['retract','laser','ram','conveyor','kinetic','vent'].includes(o.type)).map(o=>{
   const t=editing?0:simTime%4.6;
-  if(o.type==='retract'){const f=t<2.55?1:t<3.15?1-(t-2.55)/.6:t<4.05?0:(t-4.05)/.55;return {kind:'retract',x:o.x,y:o.y,w:o.w*f,h:o.h,active:f>.2,warning:t>=2.15&&t<3.15};}
-  if(o.type==='laser')return {kind:'laser',...o,active:t>=1.15&&t<2.7,warning:t>=.65&&t<1.15};
-  if(o.type==='ram'){const f=t<1.2?0:t<2?(t-1.2)/.8:t<3.3?1:t<4.2?1-(t-3.3)/.9:0;return {kind:'ram',...o,w:Math.max(16,o.w*f),active:f>.03,warning:t>=.7&&t<2};}
-  if(o.type==='vent')return {kind:'vent',...o,active:t>=1.5&&t<2.75,warning:t>=.9&&t<1.5};
-  return {kind:o.type,...o,active:true,direction:o.direction||1};
+  if(o.type==='retract'){const f=t<2.55?1:t<3.15?1-(t-2.55)/.6:t<4.05?0:(t-4.05)/.55;return {kind:'retract',x:o.x,y:o.y,w:o.w*f,h:o.h,active:f>.2,warning:t>=2.15&&t<3.15,_pendingDuplicate:o._pendingDuplicate,_source:o};}
+  if(o.type==='laser')return {kind:'laser',...o,_source:o,active:t>=1.15&&t<2.7,warning:t>=.65&&t<1.15};
+  if(o.type==='ram'){const f=t<1.2?0:t<2?(t-1.2)/.8:t<3.3?1:t<4.2?1-(t-3.3)/.9:0;return {kind:'ram',...o,_source:o,w:Math.max(16,o.w*f),active:f>.03,warning:t>=.7&&t<2};}
+  if(o.type==='vent')return {kind:'vent',...o,_source:o,active:t>=1.5&&t<2.75,warning:t>=.9&&t<1.5};
+  return {kind:o.type,...o,_source:o,active:true,direction:o.direction||1};
  });
  const items=[];
- if(levelIndex>=2){
-  const t=(simTime+levelIndex*.37)%4.6;
-  const fraction=t<2.55?1:t<3.15?1-(t-2.55)/.6:t<4.05?0:(t-4.05)/.55;
-  items.push({kind:'retract',x:levelIndex===2?135:140,y:levelIndex===2?1015:875,w:Math.max(0,116*fraction),h:16,active:fraction>.2,warning:t>=2.15&&t<3.15});
- }
- if(levelIndex>=3){
-  const t=(simTime+levelIndex*.43)%4.4;
-  items.push({kind:'laser',x:22,y:levelIndex===3?1175:1120,w:376,h:5,active:t>=1.15&&t<2.7,warning:t>=.65&&t<1.15});
- }
- if(levelIndex>=4){
-  const t=(simTime+levelIndex*.29)%5.2;
-  const extension=t<1.2?0:t<2? (t-1.2)/.8:t<3.3?1:t<4.2?1-(t-3.3)/.9:0;
-  const width=16+Math.max(0,extension)*102;
-  items.push({kind:'ram',x:398-width,y:levelIndex===4?1370:1330,w:width,h:30,active:extension>.03,warning:t>=.7&&t<2});
- }
- if(levelIndex>=3){
-  // Conveyor is solid, with a visually readable moving belt.
-  items.push({kind:'conveyor',x:levelIndex===3?222:68,y:levelIndex===3?790:690,w:124,h:14,active:true,direction:levelIndex%2?1:-1});
- }
- if(levelIndex>=4){
-  // Kinetic pad gives a predictable upward impulse on contact from above.
-  items.push({kind:'kinetic',x:levelIndex===4?125:240,y:levelIndex===4?1060:980,w:76,h:12,active:true});
- }
- if(levelIndex>=5){
-  // Amber warning precedes a timed non-lethal pressure burst.
-  const t=(simTime+.45)%4.6;
-  items.push({kind:'vent',x:245,y:1190,w:66,h:115,active:t>=1.5&&t<2.75,warning:t>=.9&&t<1.5});
- }
+ const L=levelIndex;
+ const addRetract=(x,y,w)=>{const t=(simTime+.32)%4.6;const f=t<2.55?1:t<3.15?1-(t-2.55)/.6:t<4.05?0:(t-4.05)/.55;items.push({kind:'retract',x,y,w:w*f,h:16,active:f>.2,warning:t>=2.15&&t<3.15,fullW:w});};
+ const addConveyor=(x,y,w,dir=1)=>items.push({kind:'conveyor',x,y,w,h:14,active:true,direction:dir});
+ const addLaser=(x,y,w)=>{const t=(simTime+.18)%4.4;items.push({kind:'laser',x,y,w,h:5,active:t>=1.15&&t<2.7,warning:t>=.65&&t<1.15});};
+ // New mechanics are introduced in three clear examples before combinations.
+ if(L===5||L===6){addRetract(170,440,88);addRetract(42,895,122);addRetract(188,1365,155);}
+ if(L===7||L===8){addConveyor(94,442,95,1);addConveyor(174,889,135,-1);addConveyor(64,1360,170,1);}
+ if(L===9||L===10){addLaser(55,450,290);addLaser(28,900,365);addLaser(100,1360,220);}
+ if(L===8){addRetract(168,1160,115);}
+ if(L===10){addConveyor(55,670,125,-1);addRetract(175,1115,105);}
+
  return items;
 }
 function circleOverlapsBox(b){
@@ -1087,8 +1224,10 @@ function circleOverlapsBox(b){
 }
 function drawFacilityMachinery(){
  for(const m of facilityMachinery()){
+  ctx.save();
+  if(editing&&m._pendingDuplicate&&sandboxOverlaps(sandboxAdded.findIndex(o=>o===m._source)))ctx.globalAlpha=.38;
   if(m.kind==='retract'){
-   ctx.fillStyle='#102c3a';ctx.fillRect(m.x-8,m.y-5,130,26);
+   ctx.fillStyle='#102c3a';ctx.fillRect(m.x-8,m.y-5,(m.fullW||130)+14,26);
    if(m.w>2){
     ctx.fillStyle=m.warning?'#aa783a':'#3d7b8a';ctx.fillRect(m.x,m.y,m.w,m.h);
     ctx.fillStyle=m.warning?'#ffc270':'#b9f7ff';ctx.fillRect(m.x,m.y,m.w,3);
@@ -1128,16 +1267,18 @@ function drawFacilityMachinery(){
    }
    if(m.warning){ctx.fillStyle='#ffc270';ctx.fillRect(384,m.y-12,8,5)}
   }
+  ctx.restore();
  }
 }
 function hazards(){
  if(phase==='sandbox')return sandboxAdded.filter(q=>q.type==='spikes').map(q=>({x:q.x,y:q.y,w:q.w,angle:q.angle||0}));
- let raw;
- if(levelIndex===1)return [];
- if(levelIndex===2)raw=phase==='normal'?[{x:23,y:758,w:60}]:[{x:23,y:758,w:78},{x:307,y:1251,w:70}];
- else if(levelIndex===3)raw=phase==='normal'?[]:[{x:307,y:1251,w:75}];
- else if(levelIndex===4)raw=phase==='normal'?[{x:23,y:758,w:75},{x:307,y:1251,w:70}]:spikesDamaged;
- else raw=phase==='normal'?spikesNormal:spikesDamaged;
+ let raw=[];
+ if(levelIndex===3||levelIndex===4||levelIndex===6||levelIndex===10){
+  const platforms=plat();
+  const positions=levelIndex===3?[1,3,5]:levelIndex===4?[1,3,5]:levelIndex===6?[2,5]:[1,4];
+  const widths=levelIndex===3?[38,68,104]:levelIndex===4?[44,76,96]:[48,78,96];
+  raw=positions.map((idx,i)=>{const p=platforms[idx];return {x:p.x+Math.min(20,p.w*.15),y:p.y-18,w:Math.min(widths[i]||65,p.w-30)};});
+ }
  // Spikes must have a real platform under their mounting base. Some Ascension
  // levels remove platforms; suppress orphaned spikes instead of leaving them airborne.
  return raw.flatMap(h=>{
@@ -1145,7 +1286,7 @@ function hazards(){
   return support?[{...h,y:support.y}]:[];
  });
 }
-function die(){playSfx('death');dead++;$('deaths').textContent=dead;collectedOrbs=new Set(checkpointOrbs);reset(false);shake=10;flash=1;updateOrbs()}
+function die(){recordReplaySample();if(replayCurrent.length){replayTraces.push(normaliseReplayTrace(replayCurrent));if(replayTraces.length>REPLAY_MAX_TRACES)replayTraces.shift();}replayCurrent=[];replayClock=0;playSfx('death');dead++;$('deaths').textContent=dead;collectedOrbs=new Set(checkpointOrbs);reset(false);shake=10;flash=1;updateOrbs()}
 function hitRect(b,physics){let nx=Math.max(b.x,Math.min(player.x,b.x+b.w)),ny=Math.max(b.y,Math.min(player.y,b.y+b.h));let dx=player.x-nx,dy=player.y-ny,dist=Math.hypot(dx,dy);if(dist>=R)return false;
 if(dist<.0001){let l=player.x-b.x,r=b.x+b.w-player.x,t=player.y-b.y,bot=b.y+b.h-player.y;let min=Math.min(l,r,t,bot);if(min===l){dx=-1;dy=0}else if(min===r){dx=1;dy=0}else if(min===t){dx=0;dy=-1}else{dx=0;dy=1}dist=1}else{dx/=dist;dy/=dist}
 player.x+=dx*(R-dist+.08);player.y+=dy*(R-dist+.08);let vn=player.vx*dx+player.vy*dy;if(vn<0){let bounce=Math.abs(vn)<35?0:(Math.abs(dx)>.7 && b.w<=22 && b.h===WORLD ? settings().wallBounce : settings().bounce);player.vx-=(1+bounce)*vn*dx;player.vy-=(1+bounce)*vn*dy}if(dy<-.45){player.grounded=true;doubleShotAvailable=true;player.vx*=.985}if(Math.abs(dx)>.7){player.vy*=.995}return true}
@@ -1190,8 +1331,11 @@ function updateIdle(dt){
  }
 }
 let accumulator=0,last=performance.now();function frame(now){if(phase==='sandbox'&&editing)syncPlacementCancel();if(editing&&selectedIndex>=0)positionObjectTools();tickMusic();if(completed&&chargeUntil&&now>=chargeUntil){chargeUntil=0;retrievalStart=0;showCompletion()}
-if(completed&&retrievalStart&&!retrievalZapped&&retrievalProgress()>.57){retrievalZapped=true;playSfx('cell')}let dt=Math.min(.04,(now-last)/1000);last=now;if(isModalOpen()){draw();requestAnimationFrame(frame);return;}if(runStarted&&!completed&&!editing){elapsed+=dt;showTimer()}accumulator+=dt*(aim&&!player.grounded&&doubleShotAvailable?.17:1);let iters=0;while(accumulator>=1/120&&iters++<6){step(1/120);accumulator-=1/120}updateIdle(dt);draw();requestAnimationFrame(frame)}
-function step(dt){if(editing)return;simTime+=dt;if(flash>0)flash=Math.max(0,flash-dt*2.3);if(shake>0)shake=Math.max(0,shake-dt*20);if(completed)return;let s=settings();player.grounded=false;player.vy+=s.g*dt;let friction=Math.exp(-s.drag*dt);player.vx*=friction;player.vy*=friction;player.x+=player.vx*dt;player.y+=player.vy*dt;player.angle+=player.vx*dt/R;
+if(completed&&retrievalStart&&!retrievalZapped&&retrievalProgress()>.57){retrievalZapped=true;playSfx('cell')}let dt=Math.min(.04,(now-last)/1000);last=now;if(replayActive){const advance=Math.min(.06,(now-replayLastFrame)/1000);replayLastFrame=now;const duration=replayWinning.length?replayWinning[replayWinning.length-1].t:0;replayPosition+=advance*(replayPosition>=Math.max(0,duration-2.8)?1.15:3.5);drawReplayGhosts();requestAnimationFrame(frame);return;}if(isModalOpen()){draw();requestAnimationFrame(frame);return;}if(runStarted&&!completed&&!editing){elapsed+=dt;showTimer()}accumulator+=dt*(aim&&!player.grounded&&doubleShotAvailable?.17:1);let iters=0;while(accumulator>=1/120&&iters++<6){step(1/120);recordReplaySample();accumulator-=1/120}updateIdle(dt);draw();requestAnimationFrame(frame)}
+function step(dt){if(editing)return;simTime+=dt;if(!doubleShotAvailable&&airShotRechargeAt&&simTime>=airShotRechargeAt){doubleShotAvailable=true;airShotRechargeAt=0;}if(flash>0)flash=Math.max(0,flash-dt*2.3);if(shake>0)shake=Math.max(0,shake-dt*20);if(completed)return;let s=settings();player.grounded=false;player.vy+=s.g*dt;let friction=Math.exp(-s.drag*dt);player.vx*=friction;player.vy*=friction;player.x+=player.vx*dt;player.y+=player.vy*dt;player.angle+=player.vx*dt/R;
+ // Hard containment independent of thin-wall discrete collision at high shot speeds.
+ if(player.x<6+R){player.x=6+R;player.vx=Math.abs(player.vx)*settings().wallBounce;}
+ if(player.x>414-R){player.x=414-R;player.vx=-Math.abs(player.vx)*settings().wallBounce;}
 const preCollisionDownwardSpeed=player.vy;
 for(let b of [...solidWalls,...plat(),...facilityMachinery().filter(m=>(m.kind==='retract'&&m.active)||(m.kind==='ram'&&m.active)||m.kind==='conveyor'||m.kind==='kinetic')]){if(b.angle)collideSlope(player,b);else hitRect(b);}
 detectRestingSurface();
@@ -1391,7 +1535,7 @@ function moveSandboxObject(index,x,y,point){
    const mount=nearestSpikeMount(point,b.w);
    if(mount)Object.assign(b,mount);
  }
- if(b._pendingDuplicate&&!sandboxOverlaps(index))b._pendingDuplicate=false;
+ // Duplicates stay provisional until released in a collision-free position.
  positionObjectTools();
 }
 function beginSandboxDrag(e,index,p,anywhere){
@@ -1457,7 +1601,10 @@ function release(e){
   if(editDrag&&e.pointerId===editDrag.id){
    const d=editDrag,g=sandboxEmptyGesture;
    if(d.moved){
-    if(sandboxAdded[d.i]?._pendingDuplicate){$('notice').textContent='MOVE DUPLICATE TO A CLEAR POSITION';}else{sandboxLastMove={index:d.i,before:d.origin};saveMap();}
+    if(sandboxAdded[d.i]?._pendingDuplicate){
+     if(sandboxOverlaps(d.i)){$('notice').textContent='INVALID PLACEMENT • Move the faded duplicate away from other objects.';}
+     else{delete sandboxAdded[d.i]._pendingDuplicate;sandboxLastMove={index:d.i,before:d.origin};saveMap();}
+    }else{sandboxLastMove={index:d.i,before:d.origin};saveMap();}
     sandboxLastBlankTap=null;
    }else if(g&&g.mode==='selected'){
     const now=performance.now(),prior=sandboxLastBlankTap;
@@ -1481,10 +1628,10 @@ function release(e){
  const dx=aim.end.x-aim.start.x,dy=aim.end.y-aim.start.y,len=Math.hypot(dx,dy);
  if(len>14&&(player.grounded||doubleShotAvailable)&&!completed){
   const fromAir=!player.grounded;let speed=settings().power*Math.min(1,len/155)*(fromAir?effectiveDoubleShot():1);
-  player.vx=-dx/len*speed;player.vy=-dy/len*speed;if(fromAir)doubleShotAvailable=false;
+  player.vx=-dx/len*speed;player.vy=-dy/len*speed;if(fromAir){doubleShotAvailable=false;airShotRechargeAt=simTime+0.9;}
   shotCount++;showTimer();runStarted=true;player.grounded=false;flash=.28;
-  $('notice').textContent=fromAir?'DOUBLE SHOT FIRED • Touch a surface to recharge.':'SHOT FIRED • Drag mid-air to aim a slowed Double Shot.';
- }else if(len>14&&!player.grounded&&!doubleShotAvailable){$('notice').textContent='DOUBLE SHOT SPENT • Land on a surface to recharge.'}
+  $('notice').textContent=fromAir?'DOUBLE SHOT FIRED • Recharges in 0.9s or on landing.':'SHOT FIRED • Drag mid-air to aim a slowed Double Shot.';
+ }else if(len>14&&!player.grounded&&!doubleShotAvailable){$('notice').textContent='DOUBLE SHOT RECHARGING • Ready shortly or on landing.'}
  aim=null;updateHud();
 }
 canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',()=>{cancelPendingShot();cancelAim();editDrag=null;sandboxEmptyGesture=null});
@@ -1509,7 +1656,7 @@ function desktopOuterAllowed(e){
  if(e.pointerType!=='mouse'||e.button!==0||editing||completed)return false;
  if(window.matchMedia('(pointer: coarse)').matches)return false;
  if(e.target.closest('button,input,select,textarea,a,summary,canvas,.frame,.app,aside,[role=button]'))return false;
- if(['homeOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay'].some(id=>$(id).classList.contains('visible')))return false;
+ if(['homeOverlay','pauseOverlay','settingsOverlay','controlsOverlay','modOverlay','sandboxHub','levelOverlay','finishOverlay','upgradeOverlay','playChoiceOverlay'].some(id=>$(id).classList.contains('visible')))return false;
  const rect=canvas.getBoundingClientRect();
  return e.clientX<rect.left||e.clientX>rect.right;
 }
@@ -1588,16 +1735,16 @@ for(let x=38;x<W;x+=93)ctx.fillRect(x,-(offset%154)-154,62,H+308);
 ctx.save();ctx.translate(0,-camera);
 // Continuous side casings: a single full-height assembly on each side.
 for(let side=0;side<2;side++){
- const x=side?398:0;
- const g=ctx.createLinearGradient(x,0,x+22,0);
+ const x=side?414:0;
+ const g=ctx.createLinearGradient(x,0,x+6,0);
  if(!side){g.addColorStop(0,hard?'#582923':'#46677a');g.addColorStop(.45,hard?'#362026':'#24495d');g.addColorStop(1,'#0b1d28')}
  else{g.addColorStop(0,'#0b1d28');g.addColorStop(.55,hard?'#362026':'#24495d');g.addColorStop(1,hard?'#582923':'#46677a')}
- ctx.fillStyle=g;ctx.fillRect(x,0,22,WORLD);
- ctx.fillStyle='#081923';ctx.fillRect(side?400:17,0,3,WORLD);
+ ctx.fillStyle=g;ctx.fillRect(x,0,6,WORLD);
+ ctx.fillStyle='#081923';ctx.fillRect(side?416:2,0,2,WORLD);
  ctx.strokeStyle=hard?'#a75448':'#6f9cad';ctx.lineWidth=1.5;
- ctx.beginPath();ctx.moveTo(side?418:2,0);ctx.lineTo(side?418:2,WORLD);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(side?419:0,0);ctx.lineTo(side?419:0,WORLD);ctx.stroke();
  // Continuous embedded fibre-optic light strip, uninterrupted along shaft.
- ctx.fillStyle=accent;ctx.globalAlpha=.85;ctx.fillRect(side?397:21,0,2,WORLD);ctx.globalAlpha=1;
+ ctx.fillStyle=accent;ctx.globalAlpha=.85;ctx.fillRect(side?412:6,0,1,WORLD);ctx.globalAlpha=1;
 }
 ctx.save();ctx.globalAlpha=.46; // soften background equipment so gameplay stays readable\n// Technical lab rear wall: service racks, screens and cable trunks.
 for(let y=72;y<WORLD;y+=300){
@@ -1628,6 +1775,27 @@ for(let y=72;y<WORLD;y+=300){
   ctx.fillStyle=hard?'#46252a':'#1c4457';ctx.fillRect(34,y+245,351,7);
   ctx.fillStyle=hard?'#a04a40':'#387588';ctx.fillRect(34,y+245,351,1);
 }
+// Non-colliding service architecture: braces, intake vents, sealed maintenance hatches.
+// Deliberately positioned in the rear wall, not over playable surfaces.
+for(let n=0;n<6;n++){
+ const y=255+n*264,side=(n+levelIndex)%2===0,x=side?314:35;
+ ctx.save();ctx.globalAlpha=.66;
+ ctx.fillStyle=hard?'#2d252a':'#1c3d4d';ctx.fillRect(x,y,72,64);
+ ctx.strokeStyle=hard?'#9c6658':'#4c8da0';ctx.lineWidth=3;ctx.strokeRect(x+2,y+2,68,60);
+ ctx.fillStyle='#081e2b';ctx.fillRect(x+10,y+11,52,42);
+ ctx.strokeStyle=accent;ctx.lineWidth=2;
+ for(let v=0;v<5;v++){ctx.beginPath();ctx.moveTo(x+13,y+16+v*8);ctx.lineTo(x+58,y+16+v*8);ctx.stroke()}
+ ctx.fillStyle='#84bec9';for(let q of [8,64])for(let r of [8,56])ctx.fillRect(x+q,y+r,3,3);
+ ctx.restore();
+}
+for(let n=0;n<5;n++){
+ const y=395+n*316;
+ ctx.save();ctx.globalAlpha=.44;ctx.strokeStyle=hard?'#9d584b':'#6b9daf';ctx.lineWidth=5;
+ ctx.beginPath();ctx.moveTo(22,y);ctx.lineTo(53,y-26);ctx.lineTo(104,y-26);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(398,y+45);ctx.lineTo(368,y+18);ctx.lineTo(316,y+18);ctx.stroke();
+ ctx.fillStyle=hard?'#623d38':'#356579';ctx.fillRect(22,y-7,24,13);ctx.fillRect(375,y+38,23,13);
+ ctx.restore();
+}
 // Further stationary conduits add depth without interfering with the play surfaces.
 for(const x of [118,302]){
   ctx.strokeStyle=hard?'#522a2d':'#214659';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD);ctx.stroke();
@@ -1637,6 +1805,7 @@ ctx.restore(); // foreground platforms and hazards retain full contrast\n// over
 for(let x of [29,384]){ctx.lineWidth=5;ctx.strokeStyle='#587783';ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,WORLD);ctx.stroke();ctx.lineWidth=2;ctx.strokeStyle=phase==='normal'?'#7bd3db':'#b66b5e';ctx.beginPath();ctx.moveTo(x+3,0);ctx.lineTo(x+3,WORLD);ctx.stroke()}
 function renderPlatform(p){
   ctx.save();
+  if(editing&&p._pendingDuplicate&&sandboxOverlaps(sandboxAdded.indexOf(p)))ctx.globalAlpha=.38;
   if(p.angle){ctx.translate(p.x+p.w/2,p.y);ctx.rotate((p.angle||0)*Math.PI/180);ctx.translate(-p.w/2,0)}
   else ctx.translate(p.x,p.y);
   ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=9;ctx.shadowOffsetY=4;
@@ -1735,7 +1904,7 @@ if(phase==='damaged'){
   // Gold-charged capsule is the two-credit Ascension reward. Contact collects it.
   if(!completed||(retrievalStart&&retrievalProgress()<.57)){ctx.save();ctx.translate(ascentExit.x,ascentExit.y);ctx.scale(.65,.65);ctx.fillStyle='#a69b78';rounded(-10,-16,20,32,4);ctx.fill();ctx.fillStyle='#3a2e12';rounded(-7,-12,14,24,3);ctx.fill();ctx.fillStyle='#ffdc4c';rounded(-5,-10,10,20,2);ctx.fill();ctx.strokeStyle='#ffe9a1';ctx.lineWidth=2;ctx.strokeRect(-5,-10,10,20);ctx.restore();}
   for(let k=0;k<16;k++){let xx=35+(k*73)%345,yy=110+k*109;ctx.strokeStyle='#ff604540';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx+9,yy+10);ctx.lineTo(xx+3,yy+21);ctx.stroke()}}
-if(editing){ctx.strokeStyle='#6ce8e9';ctx.lineWidth=2;ctx.setLineDash([5,5]);for(let i=0;i<sandboxAdded.length;i++){let p=sandboxAdded[i];ctx.strokeStyle=p._pendingDuplicate?'#ff6767':i===selectedIndex?'#f5ca75':'#6ce8e9';if(p.angle){const e=slopeEdge(p);ctx.beginPath();ctx.moveTo(e.ax,e.ay);ctx.lineTo(e.bx,e.by);ctx.stroke()}else if(p.type==='orb'){ctx.beginPath();ctx.arc(p.x,p.y,13,0,Math.PI*2);ctx.stroke()}else ctx.strokeRect(p.x-2,p.y-(p.type==='spikes'?SPIKE_HEIGHT+2:2),p.w+4,p.type==='spikes'?SPIKE_HEIGHT+12:p.h+4)}ctx.setLineDash([])}
+if(editing){ctx.strokeStyle='#6ce8e9';ctx.lineWidth=2;ctx.setLineDash([5,5]);for(let i=0;i<sandboxAdded.length;i++){let p=sandboxAdded[i];ctx.strokeStyle=p._pendingDuplicate&&sandboxOverlaps(i)?'#ff6767':i===selectedIndex?'#f5ca75':'#6ce8e9';if(p.angle){const e=slopeEdge(p);ctx.beginPath();ctx.moveTo(e.ax,e.ay);ctx.lineTo(e.bx,e.by);ctx.stroke()}else if(p.type==='orb'){ctx.beginPath();ctx.arc(p.x,p.y,13,0,Math.PI*2);ctx.stroke()}else ctx.strokeRect(p.x-2,p.y-(p.type==='spikes'?SPIKE_HEIGHT+2:2),p.w+4,p.type==='spikes'?SPIKE_HEIGHT+12:p.h+4)}ctx.setLineDash([])}
 // AURA-01 component rig: a two-bone inverse-kinematic jack, with the knee
 // calculated from fixed link lengths rather than an arbitrary line.
 function rigSegment(a,b,width,metal,trim){
@@ -1778,7 +1947,7 @@ const lift=0;
 const bodyX=player.x-retreat,bodyY=player.y-(retr?4*smoothstep(rp/.26):0)-lift;
 const animatedX=bodyX+chargeJitter, animatedY=bodyY-chargeJump;
 const alignedAngle=retr?player.angle+(Math.round(player.angle/Math.PI)*Math.PI-player.angle)*smoothstep(rp/.23):player.angle;
-ctx.translate(animatedX,animatedY);ctx.rotate(alignedAngle+chargeTwist);
+ctx.translate(animatedX,animatedY);ctx.rotate(alignedAngle+chargeTwist);if(replayActive)ctx.globalAlpha=0;
 // Retractable stabilizer jacks: deploy when stationary, or during cell retrieval.
 // Decorative only: collision and trajectory remain the original round droid.
 // Jack extension and hull lift share the same easing curve.
