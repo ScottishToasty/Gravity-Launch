@@ -1913,7 +1913,7 @@ function apexRefresh(){const panel=document.getElementById('apexEditor');if(!pan
 }
 function apexShowPanel(show){const el=document.getElementById('apexEditor');if(el)el.hidden=!show;}
 function apexOpen(){apexState.active=!apexState.active;apexShowPanel(apexState.active);document.getElementById('apexEditorButton').textContent=apexState.active?'✕ Exit editor':'⚙ Apex editor';if(apexState.active){aim=null;apexRefresh();}}
-function apexRotate(degrees){const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;a.rotation=((a.rotation||0)+degrees*Math.PI/180)%(2*Math.PI);apexSave();apexRefresh();}
+function apexRotate(degrees){const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const angle=Math.round(((a.rotation||0)*180/Math.PI+degrees)/5)*5;a.rotation=(((angle%360)+360)%360)*Math.PI/180;apexSave();apexRefresh();}
 function apexAdd(kind){const d=apexRead(),tpl=apexTemplates[kind];if(!tpl)return;const rng=apexRand(apexHash(apexId()+':'+kind+':'+Date.now()));let next=null;
  for(let k=0;k<100;k++){const x=kind==='light'?(rng()<.5?34:386):60+rng()*300,y=250+rng()*(WORLD-340);const a={id:'added-'+Date.now()+'-'+k,kind,x:Math.round(x),y:Math.round(y),size:tpl.radius,depth:tpl.depth,rotation:0,spin:tpl.spin,locked:false};const b=apexBounds(a);
   if(!apexIntersects(b,12)&&!d.assets.some(v=>{const q=apexBounds(v);return b.x<q.x+q.w+12&&b.x+b.w>q.x-12&&b.y<q.y+q.h+12&&b.y+b.h>q.y-12})){next=a;break;}
@@ -2406,15 +2406,15 @@ function buildGameplayMenuArt(){
 
 (function(){
 const frame=document.getElementById('frame');const btn=document.createElement('button');btn.id='apexEditorButton';btn.textContent='⚙ Apex editor';btn.onclick=()=>{if(apexState.active&&panel.hidden){apexShowPanel(true);apexRefresh()}else apexOpen()};frame.appendChild(btn);
-const panel=document.createElement('section');panel.id='apexEditor';panel.hidden=true;panel.innerHTML=`<div class="apexHead">APEX · Asset Assemblies v0.2 <button id="apexClosePanel" type="button" aria-label="Close editor menu">✕</button></div><small id="apexEditorStatus"></small>
-<div class="apexRow"><span>Background</span><label>Show <input id="apexVis-background" type="checkbox" checked></label><label>Lock <input id="apexLock-background" type="checkbox"></label></div>
+const panel=document.createElement('section');panel.id='apexEditor';panel.hidden=true;panel.innerHTML=`<div class="apexHead">APEX · Asset Assemblies v0.3 <button id="apexClosePanel" type="button" aria-label="Close editor menu">✕</button></div><small id="apexEditorStatus"></small>
+<details class="apexDetails"><summary>☷ Layers · visibility & locks</summary><div class="apexRow"><span>Background</span><label>Show <input id="apexVis-background" type="checkbox" checked></label><label>Lock <input id="apexLock-background" type="checkbox"></label></div>
 <div class="apexRow"><span>Midground</span><label>Show <input id="apexVis-midground" type="checkbox" checked></label><label>Lock <input id="apexLock-midground" type="checkbox"></label></div>
-<div class="apexRow"><span>Foreground</span><label>Show <input id="apexVis-foreground" type="checkbox" checked></label><label>Lock <input id="apexLock-foreground" type="checkbox"></label></div>
+<div class="apexRow"><span>Foreground</span><label>Show <input id="apexVis-foreground" type="checkbox" checked></label><label>Lock <input id="apexLock-foreground" type="checkbox"></label></div></details>
 <div class="apexRow"><span>Selected: <b id="apexSel">None</b></span><button id="apexLockAsset">Lock</button><button id="apexResize">Size +</button></div>
-<div class="apexBtns"><button id="apexRotateLeft">↶ Rotate 15°</button><button id="apexRotateRight">↷ Rotate 15°</button><button id="apexDelete">🗑 Delete</button></div>
-<div class="apexHead apexSubhead">Add asset</div>
+<div class="apexBtns"><button id="apexRotateLeft">↶ 5°</button><button id="apexRotateRight">↷ 5°</button><button id="apexDelete">🗑 Delete</button></div>
+<div class="apexHead apexSubhead">＋ Add asset</div>
 <div class="apexAssetGrid"><button data-apex-add="fan">◉ Fan</button><button data-apex-add="light">▯ Wall light</button><button data-apex-add="panel">▣ Console</button><button data-apex-add="junction">⊞ Junction</button><button data-apex-add="vent">▤ Wall vent</button></div>
-<div class="apexBtns"><button id="apexGen">↻ Regenerate unlocked</button><button id="apexSave">✓ Save layout</button></div><small>Tap outside to hide this menu. Tap a fixture to select it; drag to reposition the assembly. Select ⚙ Apex editor to reopen the controls. Connected cables reroute only when a clear path exists.</small>`;frame.appendChild(panel);
+<details class="apexDetails"><summary>⚙ Generation & save</summary><div class="apexBtns"><button id="apexGen">↻ Regenerate unlocked</button><button id="apexSave">✓ Save layout</button></div><small>Tap outside to close. Select, drag, rotate or resize equipment.</small></details>`;frame.appendChild(panel);
 for(const layer of ['background','midground','foreground']){
  document.getElementById('apexVis-'+layer).onchange=e=>{apexState.visible[layer]=e.target.checked};
  document.getElementById('apexLock-'+layer).onchange=e=>{apexState.locked[layer]=e.target.checked};
@@ -2423,8 +2423,8 @@ for(const layer of ['background','midground','foreground']){
 // only the menu, not the editor itself. This works on iOS pointer events too.
 frame.addEventListener('pointerdown',e=>{if(apexState.active&&!panel.hidden&&!panel.contains(e.target)&&e.target!==btn)apexShowPanel(false);},true);
 document.getElementById('apexClosePanel').onclick=()=>apexShowPanel(false);
-document.getElementById('apexRotateLeft').onclick=()=>apexRotate(-15);
-document.getElementById('apexRotateRight').onclick=()=>apexRotate(15);
+document.getElementById('apexRotateLeft').onclick=()=>apexRotate(-5);
+document.getElementById('apexRotateRight').onclick=()=>apexRotate(5);
 document.getElementById('apexDelete').onclick=()=>{const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const data=apexRead();data.assets=data.assets.filter(b=>b.id!==a.id);apexState.selection=null;apexSave();apexRefresh()};
 for(const el of panel.querySelectorAll('[data-apex-add]'))el.onclick=()=>apexAdd(el.dataset.apexAdd);
 document.getElementById('apexGen').onclick=apexRegenerate;
@@ -2501,8 +2501,8 @@ requestAnimationFrame(frame);
 
 <style>
 #apexEditorButton{position:absolute;z-index:41;left:11px;bottom:52px;background:#133e50;border:1px solid #78b8c1;border-radius:7px;color:#c3f7fc;padding:9px 13px;font-weight:700;font-size:12px;cursor:pointer}
-#apexEditor{position:absolute;z-index:42;left:10px;right:10px;bottom:94px;max-height:62%;overflow:auto;padding:12px;background:#091b29f5;color:#e2eff3;border:1px solid #7aa2ae;border-radius:10px;box-shadow:0 7px 30px #000a;font:12px system-ui}
-#apexEditor .apexHead{display:flex;align-items:center;justify-content:space-between}#apexClosePanel{min-width:35px}#apexEditor .apexSubhead{font-size:12px;margin-top:11px}#apexEditor .apexAssetGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}#apexEditor .apexAssetGrid button{font-size:11px;white-space:normal;min-height:38px}#apexEditorButton{touch-action:manipulation}#apexEditor button{touch-action:manipulation}#apexEditor[hidden]{display:none}#apexEditor .apexHead{font-size:15px;font-weight:800;margin:0 0 6px}#apexEditor .apexRow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #345161}#apexEditor button{background:#23485b;border:1px solid #628794;color:#e4f8fb;border-radius:5px;padding:8px;cursor:pointer}#apexEditor .apexBtns{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}#apexEditor .apexBtns button{flex:1}#apexEditor small{color:#a3c2cb}
+#apexEditor{position:absolute;z-index:42;left:10px;right:10px;bottom:94px;max-height:39%;overflow:auto;padding:10px;background:#091b29f5;color:#e2eff3;border:1px solid #7aa2ae;border-radius:10px;box-shadow:0 7px 30px #000a;font:12px system-ui}
+#apexEditor .apexHead{display:flex;align-items:center;justify-content:space-between}#apexClosePanel{min-width:35px}#apexEditor .apexSubhead{font-size:12px;margin-top:11px}#apexEditor .apexAssetGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}#apexEditor .apexAssetGrid button{font-size:11px;white-space:normal;min-height:32px}#apexEditorButton{touch-action:manipulation}#apexEditor button{touch-action:manipulation}#apexEditor[hidden]{display:none}#apexEditor .apexDetails{border-top:1px solid #365664;margin-top:6px;padding:5px 0}#apexEditor .apexDetails summary{cursor:pointer;font-weight:700;color:#a6dce6;min-height:24px}#apexEditor .apexHead{font-size:14px;font-weight:800;margin:0 0 6px}#apexEditor .apexRow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid #345161}#apexEditor button{background:#23485b;border:1px solid #628794;color:#e4f8fb;border-radius:5px;padding:8px;cursor:pointer}#apexEditor .apexBtns{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}#apexEditor .apexBtns button{flex:1}#apexEditor small{color:#a3c2cb}
 </style>
 
 </body></html>
