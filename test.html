@@ -266,6 +266,14 @@ body.gl-sandbox:has(#finishOverlay.visible) #pauseGear{pointer-events:none!impor
 #sandboxPicker button{pointer-events:auto;touch-action:manipulation;}
 /* Plain object labels: no misleading icon-only pseudo previews. */
 #sandboxPickerObjects button{justify-content:flex-start;padding-left:15px;}
+</style><style>
+#apexEditor{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;max-height:35%;overflow-y:auto;}
+#apexSelectionTools{position:absolute;z-index:43;bottom:58px;right:12px;display:flex;align-items:center;gap:5px;background:#081b29f5;border:1px solid #6b98a5;padding:6px;border-radius:9px;color:#d2f3f7}
+#apexSelectionTools[hidden]{display:none}
+#apexSelectionTools button{border:1px solid #668996;border-radius:6px;background:#21485b;color:#ebfbff;min-width:54px;min-height:37px}
+#apexSelectionTools span{min-width:31px;text-align:center;font:700 12px system-ui}
+body.apexEditing #frame .overlaytop,body.apexEditing #frame #hudRestart,body.apexEditing #frame #notice{display:none!important}body.apexEditing:not(.gl-sandbox) #frame #pauseGear{display:none!important}
+body.apexEditing #frame canvas{cursor:default;touch-action:none}
 </style></head><body><main class="app">
 <style>
 /* v6.3.7: accessible touch targets and consistent centre-aligned navigation */
@@ -441,7 +449,7 @@ body:has(#pauseOverlay.visible) #sandboxObjectTools,body:has(#settingsOverlay.vi
 <div class="finishOverlay" id="modOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Mod Tools</h2><div id="modToolsMount"></div><button id="modBack" class="wideAction">Settings</button></div></div>
 <div class="finishOverlay" id="controlsOverlay" style="z-index:19"><div class="finishCard submenuCard"><h2>Controls</h2><div class="controlHelp"><div><b>Launch</b><span>Hold 0.1 seconds, drag backwards to aim, release to fire.</span></div><div><b>Double Shot</b><span>Hold and drag while airborne. Time slows as you aim.</span></div><div><b>Restart</b><span>Press R or tap the ↻ button.</span></div><div><b>Cancel aim</b><span>Press C or use the cancel control.</span></div><div><b>Mobile</b><span>Touch and drag anywhere on the playfield. Tap on-screen buttons normally.</span></div><div><b>Sandbox editor</b><span>Tap an object to select it, drag anywhere to move it, double-tap blank space to deselect. Use ⊘ to undo the last move.</span></div></div><button id="controlsBack" class="wideAction">Settings</button></div></div>
 <div class="finishOverlay" id="sandboxHub" style="z-index:20"><div class="finishCard submenuCard"><div class="settingsHeader"><button id="sandboxBack">Back</button><div class="sandboxHeading"><h2>SANDBOX MODE</h2><p class="hubIntro">Create or play your own maps.</p></div></div><div class="newMapBox"><input id="sandboxName" type="text" maxlength="36" placeholder="New map name" aria-label="New map name"><button id="sandboxCreate">＋ Create new map</button></div><h3 class="hubHeading">YOUR MAPS</h3><div id="sandboxGallery" class="sandboxGallery"></div></div></div>
-<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">TEST · Apex Asset System v0.1 · v7.0.5</div></div></div><div class="finishOverlay" id="playChoiceOverlay" style="z-index:16"><div class="finishCard" style="width:min(88%,340px)"><h2>Play</h2><div class="finishChoices"><button id="playResumeChoice" class="reportPrimary">▶ Resume</button><button id="playLevelChoice">☷ Level Select</button><button id="playChoiceBack">Back</button></div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. When an object is selected, drag anywhere to move it. Double-tap empty space or use ✕ to deselect.</p></div><button id="sandboxCancelPlacement" type="button" title="Cancel placing objects" aria-label="Cancel object placement">✕</button><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="17" height="19" rx="2"/><path d="M11 25v3h16V10h-5"/><path d="M12 15h10M17 10v10"/></svg></button><button id="objectCancelMove" title="Undo last move" aria-label="Cancel last object move"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M8 24 24 8"/></svg></button><button id="objectLeft" title="Rotate left 15°">↶</button><button id="objectRight" title="Rotate right 15°">↷</button><button id="objectLevel" title="Level / reset orientation" style="display:none">📏</button><button id="objectDelete" title="Delete object">🗑</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox Menu</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarClear" type="button">Clear all objects</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges in 0.9 seconds or on landing. Aim in mid-air to slow time.</div></div>
+<div class="finishOverlay visible" id="homeOverlay" style="z-index:12"><div class="gameArt" aria-hidden="true"><div class="artFrame panelHero"><img id="artHero"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 100,0 88,100 0,100"/></svg></div><div class="artFrame panelAction"><img id="artAction"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="6,0 100,0 100,88 0,100 0,16"/></svg></div><div class="artCenter"></div><div class="artFrame panelCell"><img id="artCell"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,6 100,0 100,100 0,92"/></svg></div><div class="artFrame panelSlope"><img id="artSlope"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="0,0 94,0 100,100 0,100"/></svg></div><div class="artFrame panelAscend"><img id="artAscend"><svg class="tileOutline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="8,0 100,0 100,100 0,100"/></svg></div></div><div class="finishCard homeCard"><h2>GRAVITY<br>LAUNCH</h2><div class="cellWallet" id="homeCellWallet">◈ 0 cells</div><div class="homeMenu"><button id="homePlay">▶ Play</button><button id="homeUpgrades">✦ Upgrades</button><button id="homeSettings">⚙ Settings</button></div><div class="homeFooter" id="homeFooter">TEST v0.5.4</div></div></div><div class="finishOverlay" id="playChoiceOverlay" style="z-index:16"><div class="finishCard" style="width:min(88%,340px)"><h2>Play</h2><div class="finishChoices"><button id="playResumeChoice" class="reportPrimary">▶ Start Sector</button><button id="playOpenApex">⚙ Background Editor</button><button id="playLevelChoice">☷ Level Select</button><button id="playChoiceBack">Back</button></div></div></div><div class="finishOverlay" id="upgradeOverlay" style="z-index:15"><div class="finishCard" style="width:min(94%,365px);max-height:85%;overflow:auto"><h2>Apex Upgrades</h2><p style="margin:6px 0 13px">Earn one-time credits from first completions and newly earned evaluation stars. Upgrade pricing is provisional.</p><div id="upgradeBalance" class="cellWallet"></div><div id="upgradeList" class="upgradeList"></div><button id="closeUpgrades" style="width:100%;margin-top:14px">Main Menu</button></div></div><div id="sandboxPicker" role="dialog" aria-label="Add sandbox object"><div class="sandboxPickerHead"><strong>Choose an object type</strong><button id="sandboxPickerClose" type="button" aria-label="Close">✕</button></div><div id="sandboxPickerCategories"></div><div id="sandboxPickerObjects"></div><p>Choose an object type. Tap empty space to place more; drag empty space to scroll the shaft. When an object is selected, drag anywhere to move it. Double-tap empty space or use ✕ to deselect.</p></div><button id="sandboxCancelPlacement" type="button" title="Cancel placing objects" aria-label="Cancel object placement">✕</button><div id="sandboxObjectTools" aria-label="Selected object tools"><button id="objectDelete" title="Delete object">🗑</button><button id="objectCancelMove" title="Undo last move" aria-label="Undo last move"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/><path d="M8 24 24 8"/></svg></button><button id="objectLeft" title="Rotate left 5°">↶</button><button id="objectRight" title="Rotate right 5°">↷</button><button id="objectChange" title="Duplicate selected object" aria-label="Duplicate selected object"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="17" height="19" rx="2"/><path d="M11 25v3h16V10h-5"/><path d="M12 15h10M17 10v10"/></svg></button><button id="objectLevel" title="Level / reset orientation" style="display:none">📏</button><button id="objectDeselect" type="button" title="Cancel selection">✕</button></div><button id="sandboxSandButton" type="button" aria-label="Sandbox menu" title="Sandbox menu">▧</button><div id="sandboxSandMenu" aria-label="Sandbox menu"><div class="sandboxMenuTitle">Sandbox Menu</div><button id="sandboxBarToggle" type="button">▶ Play</button><button id="sandboxBarClear" type="button">Clear all objects</button><button id="sandboxBarSave" type="button">Save map</button><button id="sandboxBackgroundEditor" type="button">☷ Background Editor</button><button id="sandboxBarBack" type="button">Maps</button></div><div class="notice" id="notice">Hold for 0.1 seconds to aim, pull back, then release. Your second shot recharges in 0.9 seconds or on landing. Aim in mid-air to slow time.</div></div>
 <div class="toolbar" id="devToolbar"><label style="display:flex;align-items:center;gap:7px;background:#102b39;border:1px solid #3a6c81;border-radius:6px;padding:5px 9px;color:#c2e8ef">LEVEL <select id="levelSelect" style="background:#091a28;color:#9af0de;border:1px solid #466f7d;padding:5px;border-radius:4px"><option value="1">01 · First Steps</option><option value="2">02 · Precision Movement</option><option value="3">03 · Spike Training</option><option value="4">04 · Spike Course</option><option value="5">05 · Retracting Platforms</option></select></label><button id="selectLevels">☷ Level select</button><button id="audioToggle" title="Enable or mute synthesised music and sound effects">♫ Sound: Off</button><button id="nextTrack" title="Switch to another background music track">♫ Next track</button><button id="cancelShot" type="button" style="display:none">✕ Cancel shot (C)</button><button id="reset">↻ Restart</button><button id="normal" style="display:none">↓ Normal chamber</button><button id="damaged" style="display:none">↑ Damaged ascent</button><button id="sandbox" style="display:none">✦ Sandbox chamber</button><button id="edit" style="display:none">✎ Edit platforms</button><button id="clearMap" style="display:none">Clear added</button><button id="defaults">Reset tuning</button></div>
 <section id="editorTools" style="display:none" class="editorTools"><b>BUILD MODE</b><span>Tap empty space to add a platform • Select an object and use ＋ to change its type • Drag to move</span><label>Item <select id="itemType"><option value="platform">Metal platform</option><option value="spikes">Spike trap</option><option value="orb">Collectible orb</option><option value="retract">Retractable platform</option><option value="laser">Pulse laser</option><option value="ram">Hydraulic ram</option><option value="conveyor">Conveyor belt</option><option value="kinetic">Kinetic launch pad</option><option value="vent">Pressure vent</option></select></label><label>Item size <select id="platformSize"><option value="105">Short</option><option value="150" selected>Medium</option><option value="200">Long</option></select></label><div><button id="rotateLeft">↶ Rotate −15°</button><button id="rotateRight">↷ Rotate +15°</button><button id="levelItem">Level item</button><button id="deleteItem">Delete selected</button></div><span id="selectedItem">Select a platform to rotate it. Select an object to edit it.</span><div><button id="upMap">↑ Up</button><button id="downMap">↓ Down</button><button id="saveMap">Save layout</button></div></section><section class="controls" id="devPhysics" aria-label="Physics tuning"><div class="control"><label for="gravity">Gravity <output id="gravityVal">900</output></label><input id="gravity" type="range" min="400" max="1600" value="900" step="25"></div><div class="control"><label for="power">Max launch speed <output id="powerVal">720</output></label><input id="power" type="range" min="400" max="1100" value="720" step="20"></div><div class="control"><label for="drag">Air resistance <output id="dragVal">0.12</output></label><input id="drag" type="range" min="0" max="1" value="0.12" step="0.02"></div><div class="control"><label for="bounce">Bounce <output id="bounceVal">0.10</output></label><input id="bounce" type="range" min="0" max="0.65" value="0.10" step="0.05"></div><div class="control"><label for="wallBounce">Wall ricochet <output id="wallBounceVal">0.65</output></label><input id="wallBounce" type="range" min="0" max="1" value="0.65" step="0.05"></div><div class="control"><label for="arcLength">Trajectory length <output id="arcLengthVal">0.7</output></label><input id="arcLength" type="range" min="0.6" max="3.0" value="0.7" step="0.1"></div></section>
 <style>
@@ -650,7 +658,7 @@ function showUpgradeShop(){refreshWallet();const opts=[['launch','Launch Thruste
 $('homeUpgrades').onclick=e=>{e.stopPropagation();showUpgradeShop()};
 $('closeUpgrades').onclick=()=>{$('upgradeOverlay').classList.remove('visible')};
 refreshWallet();
-const BUILD_VERSION='TEST · Apex Asset System v0.1 (v7.0.5)';
+const BUILD_VERSION='TEST v0.5.4';
 function applyBuildMode(){
   const dev=isDeveloperMode();
   document.body.classList.toggle('playerBuild',!dev);
@@ -816,7 +824,7 @@ function restoreSavedRun(){
  $('deaths').textContent=dead;showTimer();updateOrbs();updateHud();
  $('playChoiceOverlay').classList.remove('visible');$('homeOverlay').classList.remove('visible');startResumeCountdown();return true;
 }
-function syncHomeResume(){const b=$('playResumeChoice');if(b)b.textContent=savedRun()?'▶ Resume saved game':'▶ Start Sector 01'}
+function syncHomeResume(){const b=$('playResumeChoice');if(b)b.textContent=savedRun()?'▶ Resume saved game':'▶ Start Sector'}
 $('pauseSaveQuit').insertAdjacentHTML('beforebegin','<button id="sandboxTestRestart" class="pauseSaveQuit" type="button" style="display:none">↻ Restart sandbox test</button>');
 $('sandboxTestRestart').onclick=()=>{$('pauseOverlay').classList.remove('visible');reset(true);};
 $('pauseSaveQuit').onclick=()=>{
@@ -1208,7 +1216,16 @@ $('sandboxClearConfirm').onclick=()=>{$('sandboxClearOverlay').classList.remove(
 $('sandboxClearOverlay').addEventListener('click',e=>{if(e.target===$('sandboxClearOverlay'))$('sandboxClearCancel').click()});
 $('saveMap').onclick=saveMap; $('upMap').onclick=()=>{camera=Math.max(0,camera-270)};$('downMap').onclick=()=>{camera=Math.min(WORLD-H,camera+270)};$('reset').onclick=()=>reset(true);$('hudRestart').addEventListener('pointerdown',e=>{e.stopPropagation();cancelPendingShot();});$('hudRestart').onclick=e=>{e.stopPropagation();cancelPendingShot();reset(true)};$('defaults').onclick=()=>{input.gravity.value=900;input.power.value=720;input.drag.value=.12;input.bounce.value=.10;input.wallBounce.value=.65;input.arcLength.value=0.7;sync()};
 const levelNames=['First Steps','Precision Movement','Spike Training','Spike Course','Retracting Platforms'];
-function plat(){if(phase==='sandbox')return [...(sandboxAdded.some(q=>q.fixture==='start')?[]:[sandboxBase[0]]),...(sandboxAdded.some(q=>q.fixture==='floor')?[]:[sandboxBase[1]]),...sandboxAdded.filter(q=>q.type==='platform')];
+
+const APEX_GAMEPLAY_KEY='gravityLaunch:backgroundEditor:gameplay:v0.5:';
+const apexGameplayCache={};
+function apexGameplayKey(){return APEX_GAMEPLAY_KEY+levelIndex+':'+phase;}
+function apexGameplaySaved(){const k=apexGameplayKey();if(apexGameplayCache[k])return apexGameplayCache[k];try{const obj=JSON.parse(localStorage.getItem(k)||'null');if(obj&&Array.isArray(obj.platforms)&&Array.isArray(obj.hazards)){apexGameplayCache[k]=obj;return obj;}}catch(e){}return null;}
+function apexGameplayEnsure(){let d=apexGameplaySaved();if(d)return d;const platforms=plat().map(o=>({...o})),traps=hazards().map(o=>({...o}));d={platforms,hazards:traps};apexGameplayCache[apexGameplayKey()]=d;return d;}
+function apexGameplaySave(){const d=apexGameplaySaved();if(d)try{localStorage.setItem(apexGameplayKey(),JSON.stringify(d))}catch(e){}}
+function apexGameplayObjects(){const d=apexGameplayEnsure();return [...d.platforms.map((o,i)=>({o,type:'platform',index:i})),...d.hazards.map((o,i)=>({o,type:'spikes',index:i}))];}
+
+function plat(){if(phase!=='sandbox'){const stored=apexGameplaySaved();if(stored)return stored.platforms;}if(phase==='sandbox')return [...(sandboxAdded.some(q=>q.fixture==='start')?[]:[sandboxBase[0]]),...(sandboxAdded.some(q=>q.fixture==='floor')?[]:[sandboxBase[1]]),...sandboxAdded.filter(q=>q.type==='platform')];
  let layout=normalPlatforms.map(p=>({...p}));
  // v7.0.3: Distinct authored silhouettes, alternating wide landings and open drops.
  // Positions stay within the 420px shaft; each sector has several generous recovery ledges.
@@ -1318,6 +1335,7 @@ function drawFacilityMachinery(){
  }
 }
 function hazards(){
+ if(phase!=='sandbox'){const stored=apexGameplaySaved();if(stored)return stored.hazards;}
  if(phase==='sandbox')return sandboxAdded.filter(q=>q.type==='spikes').map(q=>({x:q.x,y:q.y,w:q.w,angle:q.angle||0}));
  let raw=[];
  if(levelIndex===3||levelIndex===4){
@@ -1378,8 +1396,8 @@ function updateIdle(dt){
  }
 }
 let accumulator=0,last=performance.now();function frame(now){if(phase==='sandbox'&&editing)syncPlacementCancel();if(editing&&selectedIndex>=0)positionObjectTools();tickMusic();if(completed&&chargeUntil&&now>=chargeUntil){chargeUntil=0;retrievalStart=0;showCompletion()}
-if(completed&&retrievalStart&&!retrievalZapped&&retrievalProgress()>.57){retrievalZapped=true;playSfx('cell')}let dt=Math.min(.04,(now-last)/1000);last=now;if(replayActive){const advance=Math.min(.06,(now-replayLastFrame)/1000);replayLastFrame=now;const duration=replayWinning.length?replayWinning[replayWinning.length-1].t:0;replayPosition+=advance*(replayPosition>=Math.max(0,duration-2.8)?1.15:3.5);drawReplayGhosts();requestAnimationFrame(frame);return;}if(resumeCountdownUntil){const left=resumeCountdownUntil-now;if(left>0){$('resumeCountdown').querySelector('span').textContent=left>2200?'3':left>1200?'2':left>200?'1':'GO';draw();requestAnimationFrame(frame);return;}resumeCountdownUntil=0;$('resumeCountdown').style.display='none';accumulator=0;}if(isModalOpen()){accumulator=0;draw();requestAnimationFrame(frame);return;}if(runStarted&&!completed&&!editing){elapsed+=dt;showTimer()}if(aim&&!player.grounded&&doubleShotAvailable){accumulator=0;step(Math.min(1/30,dt)*AIR_AIM_TIMESCALE);recordReplaySample();}else{accumulator+=dt;let iters=0;while(accumulator>=1/60&&iters++<8){step(1/60);recordReplaySample();accumulator-=1/60}}updateIdle(dt);draw();requestAnimationFrame(frame)}
-function step(dt){if(editing)return;simTime+=dt;if(!doubleShotAvailable&&airShotRechargeAt&&simTime>=airShotRechargeAt){doubleShotAvailable=true;airShotRechargeAt=0;}if(flash>0)flash=Math.max(0,flash-dt*2.3);if(shake>0)shake=Math.max(0,shake-dt*20);if(completed)return;let s=settings();player.grounded=false;player.vy+=s.g*dt;let friction=Math.exp(-s.drag*dt);player.vx*=friction;player.vy*=friction;player.x+=player.vx*dt;player.y+=player.vy*dt;player.angle+=player.vx*dt/R;
+if(completed&&retrievalStart&&!retrievalZapped&&retrievalProgress()>.57){retrievalZapped=true;playSfx('cell')}let dt=Math.min(.04,(now-last)/1000);last=now;if(replayActive){const advance=Math.min(.06,(now-replayLastFrame)/1000);replayLastFrame=now;const duration=replayWinning.length?replayWinning[replayWinning.length-1].t:0;replayPosition+=advance*(replayPosition>=Math.max(0,duration-2.8)?1.15:3.5);drawReplayGhosts();requestAnimationFrame(frame);return;}if(resumeCountdownUntil){const left=resumeCountdownUntil-now;if(left>0){$('resumeCountdown').querySelector('span').textContent=left>2200?'3':left>1200?'2':left>200?'1':'GO';draw();requestAnimationFrame(frame);return;}resumeCountdownUntil=0;$('resumeCountdown').style.display='none';accumulator=0;}if(isModalOpen()){accumulator=0;draw();requestAnimationFrame(frame);return;}if(runStarted&&!completed&&!editing&&!apexState.active){elapsed+=dt;showTimer()}if(aim&&!player.grounded&&doubleShotAvailable){accumulator=0;step(Math.min(1/30,dt)*AIR_AIM_TIMESCALE);recordReplaySample();}else{accumulator+=dt;let iters=0;while(accumulator>=1/60&&iters++<8){step(1/60);recordReplaySample();accumulator-=1/60}}updateIdle(dt);draw();requestAnimationFrame(frame)}
+function step(dt){if(editing||apexState.active)return;simTime+=dt;if(!doubleShotAvailable&&airShotRechargeAt&&simTime>=airShotRechargeAt){doubleShotAvailable=true;airShotRechargeAt=0;}if(flash>0)flash=Math.max(0,flash-dt*2.3);if(shake>0)shake=Math.max(0,shake-dt*20);if(completed)return;let s=settings();player.grounded=false;player.vy+=s.g*dt;let friction=Math.exp(-s.drag*dt);player.vx*=friction;player.vy*=friction;player.x+=player.vx*dt;player.y+=player.vy*dt;player.angle+=player.vx*dt/R;
  // Hard containment independent of thin-wall discrete collision at high shot speeds.
  if(player.x<6+R){player.x=6+R;player.vx=Math.abs(player.vx)*settings().wallBounce;}
  if(player.x>414-R){player.x=414-R;player.vx=-Math.abs(player.vx)*settings().wallBounce;}
@@ -1467,7 +1485,7 @@ function rotationAllowed(q,angle){if(q.type!=='spikes')return true;return canAtt
 function rotateSelected(delta){
  if(phase!=='sandbox'||!editing||selectedIndex<0)return;
  const q=sandboxAdded[selectedIndex];if(!q)return;
- const step=q.type==='spikes'?90:15;
+ const step=q.type==='spikes'?90:5; // spikes must remain cardinal to attach to surfaces
  if(q.type==='spikes'){
    const a=((q.angle||0)+Math.sign(delta)*step+360)%360;
    if(!canAttachSpikes(q,a)){
@@ -1498,7 +1516,7 @@ $('sandboxObjectTools').addEventListener('pointerdown',e=>e.stopPropagation());
 $('sandboxObjectTools').addEventListener('pointerup',e=>e.stopPropagation());
 $('objectLeft').onclick=e=>{e.stopPropagation();rotateSelected(-1)};
 $('objectRight').onclick=e=>{e.stopPropagation();rotateSelected(1)};
-$('objectLevel').onclick=levelSelected;$('objectDelete').onclick=deleteSelected;
+$('objectLevel').onclick=levelSelected;$('objectDeselect').onclick=e=>{e.stopPropagation();selectedIndex=-1;sandboxLastMove=null;updateSelected();};$('objectDelete').onclick=deleteSelected;
 $('objectCancelMove').onclick=e=>{e.stopPropagation();if(!editing||!sandboxLastMove||selectedIndex!==sandboxLastMove.index)return;const q=sandboxAdded[selectedIndex];if(!q)return;Object.assign(q,sandboxLastMove.before);sandboxLastMove=null;updateSelected();saveMap();$('notice').textContent='LAST MOVE CANCELLED';};
 // Mounts are chosen from solid walls, floor, ceiling and existing platform top edges.
 function nearestSpikeMount(point,width,angleFilter=null){
@@ -1781,7 +1799,7 @@ function drawPanel(x,y,w,h,broken=false){let grad=ctx.createLinearGradient(x,y,x
 
 // APEX ASSET SYSTEM v0.2 — isolated scenery only; gameplay physics unchanged.
 const APEX_STORE='gravityLaunch:apex-assets:prototype:v0.1:'; // Continue existing layouts, upgrade schemas in-place
-const apexState={active:false,visible:{background:true,midground:true,foreground:true},locked:{background:false,midground:false,foreground:false},selection:null,drag:null,custom:{},seed:1,placing:null};
+const apexState={groups:{fan:true,light:true,panel:true,junction:true,vent:true},objectMode:'environment',active:false,testing:false,zoom:1,pointers:new Map(),pinchStart:null,scrollDrag:null,visible:{background:true,midground:true,foreground:true},locked:{background:false,midground:false,foreground:false},selection:null,drag:null,custom:{},seed:1,placing:null};
 const apexTemplates={
  fan:{radius:17,spin:.50,depth:'midground',name:'Ventilation Fan'},
  light:{radius:8,spin:0,depth:'foreground',name:'Amber Wall Light'},
@@ -1789,11 +1807,14 @@ const apexTemplates={
  junction:{radius:10,spin:0,depth:'midground',name:'Junction Box'},
  vent:{radius:22,spin:0,depth:'background',name:'Ventilation Grille'}
 };
+function apexPlaquePosition(){return {x:352,y:204}} // permanent wall mounting for all chambers
+function apexSavePlaque(p){} // plaque is permanently locked
 function apexId(){return String(levelIndex)+'-'+phase;}
 function apexHash(a){let h=2166136261;for(const c of a){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0;}
 function apexRand(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}}
-function apexBounds(a){const r=a.kind==='fan'?a.size+9:a.kind==='vent'?a.size+4:a.kind==='panel'?18:a.kind==='junction'?13:14;return {x:a.x-r,y:a.y-r,w:r*2,h:r*2}}
+function apexBounds(a){if(a&&Number.isFinite(a.w))return {x:a.x,y:a.y-(a.h?0:18),w:a.w,h:a.h||22};const r=a.kind==='fan'?a.size+9:a.kind==='vent'?a.size+4:a.kind==='panel'?18:a.kind==='junction'?13:14;return {x:a.x-r,y:a.y-r,w:r*2,h:r*2}}
 function apexIntersects(b,pad=7){return plat().some(p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.y)&&Number.isFinite(p.w)&& b.x<p.x+p.w+pad&&b.x+b.w>p.x-pad&&b.y<p.y+(p.h||19)+pad&&b.y+b.h>p.y-pad)}
+const apexGenConfig={background:60,midground:65,foreground:55,traps:35,platforms:55,randomness:55};
 function apexGenerate(seed=1){
  const rng=apexRand(apexHash(apexId()+':'+seed)),assets=[];
  const candidates=[
@@ -1807,11 +1828,13 @@ function apexGenerate(seed=1){
  {kind:'light',x:389,y:1370,depth:'foreground',size:12},
  {kind:'junction',x:67,y:465,depth:'midground',size:12},
  {kind:'panel',x:352,y:1018,depth:'midground',size:14},
- {kind:'vent',x:143,y:1480,depth:'background',size:17}];
+ {kind:'vent',x:143,y:1480,depth:'background',size:17},
+ {kind:'panel',x:47,y:294,depth:'foreground',size:15},
+ {kind:'vent',x:369,y:560,depth:'foreground',size:21}];
  for(let i=0;i<candidates.length;i++){
-  let c=candidates[i],ok=null;
+  let c=candidates[i],ok=null;const density=apexGenConfig[c.depth]??60;if(rng()*100>density)continue;
   for(let k=0;k<45;k++){
-    let x=Math.max(24,Math.min(396,c.x+(rng()-.5)*96)),y=Math.max(94,Math.min(WORLD-60,c.y+(rng()-.5)*115));
+    let x=Math.max(24,Math.min(396,c.x+(rng()-.5)*(20+apexGenConfig.randomness*1.4))),y=Math.max(94,Math.min(WORLD-60,c.y+(rng()-.5)*(25+apexGenConfig.randomness*1.8)));
     if(c.kind==='light'||c.kind==='panel'||c.kind==='junction')x=c.x;
     let a={id:'assembly-'+i,kind:c.kind,x:Math.round(x),y:Math.round(y),size:c.size,depth:c.depth,rotation:c.kind==='fan'?(rng()-.5)*.5:0,spin:c.kind==='fan'?.35+rng()*.35:0,locked:false};
     let b=apexBounds(a);
@@ -1889,9 +1912,9 @@ function renderApexAssetAssemblies({ctx,backgroundFan,rect,line,glow,damaged,scr
  const assets=apexRead().assets;
  for(const layer of ['background','midground','foreground']){
   if(!apexState.visible[layer])continue;
-  const group=assets.filter(a=>a.depth===layer);
+  const group=assets.filter(a=>a.depth===layer&&apexState.groups[a.kind]!==false);
   if(!group.length)continue;
-  ctx.save();ctx.globalAlpha=layer==='background'?.52:layer==='midground'?.84:1;
+  ctx.save();ctx.globalAlpha=layer==='background'?.45:layer==='midground'?.78:1;
   // Actual wall-mounted junction and controller serve as fixed termination points.
   // No repeating 'bus' that abruptly begins or ends between randomly placed assets.
   for(const a of group){
@@ -1908,29 +1931,70 @@ function renderApexAssetAssemblies({ctx,backgroundFan,rect,line,glow,damaged,scr
  }
 }
 function apexRefresh(){const panel=document.getElementById('apexEditor');if(!panel)return;document.getElementById('apexEditorStatus').textContent=`Sector ${String(levelIndex).padStart(2,'0')} / ${phase} · ${apexRead().assets.length} assemblies`;
- document.getElementById('apexSel').textContent=apexRead().assets.find(a=>a.id===apexState.selection)?.kind.toUpperCase()||'None';
- for(const layer of ['background','midground','foreground']){const el=document.getElementById('apexVis-'+layer);if(el)el.checked=apexState.visible[layer];const lock=document.getElementById('apexLock-'+layer);if(lock)lock.checked=apexState.locked[layer]}
+ document.getElementById('apexSel').textContent=(apexIsGameSelection()?apexState.selection.split(':')[1].toUpperCase():(apexRead().assets.find(a=>a.id===apexState.selection)?.kind.toUpperCase()||'None'));
+ const picked=apexSelected();const depthSelect=document.getElementById('apexDepth');if(depthSelect){depthSelect.disabled=!picked||apexIsGameSelection();if(picked&&!apexIsGameSelection())depthSelect.value=picked.depth;}const gameMode=apexState.objectMode==='gameplay';document.getElementById('apexGameplayAdd').hidden=!gameMode;panel.querySelector('.apexAssetGrid').hidden=gameMode;apexUISelected();for(const layer of ['background','midground','foreground']){const el=document.getElementById('apexVis-'+layer);if(el)el.checked=apexState.visible[layer];const lock=document.getElementById('apexLock-'+layer);if(lock)lock.checked=apexState.locked[layer]}
 }
+function apexUpdateTopButtons(){const nav=document.getElementById('apexTopModes');if(!nav)return;nav.style.display=(apexState.active||(phase==='sandbox'&&editing))?'flex':'none';for(const [id,mode] of [['apexTopGame','gameplay'],['apexTopScenery','environment']]){const b=document.getElementById(id);b?.classList.toggle('active',apexState.objectMode===mode);b?.setAttribute('aria-pressed',String(apexState.objectMode===mode));}}
 function apexShowPanel(show){const el=document.getElementById('apexEditor');if(el)el.hidden=!show;}
-function apexOpen(){apexState.active=!apexState.active;apexShowPanel(apexState.active);document.getElementById('apexEditorButton').textContent=apexState.active?'✕ Exit editor':'⚙ Apex editor';if(apexState.active){aim=null;apexRefresh();}}
-function apexRotate(degrees){const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const angle=Math.round(((a.rotation||0)*180/Math.PI+degrees)/5)*5;a.rotation=(((angle%360)+360)%360)*Math.PI/180;apexSave();apexRefresh();}
-function apexAdd(kind){const d=apexRead(),tpl=apexTemplates[kind];if(!tpl)return;const rng=apexRand(apexHash(apexId()+':'+kind+':'+Date.now()));let next=null;
- for(let k=0;k<100;k++){const x=kind==='light'?(rng()<.5?34:386):60+rng()*300,y=250+rng()*(WORLD-340);const a={id:'added-'+Date.now()+'-'+k,kind,x:Math.round(x),y:Math.round(y),size:tpl.radius,depth:tpl.depth,rotation:0,spin:tpl.spin,locked:false};const b=apexBounds(a);
-  if(!apexIntersects(b,12)&&!d.assets.some(v=>{const q=apexBounds(v);return b.x<q.x+q.w+12&&b.x+b.w>q.x-12&&b.y<q.y+q.h+12&&b.y+b.h>q.y-12})){next=a;break;}
+function apexSetEditing(on){if(!on){apexPlacementKind=null;apexApplyZoom(1);apexState.pointers.clear();}apexState.active=on;apexState.testing=false;document.body.classList.toggle('apexEditing',on);apexShowPanel(on);document.getElementById('apexEditorButton').textContent=on?'☷ Background menu':'☷ Background editor';document.getElementById('apexEditorButton').style.display=on?'none':'none';apexUpdateTopButtons();const tools=document.getElementById('apexSelectionTools');if(tools)tools.hidden=true;if(on){aim=null;camera=0;apexRefresh();}else{apexSave();apexState.selection=null;}}
+function apexOpen(){apexSetEditing(!apexState.active);}
+function apexTest(){apexApplyZoom(1);apexSaveCurrent();apexState.testing=true;apexState.active=false;document.body.classList.remove('apexEditing');apexShowPanel(false);document.getElementById('apexSelectionTools').hidden=true;document.getElementById('apexEditorButton').textContent='↩ Return to editor';document.getElementById('apexEditorButton').style.display='block';apexUpdateTopButtons();reset(true);}
+function apexReturn(){if(apexState.testing){apexSetEditing(true);apexState.testing=false;}else if(apexState.active){apexShowPanel(true);apexRefresh();}else{apexSetEditing(true);}}
+function apexStartFromPlay(){levelIndex=1;$('levelSelect').value='1';choose('normal',true);$('playChoiceOverlay').classList.remove('visible');apexSetEditing(true);}
+function apexSaveCurrent(){apexGameplaySave();apexSave();apexRefresh();const n=document.getElementById('apexSavedNotice');if(n)n.textContent='✓ Saved to Sector '+String(levelIndex).padStart(2,'0')+' · '+phase;}
+function apexUISelected(){const a=apexSelected(),t=document.getElementById('apexSelectionTools');if(t){t.hidden=!(apexState.active&&a);if(a){t.querySelector('#apexAngleRead').textContent=apexIsGameSelection()?Math.round(a.angle||0)+'°':Math.round((a.rotation||0)*180/Math.PI)+'°';apexPositionTools();}}}
+
+
+function apexPositionTools(){
+ const t=document.getElementById('apexSelectionTools'),a=apexSelected();if(!t||!a||!apexState.active)return;
+ const bounds=canvas.getBoundingClientRect(),frame=document.getElementById('frame').getBoundingClientRect();
+ const tx=bounds.left-frame.left+((a.x+(a.w||0)/2)/W)*bounds.width;
+ const ty=bounds.top-frame.top+((a.y-camera)/H)*bounds.height;
+ // Clamp within the visible frame, immediately above or below the selected item.
+ const left=Math.max(4,Math.min(frame.width-t.offsetWidth-4,tx-t.offsetWidth/2));
+ const above=ty-t.offsetHeight-23,top=above>36?above:Math.min(frame.height-t.offsetHeight-8,ty+30);
+ t.style.left=left+'px';t.style.top=Math.max(5,top)+'px';t.style.right='auto';t.style.bottom='auto';
+}
+function apexDuplicate(){const a=apexSelected();if(apexIsGameSelection()&&a){const type=apexState.selection.split(':')[1],key=type==='platform'?'platforms':'hazards',list=apexGameplayEnsure()[key];list.push({...a,x:a.x+20,y:a.y+45});apexState.selection='game:'+type+':'+(list.length-1);apexGameplaySave();apexRefresh();return;}if(!a||a.locked||apexState.locked[a.depth])return;const d=apexRead();const dup={...a,id:'copy-'+Date.now(),x:Math.min(395,a.x+32),y:Math.min(WORLD-30,a.y+32),locked:false};if(apexIntersects(apexBounds(dup),5))return;d.assets.push(dup);apexState.selection=dup.id;apexSave();apexRefresh();}
+function apexCancelSelection(){apexState.selection=null;apexState.drag=null;apexRefresh();}
+
+let apexUndoSnapshot=null;function apexRemember(){const a=apexSelected();if(!a)return;apexUndoSnapshot={id:apexState.selection,game:apexIsGameSelection(),before:{...a}};}
+function apexRotate(degrees){apexRemember();const a=apexSelected();if(apexIsGameSelection()&&a){a.angle=((Number(a.angle||0)+degrees)%360+360)%360;apexGameplaySave();apexRefresh();return;}if(!a||a.locked||apexState.locked[a.depth])return;const angle=Math.round(((a.rotation||0)*180/Math.PI+degrees)/5)*5;a.rotation=(((angle%360)+360)%360)*Math.PI/180;apexSave();apexRefresh();}
+let apexPlacementKind=null;
+function apexAdd(kind){
+ if(!apexTemplates[kind])return;
+ apexState.objectMode='environment';apexPlacementKind=kind;apexState.selection=null;
+ apexShowPanel(false);apexRefresh();
+ const t=document.getElementById('apexPlacementHint');if(t){t.textContent='Tap the chamber to place '+kind+' · ✕ to cancel';t.hidden=false;}
+}
+function apexCommitPlacement(point){
+ const kind=apexPlacementKind,tpl=apexTemplates[kind];if(!tpl)return false;
+ const d=apexRead(),a={id:'placed-'+Date.now()+'-'+Math.floor(Math.random()*1e4),kind,x:Math.round(Math.max(16,Math.min(W-16,point.x))),y:Math.round(Math.max(25,Math.min(WORLD-25,point.y))),size:tpl.radius,depth:tpl.depth,rotation:0,spin:tpl.spin,locked:false};
+ const b=apexBounds(a);
+ if(apexIntersects(b,8)||d.assets.some(v=>{const q=apexBounds(v);return b.x<q.x+q.w+5&&b.x+b.w>q.x-5&&b.y<q.y+q.h+5&&b.y+b.h>q.y-5})){
+  const t=document.getElementById('apexPlacementHint');if(t)t.textContent='Placement blocked — choose a clear location · ✕ to cancel';return false;
  }
- if(next){d.assets.push(next);apexState.selection=next.id;apexSave();apexRefresh();apexShowPanel(false)}else{const status=document.getElementById('apexEditorStatus');if(status)status.textContent='No clear space for that item in this chamber.'}
+ d.assets.push(a);apexState.selection=a.id;apexPlacementKind=null;apexSave();apexRefresh();
+ const t=document.getElementById('apexPlacementHint');if(t)t.hidden=true;
+ return true;
 }
 
 function apexRegenerate(){const old=apexRead(),fresh=apexGenerate(old.seed+1),locked=old.assets.filter(a=>a.locked||apexState.locked[a.depth]);fresh.assets=fresh.assets.filter(a=>!locked.some(b=>{const x=apexBounds(a),y=apexBounds(b);return x.x<y.x+y.w+16&&x.x+x.w>y.x-16&&x.y<y.y+y.h+16&&x.y+x.h>y.y-16})).concat(locked);apexState.custom[apexId()]=fresh;apexState.selection=null;apexSave();apexRefresh();}
-function apexSelected(){return apexRead().assets.find(a=>a.id===apexState.selection)}
-function apexNudge(dx,dy){const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const x=a.x,y=a.y;a.x=Math.max(20,Math.min(400,a.x+dx));a.y=Math.max(25,Math.min(WORLD-25,a.y+dy));if(apexIntersects(apexBounds(a),8)){a.x=x;a.y=y;}apexSave();}
-function apexPointerXY(e){const bounds=canvas.getBoundingClientRect();return {x:(e.clientX-bounds.left)*W/bounds.width,y:(e.clientY-bounds.top)*H/bounds.height+camera}}
-canvas.addEventListener('pointerdown',e=>{if(!apexState.active)return;apexShowPanel(false);const p=apexPointerXY(e);const items=apexRead().assets;let hit=null;for(let i=items.length-1;i>=0;i--){const a=items[i],b=apexBounds(a);if(apexState.visible[a.depth]&&p.x>=b.x&&p.x<=b.x+b.w&&p.y>=b.y&&p.y<=b.y+b.h){hit=a;break;}}
- apexState.selection=hit?.id||null;if(hit&&!hit.locked&&!apexState.locked[hit.depth])apexState.drag={id:hit.id,dx:p.x-hit.x,dy:p.y-hit.y,startX:hit.x,startY:hit.y};else apexState.drag=null;apexRefresh();e.preventDefault();e.stopImmediatePropagation();},true);
-canvas.addEventListener('pointermove',e=>{if(!apexState.active)return;if(apexState.drag){const a=apexSelected(),p=apexPointerXY(e);if(a){a.x=Math.max(20,Math.min(400,Math.round(p.x-apexState.drag.dx)));a.y=Math.max(25,Math.min(WORLD-25,Math.round(p.y-apexState.drag.dy)));}}e.preventDefault();e.stopImmediatePropagation();},true);
-canvas.addEventListener('pointerup',e=>{if(!apexState.active)return;if(apexState.drag){const a=apexSelected();if(a&&apexIntersects(apexBounds(a),7)){a.x=apexState.drag.startX;a.y=apexState.drag.startY;}apexSave();}apexState.drag=null;apexRefresh();e.preventDefault();e.stopImmediatePropagation();},true);
-canvas.addEventListener('pointercancel',e=>{if(!apexState.active)return;apexState.drag=null;e.stopImmediatePropagation();},true);
+function apexSelected(){if(apexState.objectMode==='gameplay'&&apexState.selection?.startsWith('game:')){const [,type,n]=apexState.selection.split(':');return (type==='platform'?apexGameplayEnsure().platforms:apexGameplayEnsure().hazards)[+n];}return apexRead().assets.find(a=>a.id===apexState.selection)}
+function apexIsGameSelection(){return apexState.objectMode==='gameplay'&&String(apexState.selection||'').startsWith('game:');}
+function apexSwitchMode(mode){apexState.objectMode=mode;apexUpdateTopButtons();apexState.selection=null;apexState.drag=null;if(mode==='gameplay'&&phase!=='sandbox')apexGameplayEnsure();apexRefresh();}
+function apexAddGameplay(type){if(phase==='sandbox'){document.getElementById('apexEditorStatus').textContent='For Sandbox gameplay objects, use Sandbox Build mode.';return;}const d=apexGameplayEnsure();if(type==='platform'){d.platforms.push({x:140,y:Math.round(camera+H*.55),w:136,h:19,angle:0});apexState.selection='game:platform:'+(d.platforms.length-1)}else{d.hazards.push({x:150,y:Math.round(camera+H*.55),w:65,angle:0});apexState.selection='game:spikes:'+(d.hazards.length-1)}apexGameplaySave();apexRefresh();apexShowPanel(false);}
 
+function apexNudge(dx,dy){const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const x=a.x,y=a.y;a.x=Math.max(20,Math.min(400,a.x+dx));a.y=Math.max(25,Math.min(WORLD-25,a.y+dy));if(apexIntersects(apexBounds(a),8)){a.x=x;a.y=y;}apexSave();}
+function apexApplyZoom(z){apexState.zoom=Math.max(1,Math.min(2.5,z));canvas.style.transform='scale('+apexState.zoom+')';canvas.style.transformOrigin='50% 50%';apexPositionTools();}
+function apexPointerXY(e){const bounds=canvas.getBoundingClientRect();return {x:(e.clientX-bounds.left)*W/bounds.width,y:(e.clientY-bounds.top)*H/bounds.height+camera}}
+canvas.addEventListener('pointerdown',e=>{if(!apexState.active)return;if(apexPlacementKind){apexCommitPlacement(apexPointerXY(e));e.preventDefault();e.stopImmediatePropagation();return;}apexState.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(e.pointerType==='touch'&&apexState.pointers.size>=2){const pts=[...apexState.pointers.values()];apexState.pinchStart={distance:Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y),zoom:apexState.zoom};apexState.drag=null;apexState.scrollDrag=null;e.preventDefault();e.stopImmediatePropagation();return;}apexShowPanel(false);const p=apexPointerXY(e);if(apexState.objectMode==='gameplay'&&phase!=='sandbox'){let hit=null;for(const item of apexGameplayObjects().reverse()){const b=apexBounds(item.o);if(p.x>=b.x-7&&p.x<=b.x+b.w+7&&p.y>=b.y-9&&p.y<=b.y+b.h+9){hit=item;break;}}apexState.selection=hit?'game:'+hit.type+':'+hit.index:null;apexState.drag=hit?{id:apexState.selection,dx:p.x-hit.o.x,dy:p.y-hit.o.y,startX:hit.o.x,startY:hit.o.y}:null;if(!hit)apexState.scrollDrag={clientY:e.clientY,camera};apexRefresh();e.preventDefault();e.stopImmediatePropagation();return;}const items=apexRead().assets;let hit=null;for(let i=items.length-1;i>=0;i--){const a=items[i],b=apexBounds(a);if(apexState.visible[a.depth]&&apexState.groups[a.kind]!==false&&p.x>=b.x&&p.x<=b.x+b.w&&p.y>=b.y&&p.y<=b.y+b.h){hit=a;break;}}
+ apexState.selection=hit?.id||null;if(hit&&!hit.locked&&!apexState.locked[hit.depth])apexState.drag={id:hit.id,dx:p.x-hit.x,dy:p.y-hit.y,startX:hit.x,startY:hit.y};else {apexState.drag=null;apexState.scrollDrag={clientY:e.clientY,camera};}apexRefresh();e.preventDefault();e.stopImmediatePropagation();},true);
+canvas.addEventListener('pointermove',e=>{if(!apexState.active)return;if(apexState.pointers.has(e.pointerId))apexState.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(e.pointerType==='touch'&&apexState.pointers.size>=2&&apexState.pinchStart){const pts=[...apexState.pointers.values()];const dist=Math.hypot(pts[0].x-pts[1].x,pts[0].y-pts[1].y);apexApplyZoom(apexState.pinchStart.zoom*dist/Math.max(1,apexState.pinchStart.distance));e.preventDefault();e.stopImmediatePropagation();return;}if(!apexState.drag&&apexState.scrollDrag){camera=Math.max(0,Math.min(WORLD-H,apexState.scrollDrag.camera+(apexState.scrollDrag.clientY-e.clientY)*H/canvas.getBoundingClientRect().height));}if(apexState.drag){const a=apexSelected(),p=apexPointerXY(e);if(a){a.x=Math.max(5,Math.min(400-(a.w||0),Math.round(p.x-apexState.drag.dx)));a.y=Math.max(25,Math.min(WORLD-25,Math.round(p.y-apexState.drag.dy)));}}e.preventDefault();e.stopImmediatePropagation();},true);
+canvas.addEventListener('pointerup',e=>{if(!apexState.active)return;apexState.pointers.delete(e.pointerId);if(apexState.pointers.size<2)apexState.pinchStart=null;if(apexState.drag){const a=apexSelected();if(a&&!apexIsGameSelection()&&apexIntersects(apexBounds(a),7)){a.x=apexState.drag.startX;a.y=apexState.drag.startY;}if(apexIsGameSelection())apexGameplaySave();else apexSave();}apexPositionTools();apexState.drag=null;apexState.scrollDrag=null;apexRefresh();e.preventDefault();e.stopImmediatePropagation();},true);
+canvas.addEventListener('pointercancel',e=>{if(!apexState.active)return;apexState.pointers.delete(e.pointerId);if(apexState.pointers.size<2)apexState.pinchStart=null;apexState.drag=null;apexState.scrollDrag=null;e.stopImmediatePropagation();},true);
+
+canvas.addEventListener('wheel',e=>{if(!apexState.active)return;camera=Math.max(0,Math.min(WORLD-H,camera+e.deltaY*.75));e.preventDefault();},{passive:false});
 function draw(){ctx.save();ctx.clearRect(0,0,W,H);ctx.fillStyle=phase==='normal'?'#0a1d2b':'#1f1111';ctx.fillRect(0,0,W,H);const sh=shake?(Math.sin(simTime*110)*shake):0;ctx.translate(sh*.45,sh*.3);
 // V7.0.5 VISUAL PROOF: procedural, layered illustrated industrial shaft.
 // No image assets. This renderer uses only Canvas paths, gradients and geometry.
@@ -2034,7 +2098,8 @@ function draw(){ctx.save();ctx.clearRect(0,0,W,H);ctx.fillStyle=phase==='normal'
  }
  // Character placements deliberately asymmetric, tied to world height not camera pixels.
  // Keep primary machinery apart and push fan detail deeper into the shaft.
- consolePanel(16,255);
+ // The facility console is now controlled through editable environment assemblies.
+
  // Lift mechanism deferred until fully supported and connected to guide-rail geometry.
  // hydraulic support removed per review; leaving more open lower space.
  // Small background extraction fans grouped near the top of the shaft at varied sizes.
@@ -2064,9 +2129,10 @@ function draw(){ctx.save();ctx.clearRect(0,0,W,H);ctx.fillStyle=phase==='normal'
  // Viewport-wide distance haze, beneath the playable geometry.
  ctx.restore();
  let haze=ctx.createLinearGradient(0,0,0,H);haze.addColorStop(0,'#74b7d006');haze.addColorStop(.5,'#9fdaec10');haze.addColorStop(1,'#17344608');rect(105,0,211,H,haze);
- // Fixed chamber plaque: part of the right wall language, anchored to the viewport.
+ // Fixed chamber plaque: world-anchored at the entry tile, not a screen overlay.
+ ctx.save();ctx.translate(0,-camera);
  (function drawChamberPlaque(){
-   const px=W-68, py=193, pw=43, ph=57;
+   const pos=apexPlaquePosition(), px=pos.x, py=pos.y, pw=43, ph=57;
    rect(px-4,py-4,pw+8,ph+8,'#08131b');
    let pg=ctx.createLinearGradient(px,py,px,py+ph); pg.addColorStop(0,'#1d3240'); pg.addColorStop(.55,'#132635'); pg.addColorStop(1,'#0d1d29');
    rect(px,py,pw,ph,pg);
@@ -2079,6 +2145,7 @@ function draw(){ctx.save();ctx.clearRect(0,0,W,H);ctx.fillStyle=phase==='normal'
    ctx.font='700 23px system-ui'; ctx.fillText(String(levelIndex||1).padStart(2,'0'),px+pw/2,py+43);
    ctx.globalAlpha=1;
  })();
+ ctx.restore();
  // Existing physics/world platforms draw over this background unchanged.
  ctx.save();ctx.translate(0,-camera);
 })();
@@ -2405,30 +2472,50 @@ function buildGameplayMenuArt(){
 }
 
 (function(){
-const frame=document.getElementById('frame');const btn=document.createElement('button');btn.id='apexEditorButton';btn.textContent='⚙ Apex editor';btn.onclick=()=>{if(apexState.active&&panel.hidden){apexShowPanel(true);apexRefresh()}else apexOpen()};frame.appendChild(btn);
-const panel=document.createElement('section');panel.id='apexEditor';panel.hidden=true;panel.innerHTML=`<div class="apexHead">APEX · Asset Assemblies v0.3 <button id="apexClosePanel" type="button" aria-label="Close editor menu">✕</button></div><small id="apexEditorStatus"></small>
+const frame=document.getElementById('frame');$('playOpenApex').onclick=apexStartFromPlay;$('sandboxBackgroundEditor').onclick=()=>{$('sandboxSandMenu').classList.remove('open');if(!editing)$('edit').click();apexSetEditing(true);apexSwitchMode('environment');};const btn=document.createElement('button');btn.id='apexEditorButton';btn.textContent='☷ Background editor';btn.style.display='none';btn.onclick=()=>apexReturn();frame.appendChild(btn);
+const topModes=document.createElement('nav');topModes.id='apexTopModes';topModes.setAttribute('aria-label','Editor tools');topModes.innerHTML='<button id="apexTopGame" type="button" aria-label="Gameplay editor: platforms and traps" title="Gameplay editor" >🏜</button><button id="apexTopScenery" type="button" aria-label="Background editor: scenery and layers" title="Background editor">🏞</button>';frame.appendChild(topModes);
+document.getElementById('apexTopGame').onclick=()=>{
+ if(phase==='sandbox'){
+  if(apexState.active){apexSaveCurrent();apexSetEditing(false);}
+  if(!editing)$('edit').click();
+  $('sandboxSandMenu').classList.remove('open');renderSandboxPicker();$('sandboxPicker').style.display='block';
+  document.getElementById('apexTopModes').style.display='flex';
+  document.getElementById('apexTopGame').classList.add('active');document.getElementById('apexTopScenery').classList.remove('active');
+  return;
+ }
+ apexSwitchMode('gameplay');apexShowPanel(true);
+};
+document.getElementById('apexTopScenery').onclick=()=>{
+ if(phase==='sandbox'&&!apexState.active)apexSetEditing(true);
+ apexSwitchMode('environment');apexShowPanel(true);
+};
+const panel=document.createElement('section');panel.id='apexEditor';panel.hidden=true;panel.innerHTML=`<div class="apexHead">BACKGROUND EDITOR · v0.5.4 <button id="apexClosePanel" type="button" aria-label="Close editor menu">✕</button></div><small id="apexEditorStatus"></small><details id="apexGenerationSliders" class="apexDetails" open><summary>⚙ Generate chamber · six controls</summary><div class="apexSliderGrid"><label>Background<output id="apexOut-background">55%</output><input type="range" min="0" max="100" step="5" value="60" data-apex-slider="background"></label><label>Midground<output id="apexOut-midground">55%</output><input type="range" min="0" max="100" step="5" value="65" data-apex-slider="midground"></label><label>Foreground<output id="apexOut-foreground">55%</output><input type="range" min="0" max="100" step="5" value="55" data-apex-slider="foreground"></label><label>Traps<output id="apexOut-traps">55%</output><input type="range" min="0" max="100" step="5" value="35" data-apex-slider="traps"></label><label>Platforms<output id="apexOut-platforms">55%</output><input type="range" min="0" max="100" step="5" value="55" data-apex-slider="platforms"></label><label>Randomness<output id="apexOut-randomness">55%</output><input type="range" min="0" max="100" step="5" value="55" data-apex-slider="randomness"></label></div><div class="apexBtns"><button id="apexGenerateAll" type="button">↻ Generate scenery</button><small>Platform and trap sliders are preview settings; playable terrain generation requires completion-path validation.</small></div></details><div class="apexBtns"><button id="apexModeEnv">◉ Scenery</button><button id="apexModeGame">▱ Platforms & traps</button></div><div id="apexGameplayAdd" hidden class="apexBtns"><button id="apexOpenObjectPicker">＋ Objects & traps</button><button id="apexAddPlatform">＋ Platform</button><button id="apexAddTrap">＋ Spikes</button></div>
 <details class="apexDetails"><summary>☷ Layers · visibility & locks</summary><div class="apexRow"><span>Background</span><label>Show <input id="apexVis-background" type="checkbox" checked></label><label>Lock <input id="apexLock-background" type="checkbox"></label></div>
 <div class="apexRow"><span>Midground</span><label>Show <input id="apexVis-midground" type="checkbox" checked></label><label>Lock <input id="apexLock-midground" type="checkbox"></label></div>
-<div class="apexRow"><span>Foreground</span><label>Show <input id="apexVis-foreground" type="checkbox" checked></label><label>Lock <input id="apexLock-foreground" type="checkbox"></label></div></details>
-<div class="apexRow"><span>Selected: <b id="apexSel">None</b></span><button id="apexLockAsset">Lock</button><button id="apexResize">Size +</button></div>
-<div class="apexBtns"><button id="apexRotateLeft">↶ 5°</button><button id="apexRotateRight">↷ 5°</button><button id="apexDelete">🗑 Delete</button></div>
+<div class="apexRow"><span>Foreground</span><label>Show <input id="apexVis-foreground" type="checkbox" checked></label><label>Lock <input id="apexLock-foreground" type="checkbox"></label></div><div class="apexGroupToggles"><span>Groups</span><label><input type="checkbox" data-apex-group="fan" checked>Fans</label><label><input type="checkbox" data-apex-group="light" checked>Lights</label><label><input type="checkbox" data-apex-group="panel" checked>Consoles</label><label><input type="checkbox" data-apex-group="junction" checked>Junctions</label><label><input type="checkbox" data-apex-group="vent" checked>Vents</label></div></details>
+<div class="apexRow"><span>Selected: <b id="apexSel">None</b></span><button id="apexLockAsset">Lock</button><button id="apexResize">Size +</button><select id="apexDepth" aria-label="Selected asset depth"><option value="background">Back</option><option value="midground">Mid</option><option value="foreground">Front</option></select></div>
+
 <div class="apexHead apexSubhead">＋ Add asset</div>
 <div class="apexAssetGrid"><button data-apex-add="fan">◉ Fan</button><button data-apex-add="light">▯ Wall light</button><button data-apex-add="panel">▣ Console</button><button data-apex-add="junction">⊞ Junction</button><button data-apex-add="vent">▤ Wall vent</button></div>
-<details class="apexDetails"><summary>⚙ Generation & save</summary><div class="apexBtns"><button id="apexGen">↻ Regenerate unlocked</button><button id="apexSave">✓ Save layout</button></div><small>Tap outside to close. Select, drag, rotate or resize equipment.</small></details>`;frame.appendChild(panel);
+<details class="apexDetails"><summary>⚙ Generation</summary><div class="apexBtns"><button id="apexGen">↻ Regenerate unlocked</button></div></details><div class="apexBtns"><button id="apexSave">✓ Save sector</button><button id="apexTest">▶ Test run</button><button id="apexExitToHome">⌂ Home</button></div><small id="apexSavedNotice">Changes are local until saved</small>`;frame.appendChild(panel);
+const placementHint=document.createElement('div');placementHint.id='apexPlacementHint';placementHint.hidden=true;placementHint.innerHTML='<span>Tap chamber to place</span><button type="button" id="apexCancelPlacement" aria-label="Cancel placement">✕</button>';frame.appendChild(placementHint);
+ document.getElementById('apexCancelPlacement').onclick=()=>{apexPlacementKind=null;placementHint.hidden=true;};
+const sel=document.createElement('div');sel.id='apexSelectionTools';sel.hidden=true;sel.innerHTML='<button id="apexToolDelete" title="Delete">🗑</button><button id="apexToolUndo" title="Undo move / rotation">↩</button><button id="apexToolCancel" title="Cancel selection">⊘</button><span class="apexRotateCluster"><span id="apexAngleRead">0°</span><button id="apexToolLeft" title="Rotate left 5°">↶</button><button id="apexToolRight" title="Rotate right 5°">↷</button></span><button id="apexToolDuplicate" title="Duplicate" aria-label="Duplicate selected object"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="5" width="17" height="19" rx="2"/><path d="M11 25v3h16V10h-5"/><path d="M12 15h10M17 10v10"/></svg></button>';frame.appendChild(sel);
+apexUpdateTopButtons();document.getElementById('apexToolCancel').onclick=apexCancelSelection;document.getElementById('apexToolUndo').onclick=()=>{if(!apexUndoSnapshot||apexUndoSnapshot.id!==apexState.selection)return;const a=apexSelected();if(!a)return;const now={...a};Object.assign(a,apexUndoSnapshot.before);apexUndoSnapshot.before=now;if(apexUndoSnapshot.game)apexGameplaySave();else apexSave();apexRefresh();};document.getElementById('apexToolDuplicate').onclick=apexDuplicate;document.getElementById('apexToolLeft').onclick=()=>apexRotate(-5);document.getElementById('apexToolRight').onclick=()=>apexRotate(5);
+document.getElementById('apexToolDelete').onclick=()=>{if(apexIsGameSelection()){const [,type,n]=apexState.selection.split(':'),key=type==='platform'?'platforms':'hazards';apexGameplayEnsure()[key].splice(+n,1);apexState.selection=null;apexGameplaySave();apexRefresh();return;}const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const d=apexRead();d.assets=d.assets.filter(x=>x.id!==a.id);apexState.selection=null;apexSave();apexRefresh();};
+canvas.addEventListener('pointerdown',e=>{if(apexState.active&&apexState.selection)apexRemember();},true);canvas.addEventListener('mousemove',e=>{if(!apexState.active)return;const p=apexPointerXY(e);const hit=apexRead().assets.some(a=>{const b=apexBounds(a);return p.x>=b.x&&p.x<=b.x+b.w&&p.y>=b.y&&p.y<=b.y+b.h;});canvas.style.cursor=hit?'pointer':'default';});
 for(const layer of ['background','midground','foreground']){
  document.getElementById('apexVis-'+layer).onchange=e=>{apexState.visible[layer]=e.target.checked};
  document.getElementById('apexLock-'+layer).onchange=e=>{apexState.locked[layer]=e.target.checked};
 }
 // Sandbox-style dismissal: tapping anywhere outside the floating controls collapses
 // only the menu, not the editor itself. This works on iOS pointer events too.
-frame.addEventListener('pointerdown',e=>{if(apexState.active&&!panel.hidden&&!panel.contains(e.target)&&e.target!==btn)apexShowPanel(false);},true);
+frame.addEventListener('pointerdown',e=>{if(apexState.active&&!panel.hidden&&!panel.contains(e.target)&&!topModes.contains(e.target)&&e.target!==btn)apexShowPanel(false);},true);
 document.getElementById('apexClosePanel').onclick=()=>apexShowPanel(false);
-document.getElementById('apexRotateLeft').onclick=()=>apexRotate(-5);
-document.getElementById('apexRotateRight').onclick=()=>apexRotate(5);
-document.getElementById('apexDelete').onclick=()=>{const a=apexSelected();if(!a||a.locked||apexState.locked[a.depth])return;const data=apexRead();data.assets=data.assets.filter(b=>b.id!==a.id);apexState.selection=null;apexSave();apexRefresh()};
+
 for(const el of panel.querySelectorAll('[data-apex-add]'))el.onclick=()=>apexAdd(el.dataset.apexAdd);
-document.getElementById('apexGen').onclick=apexRegenerate;
-document.getElementById('apexSave').onclick=()=>{apexSave();apexRefresh()};
+document.getElementById('apexDepth').onchange=e=>{const a=apexSelected();if(a&&!apexIsGameSelection()){a.depth=e.target.value;apexSave();apexRefresh()}};panel.querySelectorAll('[data-apex-group]').forEach(el=>{el.onchange=e=>{apexState.groups[el.dataset.apexGroup]=e.target.checked;apexRefresh()}});document.getElementById('apexModeEnv').onclick=()=>apexSwitchMode('environment');document.getElementById('apexModeGame').onclick=()=>apexSwitchMode('gameplay');document.getElementById('apexOpenObjectPicker').onclick=()=>{apexShowPanel(false);renderSandboxPicker();$('sandboxPicker').style.display='block';};document.getElementById('apexAddPlatform').onclick=()=>apexAddGameplay('platform');document.getElementById('apexAddTrap').onclick=()=>apexAddGameplay('spikes');document.getElementById('apexGen').onclick=apexRegenerate;panel.querySelectorAll('[data-apex-slider]').forEach(el=>{el.oninput=()=>{apexGenConfig[el.dataset.apexSlider]=Number(el.value);document.getElementById('apexOut-'+el.dataset.apexSlider).textContent=el.value+'%';};});document.getElementById('apexGenerateAll').onclick=()=>{apexRegenerate();document.getElementById('apexGenerationSliders').open=false;apexShowPanel(false);};
+document.getElementById('apexSave').onclick=apexSaveCurrent;document.getElementById('apexTest').onclick=apexTest;document.getElementById('apexExitToHome').onclick=()=>{apexSaveCurrent();apexSetEditing(false);$('homeOverlay').classList.add('visible');};
 document.getElementById('apexLockAsset').onclick=()=>{const a=apexSelected();if(a){a.locked=!a.locked;apexSave();apexRefresh()}};
 document.getElementById('apexResize').onclick=()=>{const a=apexSelected();if(a&&!a.locked){const prev=a.size;a.size=a.size>=26?12:a.size+4;if(apexIntersects(apexBounds(a),7))a.size=prev;apexSave();apexRefresh()}};
 })();
@@ -2503,6 +2590,30 @@ requestAnimationFrame(frame);
 #apexEditorButton{position:absolute;z-index:41;left:11px;bottom:52px;background:#133e50;border:1px solid #78b8c1;border-radius:7px;color:#c3f7fc;padding:9px 13px;font-weight:700;font-size:12px;cursor:pointer}
 #apexEditor{position:absolute;z-index:42;left:10px;right:10px;bottom:94px;max-height:39%;overflow:auto;padding:10px;background:#091b29f5;color:#e2eff3;border:1px solid #7aa2ae;border-radius:10px;box-shadow:0 7px 30px #000a;font:12px system-ui}
 #apexEditor .apexHead{display:flex;align-items:center;justify-content:space-between}#apexClosePanel{min-width:35px}#apexEditor .apexSubhead{font-size:12px;margin-top:11px}#apexEditor .apexAssetGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px}#apexEditor .apexAssetGrid button{font-size:11px;white-space:normal;min-height:32px}#apexEditorButton{touch-action:manipulation}#apexEditor button{touch-action:manipulation}#apexEditor[hidden]{display:none}#apexEditor .apexDetails{border-top:1px solid #365664;margin-top:6px;padding:5px 0}#apexEditor .apexDetails summary{cursor:pointer;font-weight:700;color:#a6dce6;min-height:24px}#apexEditor .apexHead{font-size:14px;font-weight:800;margin:0 0 6px}#apexEditor .apexRow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid #345161}#apexEditor button{background:#23485b;border:1px solid #628794;color:#e4f8fb;border-radius:5px;padding:8px;cursor:pointer}#apexEditor .apexBtns{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}#apexEditor .apexBtns button{flex:1}#apexEditor small{color:#a3c2cb}
+#apexEditor .apexGroupToggles{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}#apexEditor .apexGroupToggles label{font-size:10px}#apexEditor .apexRow select{max-width:76px;background:#102e3b;color:#e9f7fb;border:1px solid #618392;border-radius:5px}body.apexEditing #sandboxObjectTools{display:none!important}#apexSelectionTools{max-width:calc(100% - 8px);gap:3px;padding:5px;white-space:nowrap}
+#apexSelectionTools button{min-width:39px;min-height:36px;padding:5px;font-size:15px}
+#apexSelectionTools span{min-width:25px;font-size:10px}
+#apexEditor{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
+canvas.apexPointer{cursor:pointer}
+
+/* v0.5.2 -- two compact top-of-chamber mode buttons */
+#apexTopModes{position:absolute;z-index:44;top:12px;left:12px;display:none;flex-direction:column;gap:6px;align-items:center}
+#apexTopModes button{height:40px;min-width:42px;border-radius:9px;border:1px solid #5f8290;background:#102c3bea;color:#b9dce5;font:700 22px system-ui;box-shadow:0 2px 9px #0007;touch-action:manipulation;cursor:pointer}
+#apexTopModes button.active{border-color:#92e0e9;background:#225366;color:#f0ffff;box-shadow:0 0 0 1px #63aeb6 inset}
+#apexSelectionTools{overflow:visible}
+#apexSelectionTools .apexRotateCluster{position:relative;display:flex;gap:3px;align-items:center;min-width:auto}
+#apexSelectionTools .apexRotateCluster #apexAngleRead{position:absolute;bottom:100%;left:0;right:0;width:auto;min-width:auto;transform:translateY(-3px);padding:2px 4px;border:1px solid #527c8c;border-radius:5px 5px 0 0;background:#0a2331f5;color:#d8f9ff;text-align:center;font:700 11px system-ui;pointer-events:none}
+#apexSelectionTools button svg,#sandboxObjectTools button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:2}
+#apexPlacementHint{position:absolute;z-index:46;bottom:42px;left:50%;transform:translateX(-50%);width:max-content;max-width:94%;border:1px solid #6dc1d1;border-radius:9px;background:#0c2736ed;color:#d9f5fc;padding:7px 9px;font:700 12px system-ui;display:flex;gap:12px;align-items:center;box-shadow:0 4px 18px #0009}#apexPlacementHint[hidden]{display:none}#apexPlacementHint button{background:#275165;color:#dffaff;border:1px solid #77afbb;border-radius:6px;padding:6px 10px}
+#apexEditor .apexSliderGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:7px 0}
+#apexEditor .apexSliderGrid label{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px;font-size:11px;color:#cae5ed}
+#apexEditor .apexSliderGrid output{font-variant-numeric:tabular-nums;color:#8cd7e4}
+#apexEditor .apexSliderGrid input{grid-column:1/-1;width:100%;accent-color:#57d0e3}
+#sandboxObjectTools,#apexSelectionTools{display:grid;grid-template-columns:repeat(3,minmax(38px,1fr));width:min(176px,calc(100% - 12px));gap:4px;white-space:normal}
+#sandboxObjectTools button,#apexSelectionTools button{width:100%;min-width:0}
+#apexSelectionTools .apexRotateCluster{display:contents}
+#apexSelectionTools .apexRotateCluster #apexAngleRead{position:absolute;bottom:100%;left:34%;right:34%;transform:none}
+#apexTopModes button{font-size:20px}
 </style>
 
 </body></html>
